@@ -4,6 +4,7 @@ A one-file static site. Structure follows the MIT Self-Assembly Lab site (work g
 
 ```
 index.html   the whole site — HTML, CSS, JS
+resume.pdf   (add this) shown on the resume page
 CNAME        tells GitHub Pages to serve at takoyaqi.com
 images/      put your photos here
 ```

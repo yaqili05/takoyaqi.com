@@ -46,11 +46,11 @@ h2{font-size:22px;font-weight:normal;color:var(--title);letter-spacing:1px;margi
 h3{font-size:16px;font-weight:normal;color:var(--ink);letter-spacing:1px}
 p + p{margin-top:1em}
 
-/* filters */
-.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 18px;margin:0 0 30px;font-size:14px;letter-spacing:1px}
-.filters button{background:none;border:0;font:inherit;text-transform:inherit;color:var(--muted);cursor:pointer;padding:4px 0}
-.filters button:hover{color:var(--ink)}
-.filters button.on{color:var(--ink);border-bottom:1px solid var(--ink)}
+/* resume */
+.resume{max-width:820px;margin:30px auto 0}
+.resume object{display:block;width:100%;height:80vh;min-height:520px;border:1px solid var(--line)}
+.resume p{margin-top:16px;font-size:14px;letter-spacing:1px}
+.resume a{color:var(--ink);border-bottom:1px solid var(--line)}
 
 /* placeholder imagery */
 .ph{position:relative;width:100%;background:var(--tile-a);display:flex;align-items:center;justify-content:center;color:#b5b5b5;font-size:12px;letter-spacing:2px}
@@ -131,14 +131,12 @@ footer .social{display:flex;justify-content:center;gap:22px;margin-bottom:10px}
 <body>
 
 <header>
-  <a href="#/" class="site-title">yaqi li<span class="site-sub">design + research · placeholder</span></a>
+  <a href="#/" class="site-title">yaqi li</a>
   <nav><ul id="nav">
-    <li><a href="#/" data-r="work">work</a></li>
-    <li><a href="#/research" data-r="research">research</a></li>
-    <li><a href="#/publications" data-r="publications">publications</a></li>
-    <li><a href="#/press" data-r="press">press</a></li>
     <li><a href="#/about" data-r="about">about</a></li>
-    <li><a href="#/collaborators" data-r="collaborators">collaborators</a></li>
+    <li><a href="#/projects" data-r="projects">projects</a></li>
+    <li><a href="https://github.com/yaqili05" target="_blank" rel="noopener">github</a></li>
+    <li><a href="#/resume" data-r="resume">resume</a></li>
     <li><a href="#/contact" data-r="contact">contact</a></li>
   </ul></nav>
 </header>
@@ -147,9 +145,8 @@ footer .social{display:flex;justify-content:center;gap:22px;margin-bottom:10px}
 
 <footer>
   <div class="social">
-    <a href="#" aria-label="instagram">instagram</a>
+    <a href="https://github.com/yaqili05" target="_blank" rel="noopener">github</a>
     <a href="#" aria-label="linkedin">linkedin</a>
-    <a href="#" aria-label="vimeo">vimeo</a>
     <a href="mailto:hello@takoyaqi.com">email</a>
   </div>
   © <span id="yr"></span> yaqi li · takoyaqi.com
@@ -167,8 +164,6 @@ const SITE = {
   intro: "a designer and researcher at mit exploring [placeholder: one sentence about what you do — materials, environments, objects, systems].",
   email: "hello@takoyaqi.com",
 };
-
-const CATEGORIES = ["research","objects","spaces","installations","teaching"];
 
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), optional img
@@ -199,46 +194,16 @@ const PROJECTS = [
   ...p
 }));
 
-const RESEARCH = [
-  {title:"research theme one",   text:"placeholder: a short paragraph describing this line of inquiry and the projects that sit under it."},
-  {title:"research theme two",   text:"placeholder: a short paragraph describing this line of inquiry and the projects that sit under it."},
-  {title:"research theme three", text:"placeholder: a short paragraph describing this line of inquiry and the projects that sit under it."},
-  {title:"research theme four",  text:"placeholder: a short paragraph describing this line of inquiry and the projects that sit under it."},
-];
-
-const PUBLICATIONS = [
-  {year:2026, title:"title of paper or chapter", authors:"li, y., coauthor, a., coauthor, b.", venue:"journal / conference name", type:"journal", url:"#"},
-  {year:2026, title:"title of paper or chapter", authors:"li, y., coauthor, a.", venue:"conference proceedings", type:"conference", url:"#"},
-  {year:2025, title:"title of paper or chapter", authors:"coauthor, a., li, y.", venue:"book title, publisher", type:"chapter", url:"#"},
-  {year:2025, title:"title of paper or chapter", authors:"li, y.", venue:"journal name, vol. 00", type:"journal", url:"#"},
-  {year:2024, title:"title of paper or chapter", authors:"li, y., coauthor, a.", venue:"conference proceedings", type:"conference", url:"#"},
-];
-
-const PRESS = [
-  {date:"sep 2026", outlet:"publication name", title:"headline of the article goes here", url:"#"},
-  {date:"jun 2026", outlet:"publication name", title:"headline of the article goes here", url:"#"},
-  {date:"feb 2026", outlet:"publication name", title:"headline of the article goes here", url:"#"},
-  {date:"nov 2025", outlet:"publication name", title:"headline of the article goes here", url:"#"},
-  {date:"apr 2025", outlet:"publication name", title:"headline of the article goes here", url:"#"},
-];
-
 const ABOUT = {
   bio:[
     "yaqi li is a [role] at mit [department / lab]. placeholder bio — two or three sentences on background, focus, and approach.",
     "a second paragraph for education, past practice, teaching, and the kinds of collaborations you're open to."
   ],
-  cv:{
-    education:[["2026","degree, institution"],["2022","degree, institution"]],
-    experience:[["2024–","position, organization"],["2022–24","position, organization"],["2020–22","position, organization"]],
-    "awards + exhibitions":[["2026","award or exhibition name"],["2025","award or exhibition name"]],
-  },
-  cvUrl:"#",
+  // img: "images/portrait.jpg",
 };
 
-const COLLABORATORS = {
-  "partners":["partner organization","partner organization","partner organization","partner organization","partner organization","partner organization"],
-  "people":["collaborator name","collaborator name","collaborator name","collaborator name","collaborator name","collaborator name","collaborator name","collaborator name","collaborator name"],
-};
+// put your resume pdf in the folder and keep this name (or change it)
+const RESUME_PDF = "resume.pdf";
 
 /* ================================================================= */
 
@@ -249,18 +214,13 @@ const media = (src, ratio, label, i=0) => src
   ? `<img src="${esc(src)}" alt="${esc(label)}" loading="lazy" style="width:100%;aspect-ratio:${ratio};object-fit:cover">`
   : `<div class="ph ${tone(i)}" style="aspect-ratio:${ratio}" data-label="${esc(label)}"></div>`;
 
-let filter = 'all';
-
 const views = {
-  work(){
-    const list = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.cat === filter);
+  projects(){
     return `
       <p class="intro">${esc(SITE.intro)}</p>
-      <div class="filters">${['all',...CATEGORIES].map(c =>
-        `<button class="${c===filter?'on':''}" data-f="${c}">${c}</button>`).join('')}</div>
-      <div class="bricks">${list.map((p,i) => `
-        <a class="brick" href="#/work/${p.slug}" style="animation-delay:${i*40}ms">
-          ${media(p.img, p.ratio, 'image', PROJECTS.indexOf(p))}
+      <div class="bricks">${PROJECTS.map((p,i) => `
+        <a class="brick" href="#/projects/${p.slug}" style="animation-delay:${i*40}ms">
+          ${media(p.img, p.ratio, 'image', i)}
           <span class="label"><span class="cat">${esc(p.cat)}</span><span class="name">${esc(p.title)}</span></span>
         </a>`).join('')}</div>`;
   },
@@ -275,60 +235,42 @@ const views = {
       <div class="body">${p.text.map(t=>`<p>${esc(t)}</p>`).join('')}
         <p style="font-size:14px;color:var(--muted);margin-top:1.6em">with ${esc(p.collaborators)}</p></div>
       <div class="gallery">${p.gallery.map((g,k)=>`<div class="${g.wide?'wide':''}">${media(g.img, g.wide?16/9:1, 'image '+String(k+1).padStart(2,'0'), i+k+1)}</div>`).join('')}</div>
-      <div class="pager"><a href="#/work/${prev.slug}">← ${esc(prev.title)}</a><a href="#/">all work</a><a href="#/work/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
   },
-  research(){
-    return `<h1 class="page">research</h1>
-      <p class="intro">placeholder: an overview of your research agenda in two or three sentences.</p>
-      <div class="themes">${RESEARCH.map((r,i)=>`
-        <div class="theme">${media(r.img, 4/3, 'image', i)}<h3>${esc(r.title)}</h3><p>${esc(r.text)}</p></div>`).join('')}</div>`;
-  },
-  publications(){
-    const years = [...new Set(PUBLICATIONS.map(p=>p.year))];
-    return `<h1 class="page">publications</h1><div class="list">${years.map(y=>`
-      <div class="year">${y}</div>${PUBLICATIONS.filter(p=>p.year===y).map(p=>`
-      <div class="item"><div><a class="t" href="${esc(p.url)}">${esc(p.title)}</a>
-        <div class="s">${esc(p.authors)} — ${esc(p.venue)}</div></div><div class="r">${esc(p.type)}</div></div>`).join('')}`).join('')}</div>`;
-  },
-  press(){
-    return `<h1 class="page">press</h1><div class="list">${PRESS.map(p=>`
-      <div class="item"><div><a class="t" href="${esc(p.url)}">${esc(p.title)}</a><div class="s">${esc(p.outlet)}</div></div>
-      <div class="r">${esc(p.date)}</div></div>`).join('')}</div>`;
-  },
   about(){
-    return `<h1 class="page">about</h1><div class="about">
+    return `<div class="about" style="margin-top:30px">
       <div>${media(ABOUT.img, 4/5, 'portrait', 1)}</div>
-      <div><div class="bio">${ABOUT.bio.map(t=>`<p>${esc(t)}</p>`).join('')}</div>
-        <div class="cv">${Object.entries(ABOUT.cv).map(([h,rows])=>`<h3>${esc(h)}</h3><ul>${rows.map(([a,b])=>`<li><span>${esc(a)}</span><span>${esc(b)}</span></li>`).join('')}</ul>`).join('')}
-        <p style="margin-top:28px;font-size:14px"><a href="${esc(ABOUT.cvUrl)}" style="color:var(--ink);border-bottom:1px solid var(--line)">full cv (pdf)</a></p></div></div>
+      <div class="bio">${ABOUT.bio.map(t=>`<p>${esc(t)}</p>`).join('')}</div>
     </div>`;
   },
-  collaborators(){
-    return `<h1 class="page">collaborators</h1>${Object.entries(COLLABORATORS).map(([h,names])=>`
-      <ul class="names" style="margin-bottom:40px"><h3>${esc(h)}</h3>${names.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`).join('')}`;
+  resume(){
+    return `<div class="resume">
+      <object data="${esc(RESUME_PDF)}" type="application/pdf">
+        <div class="ph t2" style="aspect-ratio:8.5/11" data-label="resume.pdf"></div>
+      </object>
+      <p><a href="${esc(RESUME_PDF)}" download>download pdf</a></p>
+    </div>`;
   },
   contact(){
-    return `<h1 class="page">contact</h1><div class="contact">
-      <p>for projects, collaborations, press, or speaking — placeholder line.</p>
+    return `<div class="contact" style="margin-top:30px">
+      <p>for projects, collaborations, or research — placeholder line.</p>
       <a class="big" href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>
-      <dl><dt>studio</dt><dd>placeholder address<br>cambridge, ma 02139</dd>
-      <dt>instagram</dt><dd><a href="#">@placeholder</a></dd>
+      <dl><dt>github</dt><dd><a href="https://github.com/yaqili05" target="_blank" rel="noopener">yaqili05</a></dd>
       <dt>linkedin</dt><dd><a href="#">/in/placeholder</a></dd></dl></div>`;
   },
-  notfound(){ return `<h1 class="page">not found</h1><p><a href="#/">back to work</a></p>`; }
+  notfound(){ return `<p style="margin-top:40px">not found · <a href="#/">back to projects</a></p>`; }
 };
 
 function render(){
   const parts = location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
-  const route = parts[0] || 'work';
+  const route = parts[0] || 'projects';
   let html;
-  if (route === 'work' && parts[1]) html = views.project(parts[1]);
+  if (route === 'projects' && parts[1]) html = views.project(parts[1]);
   else html = (views[route] || views.notfound)();
   app.innerHTML = html;
   document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.r === route));
-  document.title = route === 'work' && !parts[1] ? 'yaqi li' : `${parts[1] ? parts[1].replace(/-/g,' ') : route} — yaqi li`;
-  app.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filter = b.dataset.f; render(); });
+  document.title = route === 'projects' && !parts[1] ? 'yaqi li' : `${parts[1] ? parts[1].replace(/-/g,' ') : route} — yaqi li`;
 }
 addEventListener('hashchange', () => { render(); scrollTo(0,0); });
 render();
