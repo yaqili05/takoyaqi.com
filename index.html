@@ -88,6 +88,22 @@ p + p{margin-top:1em}
   .results em{grid-column:1 / -1}
   .case blockquote{font-size:18px}
 }
+/* voyages agent */
+.diagram{margin:0;background:#f3f1ec}
+.diagram img{width:100%;height:auto}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.compare > div{border-top:1px solid var(--ink);padding-top:14px}
+.compare h3{margin-bottom:8px}
+.compare p{font-size:15px!important}
+.compare strong{display:block;margin-top:12px;font-weight:normal;font-size:22px;color:var(--ink)}
+.steps.five{grid-template-columns:repeat(5,1fr)}
+.results.stack{margin-top:34px}
+.results.stack .row{grid-template-columns:160px 1fr}
+@media (max-width:760px){
+  .compare{grid-template-columns:1fr}
+  .steps.five{grid-template-columns:1fr 1fr}
+  .results.stack .row{grid-template-columns:1fr}
+}
 /* resume */
 .resume{max-width:820px;margin:30px auto 0}
 .resume object{display:block;width:100%;height:80vh;min-height:520px;border:1px solid var(--line)}
@@ -212,7 +228,7 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), optional img
   {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:720/560, img:"images/soft-arm.jpg", custom:true},
-  {slug:"project-two",   title:"project two",   cat:"objects",       year:2026, ratio:.75},
+  {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:1200/640, img:"images/voyages-agent.svg", custom:true},
   {slug:"project-three", title:"project three", cat:"spaces",        year:2025, ratio:1.33},
   {slug:"project-four",  title:"project four",  cat:"installations", year:2025, ratio:1},
   {slug:"project-five",  title:"project five",  cat:"research",      year:2025, ratio:.8},
@@ -273,6 +289,55 @@ const SOFT_ARM = {
   repo: "https://github.com/yaqili05/softarm_sim",
 };
 
+const VOYAGES = {
+  tagline: "an llm agent that investigates voyage-curation tickets for a maritime data platform — from a client's free-text complaint to a verified fix in about a minute.",
+  meta: ["internship · summer 2026", "signal ocean, london", "mit misti", "llm agents · python · gemini"],
+  company: { name: "signal ocean", url: "https://www.thesignalgroup.com/signal-ocean-platform" },
+  problem: [
+    "signal ocean's voyages pipeline turns raw ais broadcasts from ~56,000 vessels — position, speed and draught every few minutes — into the commercial story clients buy: where each ship loaded, where it discharged, and which voyage it was on.",
+    "the inputs are noisy: crew-typed destinations, ais gaps while a ship is in port, terminals with no geofence, ship-to-ship transfers, manual entries upstream. some errors reach clients, who file curation tickets. an analyst spends ~15 minutes per case, and about 80% of that is gathering evidence across five or six tools rather than deciding.",
+  ],
+  compare: [
+    ["today", "read the ticket and work out the vessel and voyage, open the voyage panel, the ais track and draughts, check sts events, lineups, fixtures and history, then decide.", "~15 min per case"],
+    ["with the agent", "paste the ticket and press run. each case comes back with the vessel and voyage identified, all evidence gathered and checked, a verdict with its reasoning, and the exact fix as rows ready to execute.", "30–90 s per case"],
+  ],
+  steps: [
+    ["resolve", "parse the free-text ticket into one or more vessel + voyage cases."],
+    ["evidence", "10 evidence sources fetched in parallel as tools: voyage snapshots, ais track and draught, port geofences, sts events, lineups, fixtures, vessel call history."],
+    ["checks", "8 deterministic checks per port stop (draught change, stay length vs the vessel's history, geofence coverage…) turn raw data into findings."],
+    ["verdict", "a stronger model reads only the findings, ~40 rules taught by curators, and few-shot examples retrieved from the case bank — never the raw data."],
+    ["answer", "verdict, evidence and the exact database actions, shown in an approval ui. the curator decides; the agent never writes to the database."],
+  ],
+  stack: [
+    ["models", "gemini flash for the pipeline stages, a larger gemini model for the verdict; configurable so models can be swapped"],
+    ["data", "voyage snapshots, data warehouse, voyages and ais apis, jira"],
+    ["evaluation", "llm-as-judge against a frozen benchmark of 60 real tickets; tf-idf few-shot retrieval from the case bank"],
+    ["interface", "live in the internal curation tool, with accept / reject feeding the case bank"],
+  ],
+  example: "a client wrote that a tanker's voyage showed a part discharge at an african port, but it had only stopped to bunker on the way to new york. in 36 s the agent resolved the vessel and voyage from the text alone, found a flat draught over the 8-hour stay, an 8 h call against this vessel's typical 52 h discharge across 27 past calls, and a lineup and fixtures confirming the us destination — and proposed a single fix: re-label that stop from discharge to bunkers. it also noted the new york discharge couldn't be recorded yet because ais coverage hadn't reached it.",
+  results: [
+    ["accuracy on 30 unseen historical tickets", "~90%", "after teaching rules on 30 others"],
+    ["accepted by curators on real tickets", "76%", "41 of 54; every rejection comes with a reason"],
+    ["investigation time per case", "30–90 s", "vs ~15 min by hand"],
+    ["analyst time recoverable", "~215 h / yr", "indicative, at ~80 cases a month"],
+  ],
+  loop: [
+    "accept: the case joins the regression set every future change must still pass.",
+    "reject: a short form asks why and what was expected, prefilled with the agent's proposal.",
+    "a learning run collects rejections and proposes a general rule change — never one tailored to a single case.",
+    "the change must fix the rejected cases, keep every accepted one and pass all 60 benchmark tickets; a person approves it before it ships. two curator rejections in one week became two rule fixes.",
+  ],
+  contributions: [
+    "built and deployed the end-to-end agent: ticket resolution, parallel evidence tools, deterministic checks, verdict and structured fix actions",
+    "worked with curators to encode ~40 domain rules and 8 deterministic per-stop checks for load, discharge, bunkering and sts calls",
+    "built the llm-as-judge evaluation harness and the frozen 60-ticket benchmark that every rule change must pass",
+    "designed the human-in-the-loop accept / reject ui and the case bank that feeds few-shot retrieval and the self-learning loop",
+    "presented the system to the company all-hands",
+  ],
+  next: "next: take a jira link in and comment the analysis on every new ticket automatically, move from proposing to acting once accept rates earn trust, run the learning loop on a schedule, and extend to cargo tracking and forecasting.",
+  credit: "built with the data science team and the curators in london and athens during an mit misti internship. client, vessel and system details are simplified here.",
+};
+
 const ABOUT = {
   bio:[
     "yaqi li is an undergraduate at mit majoring in computation and cognition (6-9) with a minor in design. her work sits at the intersection of artificial intelligence, design and human-robot interaction, with a focus on intelligent systems that fit into human environments.",
@@ -311,6 +376,7 @@ const views = {
     const i = PROJECTS.findIndex(p => p.slug === slug);
     if (i < 0) return views.notfound();
     if (slug === 'soft-arm') return views.softarm(i);
+    if (slug === 'voyages-agent') return views.voyages(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -349,6 +415,39 @@ const views = {
 
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
+
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+    </article>`;
+  },
+  voyages(i){
+    const V = VOYAGES, prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    return `<article class="case">
+      <h1 class="page">voyages agent</h1>
+      <p class="lead">${esc(V.tagline)}</p>
+      <div class="meta">${V.meta.map((m,k)=> k===1 ? `<a class="u" href="${esc(V.company.url)}" target="_blank" rel="noopener">${esc(m)} ↗</a>` : `<span>${esc(m)}</span>`).join('')}</div>
+
+      <figure class="diagram"><img src="images/voyages-agent.svg" alt="agent architecture: ticket, resolve, evidence, checks, verdict, answer, curator review and the self-learning loop"></figure>
+
+      <section class="two"><h2>the problem</h2><div>${V.problem.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
+
+      <section><h2>a ticket, before and after</h2>
+        <div class="compare">${V.compare.map(([h,t,n])=>`<div><h3>${esc(h)}</h3><p>${esc(t)}</p><strong>${esc(n)}</strong></div>`).join('')}</div></section>
+
+      <section><h2>architecture</h2>
+        <ol class="steps five">${V.steps.map(([h,t],k)=>`<li><span class="n">0${k+1}</span><h3>${esc(h)}</h3><p>${esc(t)}</p></li>`).join('')}</ol>
+        <div class="results stack">${V.stack.map(([a,b])=>`<div class="row"><span>${esc(a)}</span><em>${esc(b)}</em></div>`).join('')}</div></section>
+
+      <blockquote>${esc(V.example)}</blockquote>
+
+      <section><h2>how we know it's right</h2>
+        <div class="results">${V.results.map(([a,b,c])=>`<div class="row"><span>${esc(a)}</span><strong>${esc(b)}</strong><em>${esc(c)}</em></div>`).join('')}</div></section>
+
+      <section class="two"><h2>it learns from curators</h2><ul class="contrib">${V.loop.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></section>
+
+      <section class="two"><h2>my contributions</h2><ul class="contrib">${V.contributions.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></section>
+
+      <section class="two"><h2>next</h2><div><p>${esc(V.next)}</p><p class="fine">${esc(V.credit)}</p>
+        <p style="margin-top:18px"><a class="u" href="${esc(V.company.url)}" target="_blank" rel="noopener">signal ocean ↗</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
