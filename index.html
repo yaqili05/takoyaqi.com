@@ -6,6 +6,8 @@
 <title>yaqi li</title>
 <meta name="description" content="yaqi li — design + research. placeholder description.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fff'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='18' text-anchor='middle' fill='%23777'%3Ey%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ---------------------------------------------------------------
    takoyaqi.com — structure after selfassemblylab.mit.edu,
@@ -87,6 +89,42 @@ p + p{margin-top:1em}
   .results .row{grid-template-columns:1fr auto}
   .results em{grid-column:1 / -1}
   .case blockquote{font-size:18px}
+}
+/* voyages agent — signal ocean palette */
+.case.so{--so-navy:#003357;--so-ink:#2B3340;--so-blue:#264292;--so-sky:#7FB3F0;--so-mist:#F3F5F8;--so-ice:#E9EFF7;--so-grey:#85858A;
+  font-family:Montserrat, Arial, Helvetica, sans-serif;color:var(--so-ink)}
+.case.so .so-hero{position:relative;display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:20px;background:var(--so-navy);color:#fff;text-align:left;
+  padding:56px 56px;margin:26px 0 0;overflow:hidden}
+.so-hero::after{content:"";position:absolute;right:-120px;bottom:-160px;width:420px;height:420px;border:1px solid rgba(127,179,240,.25);transform:rotate(45deg)}
+.so-logo img{width:170px;height:auto;display:block;margin-bottom:34px}
+.so-hero h1{font-weight:500;font-size:40px;letter-spacing:.5px;line-height:1.1;margin:0 0 16px;color:#fff}
+.so-hero p{font-size:17px;line-height:1.55;color:#dfe8f5;max-width:520px}
+.so-meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:22px;font-size:12.5px;letter-spacing:1px;color:var(--so-sky)}
+.so-meta a{color:#fff;border-bottom:1px solid rgba(255,255,255,.4)}
+.so-diamond{width:100%;max-width:360px;justify-self:center;position:relative;z-index:1;filter:drop-shadow(0 10px 30px rgba(0,0,0,.25))}
+.case.so .diagram{background:var(--so-mist);margin-top:0}
+.case.so .diagram svg{display:block;width:100%;height:auto}
+.case.so section > h2{color:var(--so-blue);font-weight:600;font-size:12.5px;letter-spacing:2.5px}
+.case.so h3{color:var(--so-navy);font-weight:600}
+.case.so section p,.case.so .contrib li,.case.so .results span{color:var(--so-ink)}
+.case.so .results em,.case.so .fine{color:var(--so-grey)!important}
+.case.so .results strong,.case.so .compare strong{color:var(--so-navy);font-weight:600}
+.case.so .results .row,.case.so .contrib li{border-top-color:var(--so-ice)}
+.case.so .contrib li::before{color:var(--so-blue);font-weight:600}
+.case.so .steps .n{border-top:2px solid var(--so-navy);color:var(--so-blue);font-weight:600}
+.case.so .compare > div{background:var(--so-mist);border-top:3px solid var(--so-navy);padding:20px 22px}
+.case.so .compare > div:last-child{background:var(--so-navy);border-top-color:var(--so-sky)}
+.case.so .compare > div:last-child h3,.case.so .compare > div:last-child strong{color:#fff}
+.case.so .compare > div:last-child p{color:#dfe8f5!important}
+.case.so blockquote{background:var(--so-ice);color:var(--so-navy);font-size:19px;padding:34px 40px;max-width:none;text-align:left;border-left:4px solid var(--so-blue)}
+.so-btn{display:inline-block;background:var(--so-navy);color:#fff!important;padding:10px 18px;letter-spacing:1px;font-size:13px}
+.so-btn:hover{background:var(--so-blue)}
+.case.so .pager a{color:var(--so-navy)}
+@media (max-width:760px){
+  .case.so .so-hero{grid-template-columns:1fr;padding:34px 24px}
+  .so-diamond{max-width:220px}
+  .so-hero h1{font-size:30px}
+  .case.so blockquote{padding:24px}
 }
 /* voyages agent */
 .diagram{margin:0;background:#f3f1ec}
@@ -228,7 +266,7 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), optional img
   {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:720/560, img:"images/soft-arm.jpg", custom:true},
-  {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:1200/640, img:"images/voyages-agent.svg", custom:true},
+  {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:900/640, img:"images/voyages-thumb.jpg", custom:true},
   {slug:"project-three", title:"project three", cat:"spaces",        year:2025, ratio:1.33},
   {slug:"project-four",  title:"project four",  cat:"installations", year:2025, ratio:1},
   {slug:"project-five",  title:"project five",  cat:"research",      year:2025, ratio:.8},
@@ -421,12 +459,18 @@ const views = {
   },
   voyages(i){
     const V = VOYAGES, prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
-    return `<article class="case">
-      <h1 class="page">voyages agent</h1>
-      <p class="lead">${esc(V.tagline)}</p>
-      <div class="meta">${V.meta.map((m,k)=> k===1 ? `<a class="u" href="${esc(V.company.url)}" target="_blank" rel="noopener">${esc(m)} ↗</a>` : `<span>${esc(m)}</span>`).join('')}</div>
+    return `<article class="case so">
+      <header class="so-hero">
+        <div class="so-copy">
+          <a href="${esc(V.company.url)}" target="_blank" rel="noopener" class="so-logo"><img src="images/signal-logo-white.png" alt="signal ocean"></a>
+          <h1>voyages agent</h1>
+          <p>${esc(V.tagline)}</p>
+          <div class="so-meta">${V.meta.map((m,k)=> k===1 ? `<a href="${esc(V.company.url)}" target="_blank" rel="noopener">${esc(m)} ↗</a>` : `<span>${esc(m)}</span>`).join('')}</div>
+        </div>
+        <img class="so-diamond" src="images/signal-diamond.png" alt="">
+      </header>
 
-      <figure class="diagram"><img src="images/voyages-agent.svg" alt="agent architecture: ticket, resolve, evidence, checks, verdict, answer, curator review and the self-learning loop"></figure>
+      <figure class="diagram" id="so-diagram"><img src="images/voyages-agent.svg" alt="agent architecture: ticket, resolve, evidence, checks, verdict, answer, curator review and the self-learning loop"></figure>
 
       <section class="two"><h2>the problem</h2><div>${V.problem.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
 
@@ -447,7 +491,7 @@ const views = {
       <section class="two"><h2>my contributions</h2><ul class="contrib">${V.contributions.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></section>
 
       <section class="two"><h2>next</h2><div><p>${esc(V.next)}</p><p class="fine">${esc(V.credit)}</p>
-        <p style="margin-top:18px"><a class="u" href="${esc(V.company.url)}" target="_blank" rel="noopener">signal ocean ↗</a></p></div></section>
+        <p style="margin-top:22px"><a class="so-btn" href="${esc(V.company.url)}" target="_blank" rel="noopener">signal ocean platform ↗</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
@@ -483,6 +527,8 @@ function render(){
   if (route === 'projects' && parts[1]) html = views.project(parts[1]);
   else html = (views[route] || views.notfound)();
   app.innerHTML = html;
+  const D = document.getElementById('so-diagram');
+  if (D) fetch('images/voyages-agent.svg').then(r => r.text()).then(t => { if (D.isConnected) D.innerHTML = t; }).catch(() => {});
   const L = document.getElementById('launch');
   if (L) L.onclick = () => { const w = document.getElementById('simwrap');
     w.innerHTML = '<iframe src="sim/index.html" title="soft arm simulation" allow="fullscreen" loading="eager"></iframe>'; w.classList.add('live'); };

@@ -1,94 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#555" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpjMGM1MGNmNC04NTc2LTQ4NmQtOTMwNS1kYmI1NmE4ZDhjNWQAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaCtRq7FiTFKHQPr4SrdN5sMAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo0MzIwZjI2Yy1lZjVkLTQ1NGItOTMxZi03ZjBlNTY5ODFlNDJscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoqFa8v4rpyKT5ccdJ6klreQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggBpOS15TfeoqrQpZLtoepUlmWrBhy8XEe4hNP4Pt1mpGkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaL1G2uZ8TAB0BdSrGVHUFZAAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCDGnVg2fjjYD2U/aS3BlghyweIbbGAgpwy6Lb6cID63TmRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBjEZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmMwYzUwY2Y0LTg1NzYtNDg2ZC05MzA1LWRiYjU2YThkOGM1ZC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmZhMDc5ZTNhLWVhMjYtNGRhMy1hMzJhLTM1MGVjMjNlY2VmOXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAGk5LXlN96iqtClku2h6lSWZasGHLxcR7iE0/g+3WakaJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggU3GflSTGqoV1QLzYu8qgCD9WJOpCb0uVoWq8RRl3f+uiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggoYCPCbke6qw0q3Md//WSloq7wATy5HLf1hp4cqdPhtt0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQLS0UkJQnnFcdA21sw/p7wDnGY53XDF1phgBb6Q0i2Bnw3vvhbtoOksn00tabuj8XIFds0HuLa2djPrkvrEzy6Y=</c2pa:manifest></metadata>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" font-family="Montserrat, Arial, Helvetica, sans-serif" font-size="15" fill="#2B3340">
   <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#999"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#85858A"/></marker>
   </defs>
-  <rect width="1200" height="640" fill="#f3f1ec"/>
+  <rect width="1200" height="640" fill="#F3F5F8"/>
 
   <!-- input -->
-  <text x="60" y="70" fill="#999" letter-spacing="2" font-size="13">input</text>
-  <rect x="60" y="86" width="170" height="92" fill="#fff" stroke="#d8d4cc"/>
-  <text x="76" y="116" fill="#333">client ticket</text>
-  <text x="76" y="140" font-size="13" fill="#888">free text, may hold</text>
-  <text x="76" y="158" font-size="13" fill="#888">several cases</text>
-  <line x1="230" y1="132" x2="276" y2="132" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="60" y="70" fill="#85858A" letter-spacing="2" font-size="13">input</text>
+  <rect x="60" y="86" width="170" height="92" fill="#fff" stroke="#C3C4C8"/>
+  <text x="76" y="116" fill="#003357">client ticket</text>
+  <text x="76" y="140" font-size="13" fill="#85858A">free text, may hold</text>
+  <text x="76" y="158" font-size="13" fill="#85858A">several cases</text>
+  <line x1="230" y1="132" x2="276" y2="132" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- pipeline stages -->
-  <text x="280" y="70" fill="#999" letter-spacing="2" font-size="13">agent pipeline · 30–90 s per case</text>
+  <text x="280" y="70" fill="#85858A" letter-spacing="2" font-size="13">agent pipeline · 30–90 s per case</text>
   <g>
-    <rect x="280" y="86" width="150" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-    <text x="296" y="112" font-size="12" fill="#999" letter-spacing="1">01</text>
-    <text x="296" y="136" fill="#333">resolve</text>
-    <text x="296" y="160" font-size="13" fill="#888">vessel + voyage</text>
+    <rect x="280" y="86" width="150" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+    <text x="296" y="112" font-size="12" fill="#264292" letter-spacing="1">01</text>
+    <text x="296" y="136" fill="#003357">resolve</text>
+    <text x="296" y="160" font-size="13" fill="#85858A">vessel + voyage</text>
 
-    <line x1="430" y1="132" x2="456" y2="132" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-    <rect x="460" y="86" width="150" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-    <text x="476" y="112" font-size="12" fill="#999" letter-spacing="1">02</text>
-    <text x="476" y="136" fill="#333">evidence</text>
-    <text x="476" y="160" font-size="13" fill="#888">10 sources, parallel</text>
+    <line x1="430" y1="132" x2="456" y2="132" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+    <rect x="460" y="86" width="150" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+    <text x="476" y="112" font-size="12" fill="#264292" letter-spacing="1">02</text>
+    <text x="476" y="136" fill="#003357">evidence</text>
+    <text x="476" y="160" font-size="13" fill="#85858A">10 sources, parallel</text>
 
-    <line x1="610" y1="132" x2="636" y2="132" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-    <rect x="640" y="86" width="150" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-    <text x="656" y="112" font-size="12" fill="#999" letter-spacing="1">03</text>
-    <text x="656" y="136" fill="#333">checks</text>
-    <text x="656" y="160" font-size="13" fill="#888">8 deterministic / stop</text>
+    <line x1="610" y1="132" x2="636" y2="132" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+    <rect x="640" y="86" width="150" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+    <text x="656" y="112" font-size="12" fill="#264292" letter-spacing="1">03</text>
+    <text x="656" y="136" fill="#003357">checks</text>
+    <text x="656" y="160" font-size="13" fill="#85858A">8 deterministic / stop</text>
 
-    <line x1="790" y1="132" x2="816" y2="132" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-    <rect x="820" y="86" width="150" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-    <text x="836" y="112" font-size="12" fill="#999" letter-spacing="1">04</text>
-    <text x="836" y="136" fill="#333">verdict</text>
-    <text x="836" y="160" font-size="13" fill="#888">~40 curator rules</text>
+    <line x1="790" y1="132" x2="816" y2="132" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+    <rect x="820" y="86" width="150" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+    <text x="836" y="112" font-size="12" fill="#264292" letter-spacing="1">04</text>
+    <text x="836" y="136" fill="#003357">verdict</text>
+    <text x="836" y="160" font-size="13" fill="#85858A">~40 curator rules</text>
 
-    <line x1="970" y1="132" x2="996" y2="132" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-    <rect x="1000" y="86" width="150" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-    <text x="1016" y="112" font-size="12" fill="#999" letter-spacing="1">05</text>
-    <text x="1016" y="136" fill="#333">answer</text>
-    <text x="1016" y="160" font-size="13" fill="#888">verdict + fix rows</text>
+    <line x1="970" y1="132" x2="996" y2="132" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+    <rect x="1000" y="86" width="150" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+    <text x="1016" y="112" font-size="12" fill="#264292" letter-spacing="1">05</text>
+    <text x="1016" y="136" fill="#003357">answer</text>
+    <text x="1016" y="160" font-size="13" fill="#85858A">verdict + fix rows</text>
   </g>
 
   <!-- evidence fan-out -->
-  <line x1="535" y1="178" x2="535" y2="222" stroke="#999" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <g font-size="13" fill="#666">
-    <rect x="300" y="226" width="470" height="118" fill="none" stroke="#d8d4cc" stroke-dasharray="4 4"/>
-    <text x="316" y="250" fill="#999" letter-spacing="1" font-size="12">tools called in parallel</text>
+  <line x1="535" y1="178" x2="535" y2="222" stroke="#85858A" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <g font-size="13" fill="#2B3340">
+    <rect x="300" y="226" width="470" height="118" fill="none" stroke="#C3C4C8" stroke-dasharray="4 4"/>
+    <text x="316" y="250" fill="#85858A" letter-spacing="1" font-size="12">tools called in parallel</text>
     <text x="316" y="276">voyage snapshots</text><text x="470" y="276">ais track</text><text x="600" y="276">draught</text>
     <text x="316" y="300">port geofences</text><text x="470" y="300">sts events</text><text x="600" y="300">lineups</text>
     <text x="316" y="324">fixtures</text><text x="470" y="324">vessel call history</text><text x="640" y="324">ticket history</text>
   </g>
   <!-- verdict model note -->
-  <line x1="895" y1="178" x2="895" y2="222" stroke="#999" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <rect x="820" y="226" width="330" height="118" fill="none" stroke="#d8d4cc" stroke-dasharray="4 4"/>
-  <text x="836" y="250" fill="#999" letter-spacing="1" font-size="12">verdict model</text>
-  <text x="836" y="276" font-size="13" fill="#666">reads findings + rules, never raw data</text>
-  <text x="836" y="300" font-size="13" fill="#666">few-shot examples retrieved (tf-idf)</text>
-  <text x="836" y="324" font-size="13" fill="#666">from the curated case bank</text>
+  <line x1="895" y1="178" x2="895" y2="222" stroke="#85858A" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <rect x="820" y="226" width="330" height="118" fill="none" stroke="#C3C4C8" stroke-dasharray="4 4"/>
+  <text x="836" y="250" fill="#85858A" letter-spacing="1" font-size="12">verdict model</text>
+  <text x="836" y="276" font-size="13" fill="#2B3340">reads findings + rules, never raw data</text>
+  <text x="836" y="300" font-size="13" fill="#2B3340">few-shot examples retrieved (tf-idf)</text>
+  <text x="836" y="324" font-size="13" fill="#2B3340">from the curated case bank</text>
 
   <!-- human in the loop -->
-  <line x1="1075" y1="178" x2="1075" y2="216" stroke="#999" stroke-width="1.5"/>
-  <path d="M1075 344 L1075 400" stroke="#999" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
-  <text x="60" y="400" fill="#999" letter-spacing="2" font-size="13">human in the loop</text>
-  <rect x="930" y="404" width="220" height="92" fill="#fff" stroke="#333" stroke-width="1.2"/>
-  <text x="946" y="434" fill="#333">curator reviews</text>
-  <text x="946" y="458" font-size="13" fill="#888">accept → fix is executed</text>
-  <text x="946" y="478" font-size="13" fill="#888">reject → reason + expected</text>
+  <line x1="1075" y1="178" x2="1075" y2="216" stroke="#85858A" stroke-width="1.5"/>
+  <path d="M1075 344 L1075 400" stroke="#85858A" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+  <text x="60" y="400" fill="#85858A" letter-spacing="2" font-size="13">human in the loop</text>
+  <rect x="930" y="404" width="220" height="92" fill="#fff" stroke="#003357" stroke-width="1.2"/>
+  <text x="946" y="434" fill="#003357">curator reviews</text>
+  <text x="946" y="458" font-size="13" fill="#85858A">accept → fix is executed</text>
+  <text x="946" y="478" font-size="13" fill="#85858A">reject → reason + expected</text>
 
-  <line x1="930" y1="450" x2="784" y2="450" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-  <rect x="610" y="404" width="170" height="92" fill="#fff" stroke="#d8d4cc"/>
-  <text x="626" y="434" fill="#333">case bank</text>
-  <text x="626" y="458" font-size="13" fill="#888">accepted → regression</text>
-  <text x="626" y="478" font-size="13" fill="#888">rejected → learning</text>
+  <line x1="930" y1="450" x2="784" y2="450" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect x="610" y="404" width="170" height="92" fill="#fff" stroke="#C3C4C8"/>
+  <text x="626" y="434" fill="#003357">case bank</text>
+  <text x="626" y="458" font-size="13" fill="#85858A">accepted → regression</text>
+  <text x="626" y="478" font-size="13" fill="#85858A">rejected → learning</text>
 
-  <line x1="610" y1="450" x2="464" y2="450" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-  <rect x="260" y="404" width="200" height="92" fill="#fff" stroke="#d8d4cc"/>
-  <text x="276" y="434" fill="#333">self-learning loop</text>
-  <text x="276" y="458" font-size="13" fill="#888">proposes a general</text>
-  <text x="276" y="478" font-size="13" fill="#888">rule change</text>
+  <line x1="610" y1="450" x2="464" y2="450" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect x="260" y="404" width="200" height="92" fill="#fff" stroke="#C3C4C8"/>
+  <text x="276" y="434" fill="#003357">self-learning loop</text>
+  <text x="276" y="458" font-size="13" fill="#85858A">proposes a general</text>
+  <text x="276" y="478" font-size="13" fill="#85858A">rule change</text>
 
-  <line x1="260" y1="450" x2="164" y2="450" stroke="#999" stroke-width="1.5" marker-end="url(#a)"/>
-  <rect x="60" y="404" width="100" height="92" fill="#fff" stroke="#d8d4cc"/>
-  <text x="76" y="434" fill="#333">gate</text>
-  <text x="76" y="458" font-size="13" fill="#888">60-case</text>
-  <text x="76" y="478" font-size="13" fill="#888">benchmark</text>
+  <line x1="260" y1="450" x2="164" y2="450" stroke="#85858A" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect x="60" y="404" width="100" height="92" fill="#fff" stroke="#C3C4C8"/>
+  <text x="76" y="434" fill="#003357">gate</text>
+  <text x="76" y="458" font-size="13" fill="#85858A">60-case</text>
+  <text x="76" y="478" font-size="13" fill="#85858A">benchmark</text>
 
-  <path d="M110 496 L110 560 L895 560 L895 348" stroke="#999" stroke-width="1.5" fill="none" stroke-dasharray="5 4" marker-end="url(#a)"/>
-  <text x="130" y="588" font-size="13" fill="#888">+ human approval → rule ships to the verdict stage; the agent never writes to the database itself</text>
+  <path d="M110 496 L110 560 L895 560 L895 348" stroke="#85858A" stroke-width="1.5" fill="none" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text x="130" y="588" font-size="13" fill="#85858A">+ human approval → rule ships to the verdict stage; the agent never writes to the database itself</text>
 </svg>
