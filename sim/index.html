@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>soft arm — interactive simulation</title>
+<style>
+:root{--ink:#333;--text:#777;--muted:#aaa;--line:#e6e6e6;--hot:#d9463b;--accent:#c9a640;--font:Arial,"Helvetica Neue",Helvetica,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff;color:var(--text);font:13px/1.5 var(--font);text-transform:lowercase;overflow:hidden}
+#view{position:absolute;inset:0;touch-action:none}
+#view canvas{display:block;width:100%;height:100%}
+.panel{position:absolute;background:rgba(255,255,255,.9);border:1px solid var(--line);padding:12px 14px;letter-spacing:.5px;backdrop-filter:blur(4px)}
+#modes{top:12px;left:12px;display:flex;flex-direction:column;gap:10px;max-width:240px}
+.seg{display:flex;gap:0;border:1px solid var(--line)}
+.seg button{flex:1;background:#fff;border:0;border-right:1px solid var(--line);font:inherit;text-transform:inherit;color:var(--muted);padding:6px 8px;cursor:pointer;letter-spacing:1px}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--ink);color:#fff}
+.hint{font-size:12px;color:var(--text);min-height:36px}
+.sliders{display:none;flex-direction:column;gap:6px}
+.sliders.show{display:flex}
+.sliders label{display:grid;grid-template-columns:44px 1fr 30px;align-items:center;gap:8px;font-size:12px}
+input[type=range]{width:100%;accent-color:#555}
+.chk{display:flex;gap:6px;align-items:center;font-size:12px;cursor:pointer}
+#sensor{top:12px;right:12px;width:170px;text-align:center}
+#sensor h4,#readout h4{font-weight:normal;color:var(--ink);letter-spacing:1px;margin-bottom:8px;font-size:12px}
+.ring{position:relative;width:110px;height:110px;margin:4px auto 8px}
+.ring .core{position:absolute;inset:34px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted)}
+.pad{position:absolute;width:20px;height:20px;border-radius:50%;background:#eee;border:1px solid #ddd;transition:background .12s,box-shadow .12s}
+.pad.on{background:var(--hot);border-color:var(--hot);box-shadow:0 0 10px rgba(217,70,59,.55)}
+#status{font-size:12px;color:var(--ink)}
+#readout{bottom:12px;right:12px;width:200px;font-size:12px}
+.bar{display:grid;grid-template-columns:44px 1fr 30px;gap:8px;align-items:center;margin:3px 0}
+.bar i{display:block;height:4px;background:var(--line);position:relative}
+.bar i b{position:absolute;left:0;top:0;bottom:0;background:#666}
+#tip{margin-top:8px;color:var(--muted);font-size:11px}
+#loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:#fff;color:var(--muted);letter-spacing:1px;z-index:5}
+#loading .b{width:160px;height:2px;background:var(--line);position:relative;overflow:hidden}
+#loading .b i{position:absolute;inset:0;width:0;background:#777;transition:width .2s}
+#help{bottom:12px;left:12px;font-size:11px;color:var(--muted);border:0;background:rgba(255,255,255,.75);padding:6px 10px}
+@media (max-width:640px){
+  #modes{max-width:none;right:12px}
+  #sensor{top:auto;bottom:12px;right:12px;width:130px;padding:8px}
+  .ring{transform:scale(.8);margin:-8px auto -6px}
+  #readout,#help{display:none}
+}
+</style>
+</head>
+<body>
+<div id="view"></div>
+
+<div id="loading"><span id="lmsg">loading mujoco…</span><div class="b"><i id="lbar"></i></div></div>
+
+<div class="panel" id="modes">
+  <div class="seg" id="seg">
+    <button data-m="reach" class="on">reach</button>
+    <button data-m="react">react</button>
+    <button data-m="manual">ropes</button>
+  </div>
+  <div class="hint" id="hint"></div>
+  <div class="sliders" id="sliders">
+    <label>rope 1<input type="range" min="0" max="5" step="0.01" value="0.3" data-r="0"><span>0.3</span></label>
+    <label>rope 2<input type="range" min="0" max="5" step="0.01" value="0.1" data-r="1"><span>0.1</span></label>
+    <label>rope 3<input type="range" min="0" max="5" step="0.01" value="0.0" data-r="2"><span>0.0</span></label>
+  </div>
+  <label class="chk"><input type="checkbox" id="cloud"> show reachable workspace</label>
+</div>
+
+<div class="panel" id="sensor">
+  <h4>tip contact sensor</h4>
+  <div class="ring" id="ring"><div class="core">8 pads</div></div>
+  <div id="status">no contact</div>
+</div>
+
+<div class="panel" id="readout">
+  <h4>rope tension</h4>
+  <div class="bar"><span>rope 1</span><i><b id="b0"></b></i><span id="v0">0</span></div>
+  <div class="bar"><span>rope 2</span><i><b id="b1"></b></i><span id="v1">0</span></div>
+  <div class="bar"><span>rope 3</span><i><b id="b2"></b></i><span id="v2">0</span></div>
+  <div id="tip">tip —</div>
+</div>
+
+<div class="panel" id="help">drag the yellow cylinder · drag empty space to orbit · scroll to zoom</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import loadMujoco from 'https://cdn.jsdelivr.net/npm/@mujoco/mujoco@3.14.0/mujoco.js';
+
+/* ------------------------------------------------------------------
+   soft arm — browser simulation
+   · the real MuJoCo model (8 origami modules, 3 ropes) runs in wasm
+   · arm poses come from a 10k-sample dataset of fully settled MuJoCo
+     states (rope tensions -> joint config); 2,000 are shipped here
+   · inverse control = inverse-distance-weighted k-NN over tip positions
+   · contacts between arm and cylinder come from mj_collision every frame
+   ------------------------------------------------------------------ */
+
+const STL = ['bottom_4x','bottom_collision','cylinder_base','rib_seg2','rib_seg3L','rib_seg3R',
+             'rib_seg4','rib_seg5L','rib_seg5R','rib_seg6','top_4x'];
+const DESK_Z = 0.728, CYL_R = 0.02, CYL_H = 0.10, NARM = 272, TUBE_Q = 272;
+const $ = id => document.getElementById(id);
+const lbar = $('lbar'), lmsg = $('lmsg');
+const prog = (p, msg) => { lbar.style.width = (p*100)+'%'; if (msg) lmsg.textContent = msg; };
+
+// ---------- load everything ----------
+const mj = await loadMujoco();
+prog(.25, 'loading model…');
+mj.FS.mkdir('/m'); mj.FS.mkdir('/m/STL');
+const files = ['scene_web.xml','module1_8.xml','object_web.xml', ...STL.map(s => `STL/${s}.stl`)];
+let done = 0;
+await Promise.all(files.map(async f => {
+  const buf = new Uint8Array(await (await fetch('model/' + f)).arrayBuffer());
+  mj.FS.writeFile('/m/' + f, buf); prog(.25 + .45 * (++done / files.length));
+}));
+const [qBuf, tcBuf, wsBuf] = await Promise.all(
+  ['poses_q.f16','poses_tc.f32','workspace_tips.f32'].map(async f => (await fetch(f)).arrayBuffer()));
+prog(.8, 'compiling model…');
+await new Promise(r => setTimeout(r, 30));
+const model = mj.MjModel.from_xml_path('/m/scene_web.xml');
+const data = new mj.MjData(model);
+prog(.95, 'building scene…');
+
+// half-float decode
+function f16(u16){ const out = new Float32Array(u16.length);
+  for (let i=0;i<u16.length;i++){ const h=u16[i], s=(h&0x8000)?-1:1, e=(h>>10)&31, f=h&1023;
+    out[i] = e===0 ? s*Math.pow(2,-14)*(f/1024) : e===31 ? (f?NaN:s*Infinity) : s*Math.pow(2,e-15)*(1+f/1024); }
+  return out; }
+const Q = f16(new Uint16Array(qBuf));
+const TC = new Float32Array(tcBuf);                // [tip xyz, ctrl 1..3] per sample
+const N = TC.length / 6;
+const WS = new Float32Array(wsBuf);
+
+// ids
+const OBJ = mj.mjtObj;
+const id = (t, n) => mj.mj_name2id(model, t.value, n);
+const tipBody = id(OBJ.mjOBJ_BODY, 'm8_bottom');
+const tipSite = id(OBJ.mjOBJ_SITE, 'attach_small');
+const tubeBody = id(OBJ.mjOBJ_BODY, 'tube');
+const deskBody = id(OBJ.mjOBJ_BODY, 'desk');
+const cylCol = id(OBJ.mjOBJ_GEOM, 'cylinder_base_col');
+const cylVis = id(OBJ.mjOBJ_GEOM, 'cylinder_base_vis');
+
+// only arm <-> cylinder contacts matter for the sensor: re-mask collision bits
+{
+  const ct = model.geom_contype, ca = model.geom_conaffinity, gb = model.geom_bodyid;
+  for (let g=0; g<model.ngeom; g++){
+    if (g === cylCol){ ct[g]=0; ca[g]=2; }
+    else if (gb[g]===tubeBody || gb[g]===deskBody || gb[g]===0){ ct[g]=0; ca[g]=0; }
+    else if (ct[g] || ca[g]){ ct[g]=2; ca[g]=0; }
+  }
+}
+
+// ---------- three.js scene ----------
+const view = $('view');
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0xffffff);
+const camera = new THREE.PerspectiveCamera(38, 1, 0.01, 20);
+camera.up.set(0,0,1); camera.position.set(0.62, -0.02, 1.12);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, -0.2, 0.78); controls.enableDamping = true; controls.minDistance = .25; controls.maxDistance = 2.5;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xdedad2, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.9); sun.position.set(0.5, 0.3, 1.9);
+sun.castShadow = true; sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera, {left:-.6,right:.6,top:.6,bottom:-.6,near:.5,far:3}); sun.shadow.bias = -0.0004;
+sun.target.position.set(0,-0.2,0.73); scene.add(sun, sun.target);
+
+const mats = {
+  arm:  new THREE.MeshStandardMaterial({ color:0xe9e7e2, roughness:.62, metalness:0 }),
+  tip:  new THREE.MeshStandardMaterial({ color:0xb9b6ae, roughness:.55 }),
+  cyl:  new THREE.MeshStandardMaterial({ color:0xd8b54f, roughness:.5 }),
+  hot:  new THREE.MeshStandardMaterial({ color:0xd9463b, roughness:.5, emissive:0x5a0d08 }),
+  desk: new THREE.MeshStandardMaterial({ color:0xf3f1ec, roughness:.9 }),
+};
+const geomCache = new Map();
+function meshGeometry(mid){
+  if (geomCache.has(mid)) return geomCache.get(mid);
+  const va = model.mesh_vertadr[mid], vn = model.mesh_vertnum[mid], fa = model.mesh_faceadr[mid], fn = model.mesh_facenum[mid];
+  const V = model.mesh_vert.slice(3*va, 3*(va+vn)), F = model.mesh_face.slice(3*fa, 3*(fa+fn));
+  let g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(V), 3));
+  g.setIndex(new THREE.BufferAttribute(new Uint32Array(F), 1));
+  g = g.toNonIndexed(); g.computeVertexNormals();
+  geomCache.set(mid, g); return g;
+}
+const rgba = model.geom_rgba.slice(), gtype = model.geom_type.slice(), gdata = model.geom_dataid.slice(),
+      gsize = model.geom_size.slice(), gbody = model.geom_bodyid.slice(), bparent = model.body_parentid.slice();
+const tipBodies = new Set([tipBody]);
+const drawn = []; let cylMesh = null; const tipMeshes = [];
+for (let g=0; g<model.ngeom; g++){
+  if (rgba[4*g+3] === 0) continue;
+  let geo, mat = mats.arm;
+  if (gtype[g] === mj.mjtGeom.mjGEOM_MESH.value) geo = meshGeometry(gdata[g]);
+  else if (gtype[g] === mj.mjtGeom.mjGEOM_BOX.value) geo = new THREE.BoxGeometry(2*gsize[3*g], 2*gsize[3*g+1], 2*gsize[3*g+2]);
+  else continue;
+  if (g === cylVis) mat = mats.cyl;
+  else if (gbody[g] === deskBody) mat = mats.desk;
+  else if (tipBodies.has(gbody[g])) mat = mats.tip;
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.matrixAutoUpdate = false; mesh.castShadow = gbody[g] !== deskBody; mesh.receiveShadow = true;
+  scene.add(mesh); drawn.push([g, mesh]);
+  if (g === cylVis) cylMesh = mesh;
+  if (mat === mats.tip) tipMeshes.push(mesh);
+}
+// workspace cloud (all 10k dataset tips)
+const cloud = new THREE.Points(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(WS, 3)),
+  new THREE.PointsMaterial({ color:0x8a8a8a, size:0.0035, transparent:true, opacity:.45, depthWrite:false }));
+cloud.visible = false; scene.add(cloud);
+// target marker
+const marker = new THREE.Mesh(new THREE.SphereGeometry(0.006, 16, 12), new THREE.MeshBasicMaterial({ color:0x333333 }));
+marker.visible = false; scene.add(marker);
+
+// ---------- k-NN inverse control ----------
+const K = 6;
+function knn(query, offset){           // offset 0 = tip space, 3 = rope-control space
+  const best = new Array(K).fill(null).map(() => [Infinity, -1]);
+  for (let i=0;i<N;i++){
+    const o = 6*i + offset;
+    const dx = TC[o]-query[0], dy = TC[o+1]-query[1], dz = TC[o+2]-query[2];
+    const d2 = dx*dx + dy*dy + dz*dz;
+    if (d2 < best[K-1][0]){ best[K-1] = [d2, i]; best.sort((a,b) => a[0]-b[0]); }
+  }
+  const out = new Float64Array(NARM), ctrl = [0,0,0], tip = [0,0,0]; let wsum = 0;
+  for (const [d2, i] of best){
+    const w = 1 / (Math.sqrt(d2) + 1e-4); wsum += w;
+    for (let j=0;j<NARM;j++) out[j] += w * Q[i*NARM + j];
+    for (let j=0;j<3;j++){ ctrl[j] += w*TC[6*i+3+j]; tip[j] += w*TC[6*i+j]; }
+  }
+  for (let j=0;j<NARM;j++) out[j] /= wsum;
+  for (let j=0;j<3;j++){ ctrl[j] /= wsum; tip[j] /= wsum; }
+  return { q: out, ctrl, tip };
+}
+const nominal = { q: Float64Array.from(Q.subarray(0, NARM)), ctrl: [TC[3],TC[4],TC[5]], tip:[TC[0],TC[1],TC[2]] };
+
+// ---------- state ----------
+let mode = 'reach';
+const cur = Float64Array.from(nominal.q), curCtrl = [...nominal.ctrl];
+let goal = nominal;
+const cyl = { x: 0.085, y: -0.16 };
+const manualCtrl = [0.3, 0.1, 0.0];
+let lastContact = -1e9, lastTipContact = -1e9, retreatFrom = null;
+const padLit = new Float32Array(8);
+
+const HINTS = {
+  reach: 'the arm looks up the closest reachable pose in its dataset and reaches for the cylinder. move it around the desk.',
+  react: 'the arm holds its rest pose. push the cylinder into it — when the tip pads feel contact it backs away, then returns.',
+  manual:'set rope tensions directly. the pose is the nearest settled mujoco sample in rope-tension space.'
+};
+function setMode(m){
+  mode = m; document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  $('hint').textContent = HINTS[m]; $('sliders').classList.toggle('show', m === 'manual');
+  if (m === 'react'){ goal = nominal; cyl.x = 0.13; cyl.y = -0.07; }
+  if (m === 'reach'){ cyl.x = 0.085; cyl.y = -0.16; }
+}
+document.querySelectorAll('#seg button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+document.querySelectorAll('#sliders input').forEach(inp => inp.oninput = () => {
+  manualCtrl[+inp.dataset.r] = +inp.value; inp.nextElementSibling.textContent = (+inp.value).toFixed(1);
+});
+$('cloud').onchange = e => cloud.visible = e.target.checked;
+setMode('reach');
+
+// sensor ring
+const ring = $('ring'), pads = [];
+for (let k=0;k<8;k++){
+  const a = k/8 * Math.PI*2 - Math.PI/2, el = document.createElement('div');
+  el.className = 'pad'; el.style.left = (45 + 42*Math.cos(a)) + 'px'; el.style.top = (45 + 42*Math.sin(a)) + 'px';
+  ring.appendChild(el); pads.push(el);
+}
+
+// ---------- dragging the cylinder ----------
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+let dragging = false; const dragPlane = new THREE.Plane(new THREE.Vector3(0,0,1), -(DESK_Z + CYL_H/2)); const grab = new THREE.Vector3();
+function setRay(e){ const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left)/r.width)*2 - 1, -((e.clientY - r.top)/r.height)*2 + 1); ray.setFromCamera(ndc, camera); }
+renderer.domElement.addEventListener('pointerdown', e => {
+  setRay(e);
+  if (ray.intersectObject(cylMesh).length){
+    dragging = true; controls.enabled = false; renderer.domElement.setPointerCapture(e.pointerId);
+    ray.ray.intersectPlane(dragPlane, grab); grab.x -= cyl.x; grab.y -= cyl.y; view.style.cursor = 'grabbing';
+  }
+});
+renderer.domElement.addEventListener('pointermove', e => {
+  setRay(e);
+  if (!dragging){ view.style.cursor = ray.intersectObject(cylMesh).length ? 'grab' : ''; return; }
+  const p = new THREE.Vector3();
+  if (ray.ray.intersectPlane(dragPlane, p)){
+    cyl.x = THREE.MathUtils.clamp(p.x - grab.x, -0.4, 0.4); cyl.y = THREE.MathUtils.clamp(p.y - grab.y, -0.38, 0.3);
+  }
+});
+const endDrag = () => { dragging = false; controls.enabled = true; view.style.cursor = ''; };
+renderer.domElement.addEventListener('pointerup', endDrag);
+renderer.domElement.addEventListener('pointercancel', endDrag);
+
+// ---------- main loop ----------
+function resize(){ const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+const m4 = new THREE.Matrix4();
+let tPrev = performance.now()/1000;
+
+function senseContacts(){
+  const cv = data.contact, n = data.ncon, xp = data.xpos, xm = data.xmat;
+  const tp = [xp[3*tipBody], xp[3*tipBody+1], xp[3*tipBody+2]];
+  const R = xm.slice(9*tipBody, 9*tipBody+9);
+  let any = false, tipHit = false, sum = [0,0,0], cnt = 0;
+  for (let i=0;i<n;i++){
+    const c = cv.get(i); const g1 = c.geom1, g2 = c.geom2, p = c.pos; const px=p[0], py=p[1], pz=p[2]; c.delete();
+    if (g1 !== cylCol && g2 !== cylCol) continue;
+    any = true; sum[0]+=px; sum[1]+=py; sum[2]+=pz; cnt++;
+    const dx = px-tp[0], dy = py-tp[1], dz = pz-tp[2];
+    if (Math.hypot(dx,dy,dz) < 0.04){            // within the tip module -> fingertip pads
+      tipHit = true;
+      const lx = R[0]*dx + R[3]*dy + R[6]*dz, ly = R[1]*dx + R[4]*dy + R[7]*dz;   // R^T * d
+      const k = Math.floor(((Math.atan2(ly, lx) + 2*Math.PI) % (2*Math.PI)) / (Math.PI/4));
+      padLit[k] = 1;
+    }
+  }
+  cv.delete();
+  return { any, tipHit, n: cnt, at: cnt ? sum.map(v => v/cnt) : null, tp };
+}
+
+window.__sim = { cpu: 0, setCyl: (x, y) => { cyl.x = x; cyl.y = y; }, setMode: m => setMode(m) };
+function frame(){
+  const c0 = performance.now();
+  const t = performance.now()/1000, dt = Math.min(0.05, t - tPrev); tPrev = t;
+  const q = data.qpos;
+  const tipNow = [data.site_xpos[3*tipSite], data.site_xpos[3*tipSite+1], data.site_xpos[3*tipSite+2]];
+
+  // ---- decide the goal pose ----
+  marker.visible = false;
+  if (mode === 'manual'){
+    goal = knn(manualCtrl, 3);
+  } else if (mode === 'reach'){
+    const z = THREE.MathUtils.clamp(tipNow[2], DESK_Z + 0.02, DESK_Z + CYL_H - 0.01);
+    let dx = tipNow[0]-cyl.x, dy = tipNow[1]-cyl.y; const L = Math.hypot(dx,dy) || 1; dx/=L; dy/=L;
+    const target = [cyl.x + dx*(CYL_R+0.004), cyl.y + dy*(CYL_R+0.004), z];
+    if (t - lastTipContact > 0.25) goal = knn(target, 0);      // hold still while the pads report contact
+    marker.position.set(...target); marker.visible = true;
+  } else if (mode === 'react'){
+    if (retreatFrom){                                          // keep backing off while touched
+      let dx = tipNow[0]-retreatFrom[0], dy = tipNow[1]-retreatFrom[1]; const L = Math.hypot(dx,dy) || 1;
+      goal = knn([tipNow[0] + 0.07*dx/L, tipNow[1] + 0.07*dy/L, tipNow[2]], 0);
+    } else if (t - lastContact > 0.9) goal = nominal;          // contact cleared -> ease back to rest
+  }
+
+  // ---- move toward the goal (first-order smoothing) ----
+  const a = 1 - Math.exp(-dt * (mode === 'react' ? 7 : 4));
+  for (let j=0;j<NARM;j++) cur[j] += (goal.q[j] - cur[j]) * a;
+  for (let j=0;j<3;j++) curCtrl[j] += (goal.ctrl[j] - curCtrl[j]) * a;
+  q.set(cur, 0);
+  q[TUBE_Q]=cyl.x; q[TUBE_Q+1]=cyl.y; q[TUBE_Q+2]=DESK_Z; q[TUBE_Q+3]=1; q[TUBE_Q+4]=0; q[TUBE_Q+5]=0; q[TUBE_Q+6]=0;
+
+  // ---- mujoco: kinematics + collision detection ----
+  mj.mj_kinematics(model, data);
+  mj.mj_collision(model, data);
+  const s = senseContacts();
+  if (s.any) lastContact = t;
+  if (s.tipHit) lastTipContact = t;
+  if (mode === 'react') retreatFrom = s.any ? [cyl.x, cyl.y] : (t - lastContact < 0.35 ? retreatFrom : null);
+
+  // ---- ui ----
+  for (let k=0;k<8;k++){ padLit[k] = Math.max(0, padLit[k] - dt*4); pads[k].classList.toggle('on', padLit[k] > 0.05); }
+  const tipOn = t - lastTipContact < 0.15;
+  tipMeshes.forEach(m => m.material = tipOn ? mats.hot : mats.tip);
+  $('status').textContent = tipOn ? 'tip contact' : s.any ? `body contact (${s.n})` : 'no contact';
+  $('status').style.color = tipOn ? 'var(--hot)' : '';
+  for (let j=0;j<3;j++){ $('b'+j).style.width = (curCtrl[j]/5*100)+'%'; $('v'+j).textContent = curCtrl[j].toFixed(1); }
+  const tx = data.site_xpos;
+  $('tip').textContent = `tip ${tx[3*tipSite].toFixed(3)}, ${tx[3*tipSite+1].toFixed(3)}, ${tx[3*tipSite+2].toFixed(3)} m`;
+
+  window.__sim.cpu = 0.9*window.__sim.cpu + 0.1*(performance.now()-c0);
+  window.__sim.tipErr = marker.visible ? Math.hypot(marker.position.x-data.site_xpos[3*tipSite], marker.position.y-data.site_xpos[3*tipSite+1], marker.position.z-data.site_xpos[3*tipSite+2]) : null;
+  // ---- render ----
+  const gp = data.geom_xpos, gm = data.geom_xmat;
+  for (const [g, mesh] of drawn){
+    const p = 3*g, r = 9*g;
+    m4.set(gm[r],gm[r+1],gm[r+2],gp[p], gm[r+3],gm[r+4],gm[r+5],gp[p+1], gm[r+6],gm[r+7],gm[r+8],gp[p+2], 0,0,0,1);
+    mesh.matrix.copy(m4); mesh.matrixWorldNeedsUpdate = true;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+prog(1); $('loading').style.display = 'none';
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

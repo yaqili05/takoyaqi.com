@@ -1,0 +1,18 @@
+<mujoco model="object_scene">
+  <compiler angle="radian" coordinate="local" meshdir="." texturedir="."/>
+  <asset>
+    <mesh name="cylinder_base_vis" file="STL/cylinder_base.stl" scale="0.4 0.4 1"/>
+    <mesh name="cylinder_base_col" file="STL/cylinder_base.stl" scale="0.4 0.4 1"/>
+  </asset>
+  <worldbody>
+    <body name="tube" pos="0.06 -0.12 0.728">
+      <joint name="tube_free" type="free" damping="0.02"/>
+      <geom name="cylinder_base_vis" type="mesh" mesh="cylinder_base_vis" rgba="1 1 0 1" contype="0" conaffinity="0"/>
+      <geom name="cylinder_base_col" type="mesh" mesh="cylinder_base_col" rgba="1 0 0 0" contype="1" conaffinity="1" friction="0.5 0.01 0.005"/>
+      <inertial pos="0 0 0.05" mass="0.03" diaginertia="0.00011729 0.00011729 0.00002513"/>
+    </body>
+    <body name="desk" pos="0 0 0.7">
+      <geom name="desk_col" type="box" size="1.4 1.0 0.028" rgba="0.86 0.84 0.8 1" contype="1" conaffinity="1" friction="0.4 0.01 0.005"/>
+    </body>
+  </worldbody>
+</mujoco>

@@ -1,0 +1,4 @@
+<mujoco model="soft arm web scene">
+  <include file="module1_8.xml"/>
+  <include file="object_web.xml"/>
+</mujoco>
