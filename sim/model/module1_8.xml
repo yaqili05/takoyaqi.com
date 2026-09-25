@@ -125,7 +125,7 @@
       <inertial mass="0.0027151337" pos="0 0 0.00089993542" fullinertia="2.1879576e-09 2.1879576e-09 1.4986011e-12 0 0 0" />
       <body name="m8_seg2" pos="-1.0472536e-11 -0.016545951 0.0024395628" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
         <inertial mass="0.00028043635" pos="0 0.0011167975 0.0054864032" fullinertia="4.1810971e-09 1.4671305e-08 1.089483e-08 0 0 8.242306e-10" />
-        <joint name="m8_j_bottom_seg2" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+        <joint name="m8_j_bottom_seg2" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
         <geom mesh="m8_seg2_m" />
         <geom class="collision_capsule" fromto="0 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
         <geom class="collision_capsule" fromto="0.010842694 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
@@ -185,7 +185,7 @@
       </body>
       <body name="m8_seg2_r1" pos="0.016545951 -1.0472537e-11 0.0024395628" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
         <inertial mass="0.00028043635" pos="0 0.0011167975 0.0054864032" fullinertia="4.1810971e-09 1.4671305e-08 1.089483e-08 0 0 8.242306e-10" />
-        <joint name="m8_j_bottom_seg2_r1" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+        <joint name="m8_j_bottom_seg2_r1" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
         <geom mesh="m8_seg2_m" />
         <geom class="collision_capsule" fromto="0 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
         <geom class="collision_capsule" fromto="0.010842694 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
@@ -245,7 +245,7 @@
       </body>
       <body name="m8_seg2_r2" pos="1.0472537e-11 0.016545951 0.0024395628" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
         <inertial mass="0.00028043635" pos="0 0.0011167975 0.0054864032" fullinertia="4.1810971e-09 1.4671305e-08 1.089483e-08 0 0 8.242306e-10" />
-        <joint name="m8_j_bottom_seg2_r2" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+        <joint name="m8_j_bottom_seg2_r2" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
         <geom mesh="m8_seg2_m" />
         <geom class="collision_capsule" fromto="0 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
         <geom class="collision_capsule" fromto="0.010842694 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
@@ -305,7 +305,7 @@
       </body>
       <body name="m8_seg2_r3" pos="-0.016545951 1.0472538e-11 0.0024395628" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
         <inertial mass="0.00028043635" pos="0 0.0011167975 0.0054864032" fullinertia="4.1810971e-09 1.4671305e-08 1.089483e-08 0 0 8.242306e-10" />
-        <joint name="m8_j_bottom_seg2_r3" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+        <joint name="m8_j_bottom_seg2_r3" type="hinge" pos="0 0.00026022466 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
         <geom mesh="m8_seg2_m" />
         <geom class="collision_capsule" fromto="0 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
         <geom class="collision_capsule" fromto="0.010842694 0.0010842694 0.0021685389 0 0.0032528083 0.013011233" />
@@ -397,7 +397,7 @@
             <inertial mass="0.0034610099" pos="0 0 0.00097577245" fullinertia="3.2788757e-09 3.2788757e-09 2.2458052e-12 0 0 0" />
             <body name="m7_seg2" pos="-1.135505e-11 -0.017940269 0.0026451434" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
               <inertial mass="0.00035747521" pos="0 0.0012109094 0.0059487393" fullinertia="6.2657967e-09 2.1986434e-08 1.6327004e-08 0 0 1.2351929e-09" />
-              <joint name="m7_j_bottom_seg2" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+              <joint name="m7_j_bottom_seg2" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
               <geom mesh="m7_seg2_m" />
               <geom class="collision_capsule" fromto="0 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
               <geom class="collision_capsule" fromto="0.011756402 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
@@ -457,7 +457,7 @@
             </body>
             <body name="m7_seg2_r1" pos="0.017940269 -1.1355051e-11 0.0026451434" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
               <inertial mass="0.00035747521" pos="0 0.0012109094 0.0059487393" fullinertia="6.2657967e-09 2.1986434e-08 1.6327004e-08 0 0 1.2351929e-09" />
-              <joint name="m7_j_bottom_seg2_r1" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+              <joint name="m7_j_bottom_seg2_r1" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
               <geom mesh="m7_seg2_m" />
               <geom class="collision_capsule" fromto="0 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
               <geom class="collision_capsule" fromto="0.011756402 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
@@ -517,7 +517,7 @@
             </body>
             <body name="m7_seg2_r2" pos="1.1355052e-11 0.017940269 0.0026451434" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
               <inertial mass="0.00035747521" pos="0 0.0012109094 0.0059487393" fullinertia="6.2657967e-09 2.1986434e-08 1.6327004e-08 0 0 1.2351929e-09" />
-              <joint name="m7_j_bottom_seg2_r2" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+              <joint name="m7_j_bottom_seg2_r2" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
               <geom mesh="m7_seg2_m" />
               <geom class="collision_capsule" fromto="0 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
               <geom class="collision_capsule" fromto="0.011756402 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
@@ -577,7 +577,7 @@
             </body>
             <body name="m7_seg2_r3" pos="-0.017940269 1.1355053e-11 0.0026451434" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
               <inertial mass="0.00035747521" pos="0 0.0012109094 0.0059487393" fullinertia="6.2657967e-09 2.1986434e-08 1.6327004e-08 0 0 1.2351929e-09" />
-              <joint name="m7_j_bottom_seg2_r3" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+              <joint name="m7_j_bottom_seg2_r3" type="hinge" pos="0 0.00028215364 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
               <geom mesh="m7_seg2_m" />
               <geom class="collision_capsule" fromto="0 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
               <geom class="collision_capsule" fromto="0.011756402 0.0011756402 0.0023512804 0 0.0035269205 0.014107682" />
@@ -669,7 +669,7 @@
                   <inertial mass="0.0044117864" pos="0 0 0.0010580002" fullinertia="4.9137267e-09 4.9137267e-09 3.3655661e-12 0 0 0" />
                   <body name="m6_seg2" pos="-1.2311933e-11 -0.019452085 0.0028680481" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                     <inertial mass="0.00045567747" pos="0 0.001312952 0.0064500361" fullinertia="9.3899297e-09 3.2948893e-08 2.4467666e-08 0 0 1.8510614e-09" />
-                    <joint name="m6_j_bottom_seg2" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                    <joint name="m6_j_bottom_seg2" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                     <geom mesh="m6_seg2_m" />
                     <geom class="collision_capsule" fromto="0 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
                     <geom class="collision_capsule" fromto="0.012747107 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
@@ -729,7 +729,7 @@
                   </body>
                   <body name="m6_seg2_r1" pos="0.019452085 -1.2311935e-11 0.0028680481" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                     <inertial mass="0.00045567747" pos="0 0.001312952 0.0064500361" fullinertia="9.3899297e-09 3.2948893e-08 2.4467666e-08 0 0 1.8510614e-09" />
-                    <joint name="m6_j_bottom_seg2_r1" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                    <joint name="m6_j_bottom_seg2_r1" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                     <geom mesh="m6_seg2_m" />
                     <geom class="collision_capsule" fromto="0 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
                     <geom class="collision_capsule" fromto="0.012747107 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
@@ -789,7 +789,7 @@
                   </body>
                   <body name="m6_seg2_r2" pos="1.2311935e-11 0.019452085 0.0028680481" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                     <inertial mass="0.00045567747" pos="0 0.001312952 0.0064500361" fullinertia="9.3899297e-09 3.2948893e-08 2.4467666e-08 0 0 1.8510614e-09" />
-                    <joint name="m6_j_bottom_seg2_r2" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                    <joint name="m6_j_bottom_seg2_r2" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                     <geom mesh="m6_seg2_m" />
                     <geom class="collision_capsule" fromto="0 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
                     <geom class="collision_capsule" fromto="0.012747107 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
@@ -849,7 +849,7 @@
                   </body>
                   <body name="m6_seg2_r3" pos="-0.019452085 1.2311937e-11 0.0028680481" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                     <inertial mass="0.00045567747" pos="0 0.001312952 0.0064500361" fullinertia="9.3899297e-09 3.2948893e-08 2.4467666e-08 0 0 1.8510614e-09" />
-                    <joint name="m6_j_bottom_seg2_r3" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                    <joint name="m6_j_bottom_seg2_r3" type="hinge" pos="0 0.00030593057 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                     <geom mesh="m6_seg2_m" />
                     <geom class="collision_capsule" fromto="0 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
                     <geom class="collision_capsule" fromto="0.012747107 0.0012747107 0.0025494214 0 0.0038241321 0.015296528" />
@@ -941,7 +941,7 @@
                         <inertial mass="0.0056237512" pos="0 0 0.0011471573" fullinertia="7.3637161e-09 7.3637161e-09 5.0436411e-12 0 0 0" />
                         <body name="m5_seg2" pos="-1.3349453e-11 -0.021091301 0.0031097368" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                           <inertial mass="0.00058085695" pos="0 0.0014235937 0.0069935769" fullinertia="1.4071759e-08 4.9377248e-08 3.6667271e-08 0 0 2.7740026e-09" />
-                          <joint name="m5_j_bottom_seg2" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                          <joint name="m5_j_bottom_seg2" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                           <geom mesh="m5_seg2_m" />
                           <geom class="collision_capsule" fromto="0 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
                           <geom class="collision_capsule" fromto="0.013821298 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
@@ -1001,7 +1001,7 @@
                         </body>
                         <body name="m5_seg2_r1" pos="0.021091301 -1.3349454e-11 0.0031097368" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                           <inertial mass="0.00058085695" pos="0 0.0014235937 0.0069935769" fullinertia="1.4071759e-08 4.9377248e-08 3.6667271e-08 0 0 2.7740026e-09" />
-                          <joint name="m5_j_bottom_seg2_r1" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                          <joint name="m5_j_bottom_seg2_r1" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                           <geom mesh="m5_seg2_m" />
                           <geom class="collision_capsule" fromto="0 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
                           <geom class="collision_capsule" fromto="0.013821298 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
@@ -1061,7 +1061,7 @@
                         </body>
                         <body name="m5_seg2_r2" pos="1.3349455e-11 0.021091301 0.0031097368" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                           <inertial mass="0.00058085695" pos="0 0.0014235937 0.0069935769" fullinertia="1.4071759e-08 4.9377248e-08 3.6667271e-08 0 0 2.7740026e-09" />
-                          <joint name="m5_j_bottom_seg2_r2" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                          <joint name="m5_j_bottom_seg2_r2" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                           <geom mesh="m5_seg2_m" />
                           <geom class="collision_capsule" fromto="0 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
                           <geom class="collision_capsule" fromto="0.013821298 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
@@ -1121,7 +1121,7 @@
                         </body>
                         <body name="m5_seg2_r3" pos="-0.021091301 1.3349457e-11 0.0031097368" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                           <inertial mass="0.00058085695" pos="0 0.0014235937 0.0069935769" fullinertia="1.4071759e-08 4.9377248e-08 3.6667271e-08 0 0 2.7740026e-09" />
-                          <joint name="m5_j_bottom_seg2_r3" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                          <joint name="m5_j_bottom_seg2_r3" type="hinge" pos="0 0.00033171116 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                           <geom mesh="m5_seg2_m" />
                           <geom class="collision_capsule" fromto="0 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
                           <geom class="collision_capsule" fromto="0.013821298 0.0013821298 0.0027642597 0 0.0041463895 0.016585558" />
@@ -1213,7 +1213,7 @@
                               <inertial mass="0.0071686558" pos="0 0 0.0012438276" fullinertia="1.1035273e-08 1.1035273e-08 7.5584061e-12 0 0 0" />
                               <body name="m4_seg2" pos="-1.4474404e-11 -0.022868653 0.0033717925" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                                 <inertial mass="0.00074042456" pos="0 0.0015435591 0.0075829215" fullinertia="2.1087953e-08 7.3996797e-08 5.4949613e-08 0 0 4.1571234e-09" />
-                                <joint name="m4_j_bottom_seg2" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                <joint name="m4_j_bottom_seg2" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                 <geom mesh="m4_seg2_m" />
                                 <geom class="collision_capsule" fromto="0 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
                                 <geom class="collision_capsule" fromto="0.014986011 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
@@ -1273,7 +1273,7 @@
                               </body>
                               <body name="m4_seg2_r1" pos="0.022868653 -1.4474405e-11 0.0033717925" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                                 <inertial mass="0.00074042456" pos="0 0.0015435591 0.0075829215" fullinertia="2.1087953e-08 7.3996797e-08 5.4949613e-08 0 0 4.1571234e-09" />
-                                <joint name="m4_j_bottom_seg2_r1" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                <joint name="m4_j_bottom_seg2_r1" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                 <geom mesh="m4_seg2_m" />
                                 <geom class="collision_capsule" fromto="0 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
                                 <geom class="collision_capsule" fromto="0.014986011 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
@@ -1333,7 +1333,7 @@
                               </body>
                               <body name="m4_seg2_r2" pos="1.4474406e-11 0.022868653 0.0033717925" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                                 <inertial mass="0.00074042456" pos="0 0.0015435591 0.0075829215" fullinertia="2.1087953e-08 7.3996797e-08 5.4949613e-08 0 0 4.1571234e-09" />
-                                <joint name="m4_j_bottom_seg2_r2" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                <joint name="m4_j_bottom_seg2_r2" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                 <geom mesh="m4_seg2_m" />
                                 <geom class="collision_capsule" fromto="0 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
                                 <geom class="collision_capsule" fromto="0.014986011 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
@@ -1393,7 +1393,7 @@
                               </body>
                               <body name="m4_seg2_r3" pos="-0.022868653 1.4474408e-11 0.0033717925" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                                 <inertial mass="0.00074042456" pos="0 0.0015435591 0.0075829215" fullinertia="2.1087953e-08 7.3996797e-08 5.4949613e-08 0 0 4.1571234e-09" />
-                                <joint name="m4_j_bottom_seg2_r3" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                <joint name="m4_j_bottom_seg2_r3" type="hinge" pos="0 0.00035966426 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                 <geom mesh="m4_seg2_m" />
                                 <geom class="collision_capsule" fromto="0 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
                                 <geom class="collision_capsule" fromto="0.014986011 0.0014986011 0.0029972022 0 0.0044958033 0.017983213" />
@@ -1485,7 +1485,7 @@
                                     <inertial mass="0.0091379622" pos="0 0 0.0013486442" fullinertia="1.6537472e-08 1.6537472e-08 1.1327036e-11 0 0 0" />
                                     <body name="m3_seg2" pos="-1.5694153e-11 -0.024795781 0.0036559315" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                                       <inertial mass="0.0009438271" pos="0 0.0016736339 0.0082219299" fullinertia="3.160243e-08 1.1089168e-07 8.234755e-08 0 0 6.2298697e-09" />
-                                      <joint name="m3_j_bottom_seg2" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                      <joint name="m3_j_bottom_seg2" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                       <geom mesh="m3_seg2_m" />
                                       <geom class="collision_capsule" fromto="0 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
                                       <geom class="collision_capsule" fromto="0.016248873 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
@@ -1545,7 +1545,7 @@
                                     </body>
                                     <body name="m3_seg2_r1" pos="0.024795781 -1.5694155e-11 0.0036559315" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                                       <inertial mass="0.0009438271" pos="0 0.0016736339 0.0082219299" fullinertia="3.160243e-08 1.1089168e-07 8.234755e-08 0 0 6.2298697e-09" />
-                                      <joint name="m3_j_bottom_seg2_r1" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                      <joint name="m3_j_bottom_seg2_r1" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                       <geom mesh="m3_seg2_m" />
                                       <geom class="collision_capsule" fromto="0 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
                                       <geom class="collision_capsule" fromto="0.016248873 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
@@ -1605,7 +1605,7 @@
                                     </body>
                                     <body name="m3_seg2_r2" pos="1.5694156e-11 0.024795781 0.0036559315" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                                       <inertial mass="0.0009438271" pos="0 0.0016736339 0.0082219299" fullinertia="3.160243e-08 1.1089168e-07 8.234755e-08 0 0 6.2298697e-09" />
-                                      <joint name="m3_j_bottom_seg2_r2" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                      <joint name="m3_j_bottom_seg2_r2" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                       <geom mesh="m3_seg2_m" />
                                       <geom class="collision_capsule" fromto="0 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
                                       <geom class="collision_capsule" fromto="0.016248873 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
@@ -1665,7 +1665,7 @@
                                     </body>
                                     <body name="m3_seg2_r3" pos="-0.024795781 1.5694157e-11 0.0036559315" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                                       <inertial mass="0.0009438271" pos="0 0.0016736339 0.0082219299" fullinertia="3.160243e-08 1.1089168e-07 8.234755e-08 0 0 6.2298697e-09" />
-                                      <joint name="m3_j_bottom_seg2_r3" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                      <joint name="m3_j_bottom_seg2_r3" type="hinge" pos="0 0.00038997296 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                       <geom mesh="m3_seg2_m" />
                                       <geom class="collision_capsule" fromto="0 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
                                       <geom class="collision_capsule" fromto="0.016248873 0.0016248873 0.0032497747 0 0.004874662 0.019498648" />
@@ -1757,7 +1757,7 @@
                                           <inertial mass="0.011648258" pos="0 0 0.0014622937" fullinertia="2.4783074e-08 2.4783074e-08 1.6974708e-11 0 0 0" />
                                           <body name="m2_seg2" pos="-1.701669e-11 -0.026885307 0.0039640148" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                                             <inertial mass="0.0012031065" pos="0 0.0018146701 0.0089147872" fullinertia="4.7359436e-08 1.661824e-07 1.2340613e-07 0 0 9.3360895e-09" />
-                                            <joint name="m2_j_bottom_seg2" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                            <joint name="m2_j_bottom_seg2" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                             <geom mesh="m2_seg2_m" />
                                             <geom class="collision_capsule" fromto="0 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
                                             <geom class="collision_capsule" fromto="0.017618156 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
@@ -1817,7 +1817,7 @@
                                           </body>
                                           <body name="m2_seg2_r1" pos="0.026885307 -1.7016692e-11 0.0039640148" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                                             <inertial mass="0.0012031065" pos="0 0.0018146701 0.0089147872" fullinertia="4.7359436e-08 1.661824e-07 1.2340613e-07 0 0 9.3360895e-09" />
-                                            <joint name="m2_j_bottom_seg2_r1" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                            <joint name="m2_j_bottom_seg2_r1" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                             <geom mesh="m2_seg2_m" />
                                             <geom class="collision_capsule" fromto="0 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
                                             <geom class="collision_capsule" fromto="0.017618156 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
@@ -1877,7 +1877,7 @@
                                           </body>
                                           <body name="m2_seg2_r2" pos="1.7016693e-11 0.026885307 0.0039640148" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                                             <inertial mass="0.0012031065" pos="0 0.0018146701 0.0089147872" fullinertia="4.7359436e-08 1.661824e-07 1.2340613e-07 0 0 9.3360895e-09" />
-                                            <joint name="m2_j_bottom_seg2_r2" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                            <joint name="m2_j_bottom_seg2_r2" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                             <geom mesh="m2_seg2_m" />
                                             <geom class="collision_capsule" fromto="0 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
                                             <geom class="collision_capsule" fromto="0.017618156 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
@@ -1937,7 +1937,7 @@
                                           </body>
                                           <body name="m2_seg2_r3" pos="-0.026885307 1.7016695e-11 0.0039640148" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                                             <inertial mass="0.0012031065" pos="0 0.0018146701 0.0089147872" fullinertia="4.7359436e-08 1.661824e-07 1.2340613e-07 0 0 9.3360895e-09" />
-                                            <joint name="m2_j_bottom_seg2_r3" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                            <joint name="m2_j_bottom_seg2_r3" type="hinge" pos="0 0.00042283576 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                             <geom mesh="m2_seg2_m" />
                                             <geom class="collision_capsule" fromto="0 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
                                             <geom class="collision_capsule" fromto="0.017618156 0.0017618156 0.0035236313 0 0.005285447 0.021141788" />
@@ -2029,7 +2029,7 @@
                                                 <inertial mass="0.014848159" pos="0 0 0.0015855203" fullinertia="3.7139942e-08 3.7139942e-08 2.5438316e-11 0 0 0" />
                                                 <body name="m1_seg2" pos="-1.8450677e-11 -0.029150916 0.00429806" quat="-1.65174999e-08 -6.799909979e-08 7.900499979e-05 0.9999999969">
                                                   <inertial mass="0.0015336127" pos="0 0.0019675913 0.0096660311" fullinertia="7.0972903e-08 2.4904112e-07 1.8493656e-07 0 0 1.3991074e-08" />
-                                                  <joint name="m1_j_bottom_seg2" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                                  <joint name="m1_j_bottom_seg2" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                                   <geom mesh="m1_seg2_m" />
                                                   <geom class="collision_capsule" fromto="0 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
                                                   <geom class="collision_capsule" fromto="0.019102828 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
@@ -2089,7 +2089,7 @@
                                                 </body>
                                                 <body name="m1_seg2_r1" pos="0.029150916 -1.8450679e-11 0.00429806" quat="-0.7071067907 -5.591305372e-05 5.581688847e-05 0.7071067673">
                                                   <inertial mass="0.0015336127" pos="0 0.0019675913 0.0096660311" fullinertia="7.0972903e-08 2.4904112e-07 1.8493656e-07 0 0 1.3991074e-08" />
-                                                  <joint name="m1_j_bottom_seg2_r1" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                                  <joint name="m1_j_bottom_seg2_r1" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                                   <geom mesh="m1_seg2_m" />
                                                   <geom class="collision_capsule" fromto="0 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
                                                   <geom class="collision_capsule" fromto="0.019102828 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
@@ -2149,7 +2149,7 @@
                                                 </body>
                                                 <body name="m1_seg2_r2" pos="1.845068e-11 0.029150916 0.00429806" quat="-0.9999999969 -7.900499979e-05 -6.799909979e-08 -1.651749984e-08">
                                                   <inertial mass="0.0015336127" pos="0 0.0019675913 0.0096660311" fullinertia="7.0972903e-08 2.4904112e-07 1.8493656e-07 0 0 1.3991074e-08" />
-                                                  <joint name="m1_j_bottom_seg2_r2" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                                  <joint name="m1_j_bottom_seg2_r2" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                                   <geom mesh="m1_seg2_m" />
                                                   <geom class="collision_capsule" fromto="0 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
                                                   <geom class="collision_capsule" fromto="0.019102828 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
@@ -2209,7 +2209,7 @@
                                                 </body>
                                                 <body name="m1_seg2_r3" pos="-0.029150916 1.8450682e-11 0.00429806" quat="-0.7071067673 -5.581688847e-05 -5.591305372e-05 -0.7071067907">
                                                   <inertial mass="0.0015336127" pos="0 0.0019675913 0.0096660311" fullinertia="7.0972903e-08 2.4904112e-07 1.8493656e-07 0 0 1.3991074e-08" />
-                                                  <joint name="m1_j_bottom_seg2_r3" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="-0.2 1.2" />
+                                                  <joint name="m1_j_bottom_seg2_r3" type="hinge" pos="0 0.00045846788 0" axis="-1 0 0" limited="true" range="0 1.2" solreflimit="0.004 1" solimplimit="0.99 0.999 0.001" />
                                                   <geom mesh="m1_seg2_m" />
                                                   <geom class="collision_capsule" fromto="0 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
                                                   <geom class="collision_capsule" fromto="0.019102828 0.0019102828 0.0038205657 0 0.0057308485 0.022923394" />
@@ -2292,166 +2292,171 @@
     </body>
   </worldbody>
   <equality>
+    <!-- Rigidly fix the base module (m1_bottom) to the fixed base mount (m1_top)
+         where the base panels touch, so the base does not move/rotate w.r.t. the
+         base and only the middle modules deform. relpose is the assembled rest
+         pose (the soft connects' equilibrium), so this reinforces assembly. -->
+    <weld name="base_fix" body1="m1_top" body2="m1_bottom" relpose="0.000415 -0.000053 -0.060939 0.707084 -0.003825 -0.003609 0.707110" solref="0.001 1" solimp="0.999 0.9999 0.0001" />
     <weld body1="m8_seg5L" body2="m8_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m8_h5Ltop_a1" site2="m8_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Ltop_a2" site2="m8_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a1" site2="m8_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a2" site2="m8_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m8_h5Ltop_a1" site2="m8_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Ltop_a2" site2="m8_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a1" site2="m8_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a2" site2="m8_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m8_seg5L_r1" body2="m8_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m8_h5Ltop_a1_r1" site2="m8_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Ltop_a2_r1" site2="m8_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a1_r1" site2="m8_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a2_r1" site2="m8_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m8_h5Ltop_a1_r1" site2="m8_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Ltop_a2_r1" site2="m8_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a1_r1" site2="m8_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a2_r1" site2="m8_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m8_seg5L_r2" body2="m8_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m8_h5Ltop_a1_r2" site2="m8_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Ltop_a2_r2" site2="m8_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a1_r2" site2="m8_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a2_r2" site2="m8_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m8_h5Ltop_a1_r2" site2="m8_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Ltop_a2_r2" site2="m8_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a1_r2" site2="m8_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a2_r2" site2="m8_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m8_seg5L_r3" body2="m8_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m8_h5Ltop_a1_r3" site2="m8_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Ltop_a2_r3" site2="m8_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a1_r3" site2="m8_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m8_h5Rtop_a2_r3" site2="m8_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m8_h5Ltop_a1_r3" site2="m8_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Ltop_a2_r3" site2="m8_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a1_r3" site2="m8_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m8_h5Rtop_a2_r3" site2="m8_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m7_seg5L" body2="m7_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m7_h5Ltop_a1" site2="m7_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Ltop_a2" site2="m7_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a1" site2="m7_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a2" site2="m7_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m7_h5Ltop_a1" site2="m7_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Ltop_a2" site2="m7_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a1" site2="m7_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a2" site2="m7_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m7_seg5L_r1" body2="m7_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m7_h5Ltop_a1_r1" site2="m7_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Ltop_a2_r1" site2="m7_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a1_r1" site2="m7_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a2_r1" site2="m7_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m7_h5Ltop_a1_r1" site2="m7_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Ltop_a2_r1" site2="m7_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a1_r1" site2="m7_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a2_r1" site2="m7_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m7_seg5L_r2" body2="m7_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m7_h5Ltop_a1_r2" site2="m7_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Ltop_a2_r2" site2="m7_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a1_r2" site2="m7_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a2_r2" site2="m7_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m7_h5Ltop_a1_r2" site2="m7_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Ltop_a2_r2" site2="m7_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a1_r2" site2="m7_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a2_r2" site2="m7_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m7_seg5L_r3" body2="m7_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m7_h5Ltop_a1_r3" site2="m7_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Ltop_a2_r3" site2="m7_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a1_r3" site2="m7_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m7_h5Rtop_a2_r3" site2="m7_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m7_h5Ltop_a1_r3" site2="m7_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Ltop_a2_r3" site2="m7_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a1_r3" site2="m7_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m7_h5Rtop_a2_r3" site2="m7_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m6_seg5L" body2="m6_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m6_h5Ltop_a1" site2="m6_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Ltop_a2" site2="m6_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a1" site2="m6_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a2" site2="m6_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m6_h5Ltop_a1" site2="m6_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Ltop_a2" site2="m6_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a1" site2="m6_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a2" site2="m6_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m6_seg5L_r1" body2="m6_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m6_h5Ltop_a1_r1" site2="m6_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Ltop_a2_r1" site2="m6_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a1_r1" site2="m6_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a2_r1" site2="m6_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m6_h5Ltop_a1_r1" site2="m6_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Ltop_a2_r1" site2="m6_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a1_r1" site2="m6_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a2_r1" site2="m6_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m6_seg5L_r2" body2="m6_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m6_h5Ltop_a1_r2" site2="m6_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Ltop_a2_r2" site2="m6_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a1_r2" site2="m6_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a2_r2" site2="m6_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m6_h5Ltop_a1_r2" site2="m6_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Ltop_a2_r2" site2="m6_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a1_r2" site2="m6_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a2_r2" site2="m6_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m6_seg5L_r3" body2="m6_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m6_h5Ltop_a1_r3" site2="m6_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Ltop_a2_r3" site2="m6_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a1_r3" site2="m6_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m6_h5Rtop_a2_r3" site2="m6_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m6_h5Ltop_a1_r3" site2="m6_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Ltop_a2_r3" site2="m6_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a1_r3" site2="m6_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m6_h5Rtop_a2_r3" site2="m6_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m5_seg5L" body2="m5_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m5_h5Ltop_a1" site2="m5_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Ltop_a2" site2="m5_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a1" site2="m5_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a2" site2="m5_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m5_h5Ltop_a1" site2="m5_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Ltop_a2" site2="m5_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a1" site2="m5_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a2" site2="m5_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m5_seg5L_r1" body2="m5_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m5_h5Ltop_a1_r1" site2="m5_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Ltop_a2_r1" site2="m5_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a1_r1" site2="m5_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a2_r1" site2="m5_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m5_h5Ltop_a1_r1" site2="m5_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Ltop_a2_r1" site2="m5_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a1_r1" site2="m5_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a2_r1" site2="m5_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m5_seg5L_r2" body2="m5_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m5_h5Ltop_a1_r2" site2="m5_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Ltop_a2_r2" site2="m5_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a1_r2" site2="m5_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a2_r2" site2="m5_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m5_h5Ltop_a1_r2" site2="m5_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Ltop_a2_r2" site2="m5_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a1_r2" site2="m5_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a2_r2" site2="m5_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m5_seg5L_r3" body2="m5_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m5_h5Ltop_a1_r3" site2="m5_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Ltop_a2_r3" site2="m5_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a1_r3" site2="m5_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m5_h5Rtop_a2_r3" site2="m5_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m5_h5Ltop_a1_r3" site2="m5_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Ltop_a2_r3" site2="m5_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a1_r3" site2="m5_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m5_h5Rtop_a2_r3" site2="m5_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m4_seg5L" body2="m4_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m4_h5Ltop_a1" site2="m4_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Ltop_a2" site2="m4_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a1" site2="m4_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a2" site2="m4_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m4_h5Ltop_a1" site2="m4_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Ltop_a2" site2="m4_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a1" site2="m4_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a2" site2="m4_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m4_seg5L_r1" body2="m4_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m4_h5Ltop_a1_r1" site2="m4_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Ltop_a2_r1" site2="m4_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a1_r1" site2="m4_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a2_r1" site2="m4_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m4_h5Ltop_a1_r1" site2="m4_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Ltop_a2_r1" site2="m4_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a1_r1" site2="m4_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a2_r1" site2="m4_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m4_seg5L_r2" body2="m4_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m4_h5Ltop_a1_r2" site2="m4_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Ltop_a2_r2" site2="m4_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a1_r2" site2="m4_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a2_r2" site2="m4_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m4_h5Ltop_a1_r2" site2="m4_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Ltop_a2_r2" site2="m4_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a1_r2" site2="m4_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a2_r2" site2="m4_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m4_seg5L_r3" body2="m4_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m4_h5Ltop_a1_r3" site2="m4_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Ltop_a2_r3" site2="m4_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a1_r3" site2="m4_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m4_h5Rtop_a2_r3" site2="m4_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m4_h5Ltop_a1_r3" site2="m4_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Ltop_a2_r3" site2="m4_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a1_r3" site2="m4_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m4_h5Rtop_a2_r3" site2="m4_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m3_seg5L" body2="m3_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m3_h5Ltop_a1" site2="m3_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Ltop_a2" site2="m3_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a1" site2="m3_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a2" site2="m3_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m3_h5Ltop_a1" site2="m3_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Ltop_a2" site2="m3_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a1" site2="m3_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a2" site2="m3_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m3_seg5L_r1" body2="m3_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m3_h5Ltop_a1_r1" site2="m3_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Ltop_a2_r1" site2="m3_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a1_r1" site2="m3_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a2_r1" site2="m3_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m3_h5Ltop_a1_r1" site2="m3_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Ltop_a2_r1" site2="m3_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a1_r1" site2="m3_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a2_r1" site2="m3_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m3_seg5L_r2" body2="m3_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m3_h5Ltop_a1_r2" site2="m3_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Ltop_a2_r2" site2="m3_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a1_r2" site2="m3_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a2_r2" site2="m3_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m3_h5Ltop_a1_r2" site2="m3_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Ltop_a2_r2" site2="m3_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a1_r2" site2="m3_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a2_r2" site2="m3_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m3_seg5L_r3" body2="m3_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m3_h5Ltop_a1_r3" site2="m3_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Ltop_a2_r3" site2="m3_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a1_r3" site2="m3_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m3_h5Rtop_a2_r3" site2="m3_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m3_h5Ltop_a1_r3" site2="m3_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Ltop_a2_r3" site2="m3_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a1_r3" site2="m3_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m3_h5Rtop_a2_r3" site2="m3_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m2_seg5L" body2="m2_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m2_h5Ltop_a1" site2="m2_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Ltop_a2" site2="m2_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a1" site2="m2_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a2" site2="m2_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m2_h5Ltop_a1" site2="m2_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Ltop_a2" site2="m2_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a1" site2="m2_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a2" site2="m2_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m2_seg5L_r1" body2="m2_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m2_h5Ltop_a1_r1" site2="m2_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Ltop_a2_r1" site2="m2_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a1_r1" site2="m2_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a2_r1" site2="m2_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m2_h5Ltop_a1_r1" site2="m2_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Ltop_a2_r1" site2="m2_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a1_r1" site2="m2_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a2_r1" site2="m2_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m2_seg5L_r2" body2="m2_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m2_h5Ltop_a1_r2" site2="m2_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Ltop_a2_r2" site2="m2_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a1_r2" site2="m2_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a2_r2" site2="m2_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m2_h5Ltop_a1_r2" site2="m2_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Ltop_a2_r2" site2="m2_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a1_r2" site2="m2_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a2_r2" site2="m2_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m2_seg5L_r3" body2="m2_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m2_h5Ltop_a1_r3" site2="m2_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Ltop_a2_r3" site2="m2_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a1_r3" site2="m2_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m2_h5Rtop_a2_r3" site2="m2_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m2_h5Ltop_a1_r3" site2="m2_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Ltop_a2_r3" site2="m2_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a1_r3" site2="m2_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m2_h5Rtop_a2_r3" site2="m2_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m1_seg5L" body2="m1_seg5R" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m1_h5Ltop_a1" site2="m1_h5Ltop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Ltop_a2" site2="m1_h5Ltop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a1" site2="m1_h5Rtop_b1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a2" site2="m1_h5Rtop_b2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m1_h5Ltop_a1" site2="m1_h5Ltop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Ltop_a2" site2="m1_h5Ltop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a1" site2="m1_h5Rtop_b1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a2" site2="m1_h5Rtop_b2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m1_seg5L_r1" body2="m1_seg5R_r1" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m1_h5Ltop_a1_r1" site2="m1_h5Ltop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Ltop_a2_r1" site2="m1_h5Ltop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a1_r1" site2="m1_h5Rtop_b1_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a2_r1" site2="m1_h5Rtop_b2_r1" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m1_h5Ltop_a1_r1" site2="m1_h5Ltop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Ltop_a2_r1" site2="m1_h5Ltop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a1_r1" site2="m1_h5Rtop_b1_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a2_r1" site2="m1_h5Rtop_b2_r1" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m1_seg5L_r2" body2="m1_seg5R_r2" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m1_h5Ltop_a1_r2" site2="m1_h5Ltop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Ltop_a2_r2" site2="m1_h5Ltop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a1_r2" site2="m1_h5Rtop_b1_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a2_r2" site2="m1_h5Rtop_b2_r2" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m1_h5Ltop_a1_r2" site2="m1_h5Ltop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Ltop_a2_r2" site2="m1_h5Ltop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a1_r2" site2="m1_h5Rtop_b1_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a2_r2" site2="m1_h5Rtop_b2_r2" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
     <weld body1="m1_seg5L_r3" body2="m1_seg5R_r3" solref="0.01 1" solimp="0.95 0.99 0.002" />
-    <connect site1="m1_h5Ltop_a1_r3" site2="m1_h5Ltop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Ltop_a2_r3" site2="m1_h5Ltop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a1_r3" site2="m1_h5Rtop_b1_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
-    <connect site1="m1_h5Rtop_a2_r3" site2="m1_h5Rtop_b2_r3" solref="0.001 1" solimp="0.99 0.999 0.001" />
+    <connect site1="m1_h5Ltop_a1_r3" site2="m1_h5Ltop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Ltop_a2_r3" site2="m1_h5Ltop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a1_r3" site2="m1_h5Rtop_b1_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
+    <connect site1="m1_h5Rtop_a2_r3" site2="m1_h5Rtop_b2_r3" solref="0.0003 1" solimp="0.9995 0.9999 0.0005" />
   </equality>
   <tendon>
     <spatial name="rope1" width="0.0005" limited="true" range="0 1.5">

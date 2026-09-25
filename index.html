@@ -262,7 +262,7 @@ const SOFT_ARM = {
     "designing conductive-pla tip contact sensing and an rl policy for blind tunnel navigation and touch-reactive behaviour (in progress)",
   ],
   next: "in progress: tip sensors on hardware, motion capture for ground truth, and training the tactile policy across randomized tunnel geometries for a robosoft submission.",
-  credit: "the base origami arm model builds on earlier work in the lab. the browser demo runs the real mujoco model compiled to webassembly; poses come from the settled dataset, and contacts are computed by mujoco every frame.",
+  credit: "the base origami arm model builds on earlier work in the lab. the demo above is the live mujoco model compiled to webassembly: real physics at 4 ms steps, rope commands from k-nn over a dataset of settled samples plus a local-jacobian closed-loop correction, and tip contacts read from mujoco every frame.",
   repo: "https://github.com/yaqili05/softarm_sim",
 };
 
@@ -320,9 +320,9 @@ const views = {
 
       <div class="simwrap" id="simwrap">
         <img src="images/soft-arm.jpg" alt="the soft arm touching a cylinder in simulation">
-        <button class="launch" id="launch"><span>launch interactive simulation</span><small>runs mujoco in your browser · ~12 mb</small></button>
+        <button class="launch" id="launch"><span>launch interactive simulation</span><small>live mujoco physics in your browser · ~11 mb</small></button>
       </div>
-      <div class="simlinks"><span>reach · react · ropes — drag the cylinder, orbit to look around</span><a href="sim/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
+      <div class="simlinks"><span>reach · path following · react · ropes — drag the cylinder into the arm, orbit to look around</span><a href="sim/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
 
       <section class="two"><h2>overview</h2><div>${A.overview.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
 
