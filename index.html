@@ -90,6 +90,45 @@ p + p{margin-top:1em}
   .results em{grid-column:1 / -1}
   .case blockquote{font-size:18px}
 }
+/* gaze to the stars — night palette */
+.case.gz{background:#000;color:#ccc;margin:20px -24px 0;padding:0 24px 40px;max-width:none}
+.gz-hero{position:relative;height:min(72vh,640px);min-height:340px;overflow:hidden;margin:0 -24px;background:#000}
+.gz-hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.gz-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 20px 44px;
+  background:linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,.85));color:#fff;text-align:center}
+.gz-logo{width:74px;height:auto;margin-bottom:16px;opacity:.95}
+.gz-over h1{font-weight:normal;font-size:38px;letter-spacing:6px;margin:0 0 10px;color:#fff}
+.gz-over p{font-size:15px;letter-spacing:1.5px;color:#ddd;max-width:560px}
+.gz-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px;padding:22px 0 0;font-size:12.5px;letter-spacing:1.5px;color:#888}
+.case.gz{max-width:none}
+.case.gz > section,.case.gz > .gz-nums,.case.gz > .pager{max-width:1040px;margin-left:auto;margin-right:auto}
+.case.gz section > h2{color:#888}
+.case.gz section p{color:#ccc}
+.case.gz h2,.case.gz strong{color:#fff}
+.gz-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:70px!important;text-align:center}
+.gz-nums div{border-top:1px solid #333;padding-top:18px}
+.gz-nums strong{display:block;font-weight:normal;font-size:44px;letter-spacing:2px}
+.gz-nums span{font-size:13px;color:#999;letter-spacing:1px}
+.gz-pod{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px;align-items:center}
+.gz-podvid video{width:100%;display:block;background:#000}
+.gz-eye{margin:30px 0 0;max-width:420px}
+.gz-eye video{width:100%;display:block;border-radius:2px}
+.gz-eye figcaption{font-size:12px;color:#777;margin-top:8px;letter-spacing:1px}
+.gz-yt{position:relative;aspect-ratio:16/9;background:#111}
+.gz-yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.gz-links{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.gz-links a{color:#fff;border-bottom:1px solid #444;font-size:15px;letter-spacing:.5px}
+.gz-links a:hover{border-bottom-color:#fff}
+.case.gz .fine{color:#777!important;margin-top:22px}
+.case.gz .pager{border-top-color:#222}
+.case.gz .pager a{color:#bbb}
+@media (max-width:760px){
+  .case.gz{margin:14px -16px 0;padding:0 16px 30px}
+  .gz-hero{margin:0 -16px;height:60vh}
+  .gz-over h1{font-size:26px;letter-spacing:4px}
+  .gz-nums{grid-template-columns:1fr}
+  .gz-pod{grid-template-columns:1fr}
+}
 /* voyages agent — signal ocean palette */
 .case.so{--so-navy:#003357;--so-ink:#2B3340;--so-blue:#264292;--so-sky:#7FB3F0;--so-mist:#F3F5F8;--so-ice:#E9EFF7;--so-grey:#85858A;
   font-family:Montserrat, Arial, Helvetica, sans-serif;color:var(--so-ink)}
@@ -266,8 +305,8 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), optional img
   {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:720/560, img:"images/soft-arm.jpg", custom:true},
+  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:820/648, img:"images/gaze-thumb.jpg", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:900/640, img:"images/voyages-thumb.jpg", custom:true},
-  {slug:"project-three", title:"project three", cat:"spaces",        year:2025, ratio:1.33},
   {slug:"project-four",  title:"project four",  cat:"installations", year:2025, ratio:1},
   {slug:"project-five",  title:"project five",  cat:"research",      year:2025, ratio:.8},
   {slug:"project-six",   title:"project six",   cat:"teaching",      year:2025, ratio:1.5},
@@ -376,6 +415,28 @@ const VOYAGES = {
   credit: "built with the data science team and the curators in london and athens during an mit misti internship. client, vessel and system details are simplified here.",
 };
 
+const GAZE = {
+  tagline: "within every eye lies a hidden story, woven like constellations in the night.",
+  meta: ["interactive installation", "march 12–14, 2025", "critical matter group, mit media lab", "artfinity · mit dome"],
+  links: [
+    ["project site", "https://gazetothestars.com/index"],
+    ["critical matter on instagram", "https://www.instagram.com/criticalmattergroup/"],
+    ["artfinity event", "https://artfinity.mit.edu/event/gaze-to-the-stars"],
+  ],
+  about: [
+    "what if the mit dome could look back at us? inspired by mit's motto per ardua ad astra — “through difficulties to the stars” — gaze to the stars turned the great dome into a living canvas for the resilience and aspirations of people who have shaped, or been shaped by, mit.",
+    "the dome “looked back” through close-ups of participants' eyes gazing at the stars. each iris was merged with star imagery, and each person's spoken story was translated into a coded visual language and projected inside their eye — putting the unspoken narratives of struggle, failure and transformation alongside the usual stories of success.",
+  ],
+  pod: "stories were collected in immersive storytelling pods that travelled across campus. participants put their face to the viewing window, gazed into an infinity room while listening to voices from the mit community, then shared their own story — guided in part by an ai-moderated conversation with reflective prompts — while a camera recorded a close-up of their eye. only the eye video and a transcript were kept; no audio was recorded.",
+  numbers: [["200+","eyes and stories collected"],["3","nights projected on the mit dome, livestreamed"],["1","searchable archive — find your own eye"]],
+  role: [
+    "as an undergraduate researcher (urop) in the critical matter group, i prototyped the interactive hci side of the pods: integrating eye-tracking and multimodal data collection — eye video, the ai-moderated conversation and its transcript — into a flow that could run unattended across campus and scale to 200+ participants.",
+    "in the same group i built ai-driven generative pipelines (text-to-3d, text-to-video) to study language-conditioned creative systems.",
+  ],
+  youtube: "EIrx0QV6Pkc",
+  credits: "critical matter group, mit media lab — behnaz farahi (pi); chenyue “xdd” dai, yaluo wang, frank cong, suwan kim, sergio mutis, haolei zhang (ras); julian ceipek (software); jiaji li (postdoc); milin tunsiricharoengul; krystal jiang, linda xue, jd hagood, nebus kitessa, yaqi li, pria sawhney (urops). presented as part of artfinity at mit. media courtesy of the project.",
+};
+
 const ABOUT = {
   bio:[
     "yaqi li is an undergraduate at mit majoring in computation and cognition (6-9) with a minor in design. her work sits at the intersection of artificial intelligence, design and human-robot interaction, with a focus on intelligent systems that fit into human environments.",
@@ -415,6 +476,7 @@ const views = {
     if (i < 0) return views.notfound();
     if (slug === 'soft-arm') return views.softarm(i);
     if (slug === 'voyages-agent') return views.voyages(i);
+    if (slug === 'gaze-to-the-stars') return views.gaze(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -453,6 +515,38 @@ const views = {
 
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
+
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+    </article>`;
+  },
+  gaze(i){
+    const G = GAZE, prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    return `<article class="case gz">
+      <header class="gz-hero">
+        <video autoplay muted loop playsinline preload="metadata" poster="images/gaze-drone.jpg"><source src="images/gaze-drone.mp4" type="video/mp4"></video>
+        <div class="gz-over">
+          <img class="gz-logo" src="images/gaze-logo-white.png" alt="">
+          <h1>gaze to the stars</h1>
+          <p>${esc(G.tagline)}</p>
+        </div>
+      </header>
+      <div class="gz-meta">${G.meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>
+
+      <section class="two"><h2>about</h2><div>${G.about.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
+
+      <div class="gz-nums">${G.numbers.map(([a,b])=>`<div><strong>${esc(a)}</strong><span>${esc(b)}</span></div>`).join('')}</div>
+
+      <section class="gz-pod"><div class="gz-podvid"><video autoplay muted loop playsinline preload="metadata" poster="images/gaze-pod.jpg"><source src="images/gaze-pod.mp4" type="video/mp4"></video></div>
+        <div><h2>the pod</h2><p>${esc(G.pod)}</p></div></section>
+
+      <section class="two"><h2>my role</h2><div>${G.role.map(t=>`<p>${esc(t)}</p>`).join('')}
+        <figure class="gz-eye"><video autoplay muted loop playsinline preload="metadata" poster="images/gaze-eye.jpg"><source src="images/gaze-eye-yaqi.mp4" type="video/mp4"></video><figcaption>my eye, from the team page</figcaption></figure></div></section>
+
+      <section><h2>on the dome</h2>
+        <div class="gz-yt"><iframe src="https://www.youtube-nocookie.com/embed/${esc(G.youtube)}" title="gaze to the stars — mit media lab" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div></section>
+
+      <section class="two"><h2>links</h2><div class="gz-links">${G.links.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join('')}
+        <p class="fine">${esc(G.credits)}</p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
