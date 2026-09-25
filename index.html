@@ -306,9 +306,9 @@ const SITE = {
 
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
-  {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:4/3, img:"images/soft-arm.jpg", custom:true},
-  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", custom:true},
+  {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm.jpg", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-thumb.jpg", custom:true},
+  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
   location:"cambridge, ma",
@@ -480,7 +480,7 @@ const views = {
   softarm(i){
     const A = SOFT_ARM, prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="case">
-      <h1 class="page">soft arm</h1>
+      <h1 class="page">tactile soft robot arm</h1>
       <p class="lead">${esc(A.tagline)}</p>
       <div class="meta">${A.meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>
 
