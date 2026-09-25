@@ -433,12 +433,16 @@ window.__sim = { get: () => ({ mode, tip: tipPos(), cyl: cylPos(), ctrl: [...ctr
 
 let NORENDER = new URLSearchParams(location.search).has('norender');
 window.__render = v => { NORENDER = !v; };
-function frame(){
-  const t = performance.now()/1000, rawDt = t - tPrev, wdt = Math.min(0.05, rawDt); tPrev = t; wallClock += wdt;
+const RECORD = new URLSearchParams(location.search).has('record');
+window.__clean = () => { pathLine.visible = false; trail.line.visible = false; marker.material.visible = false; };
+window.__cam = (p, t) => { camera.position.set(...p); controls.target.set(...t); controls.update(); };
+window.__tick = (dt, draw = true) => { const r = NORENDER; NORENDER = !draw; frame(dt); NORENDER = r; };
+function frame(fixed){
+  const t = performance.now()/1000, rawDt = fixed || (t - tPrev), wdt = fixed || Math.min(0.05, rawDt); tPrev = t; wallClock += wdt;
   control(S, wdt);
   // physics: catch up with wall-clock time, but never spend more than ~12 ms per frame
   const c0 = performance.now(); let steps = 0;
-  while (simClock < wallClock && performance.now() - c0 < 12){
+  while (simClock < wallClock && (fixed || performance.now() - c0 < 12)){
     const rate = 6*DT;                                                         // rope tension slew limit (ctrl units / step)
     for (let k=0;k<3;k++) ctrl[k] += Math.max(-rate, Math.min(rate, ctrlTarget[k] - ctrl[k]));
     data.ctrl.set(ctrl); applyDrag(); mj.mj_step(model, data); simClock += DT; steps++;
@@ -467,11 +471,11 @@ function frame(){
     m4.set(gm[r],gm[r+1],gm[r+2],gp[p], gm[r+3],gm[r+4],gm[r+5],gp[p+1], gm[r+6],gm[r+7],gm[r+8],gp[p+2], 0,0,0,1);
     mesh.matrix.copy(m4); mesh.matrixWorldNeedsUpdate = true; }
   controls.update(); if (!NORENDER) renderer.render(scene, camera);
-  requestAnimationFrame(frame);
+  if (!fixed) requestAnimationFrame(() => frame());
 }
 setMode('reach'); resetSim();
 prog(1); $('loading').style.display = 'none';
-requestAnimationFrame(frame);
+if (!RECORD) requestAnimationFrame(() => frame());
 </script>
 </body>
 </html>

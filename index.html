@@ -198,7 +198,8 @@ p + p{margin-top:1em}
 @media (max-width:560px){.bricks{grid-template-columns:1fr}}
 .brick{margin:0;display:block;position:relative;overflow:hidden;animation:fade .5s ease both}
 .brick .ph{transition:transform .6s ease}
-.brick:hover .ph{transform:scale(1.03)}
+.brick:hover .ph,.brick:hover video,.brick:hover img{transform:scale(1.03)}
+.brick video,.brick img{transition:transform .6s ease}
 .brick .label{position:absolute;inset:0;background:var(--overlay);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;opacity:0;transition:opacity .35s}
 .brick:hover .label,.brick:focus-visible .label{opacity:1}
 .label .cat{font-size:13px;color:var(--muted);letter-spacing:1px}
@@ -306,9 +307,9 @@ const SITE = {
 
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
-  {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm.jpg", custom:true},
+  {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-thumb.jpg", custom:true},
-  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", custom:true},
+  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
   location:"cambridge, ma",
@@ -447,6 +448,9 @@ const media = (src, ratio, label, i=0) => src
   ? `<img src="${esc(src)}" alt="${esc(label)}" loading="lazy" style="width:100%;aspect-ratio:${ratio};object-fit:cover">`
   : `<div class="ph ${tone(i)}" style="aspect-ratio:${ratio}" data-label="${esc(label)}"></div>`;
 
+const loopVideo = (base, poster, ratio) =>
+  `<video autoplay muted loop playsinline preload="auto" poster="${esc(poster)}" style="width:100%;aspect-ratio:${ratio};object-fit:cover;display:block"><source src="${esc(base)}.webm" type="video/webm"><source src="${esc(base)}.mp4" type="video/mp4"></video>`;
+
 const views = {
   projects(){
     return `
@@ -456,7 +460,7 @@ const views = {
       </div>
       <div class="bricks">${PROJECTS.map((p,i) => `
         <a class="brick" href="#/projects/${p.slug}" style="animation-delay:${i*40}ms">
-          ${media(p.img, p.ratio, 'image', i)}
+          ${p.video ? loopVideo(p.video, p.img, p.ratio) : media(p.img, p.ratio, 'image', i)}
           <span class="label"><span class="cat">${esc(p.cat)}</span><span class="name">${esc(p.title)}</span></span>
         </a>`).join('')}</div>`;
   },
@@ -485,7 +489,7 @@ const views = {
       <div class="meta">${A.meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>
 
       <div class="simwrap" id="simwrap">
-        <img src="images/soft-arm.jpg" alt="the soft arm touching a cylinder in simulation">
+        <video autoplay muted loop playsinline poster="images/soft-arm-loop.jpg" style="width:100%;height:100%;object-fit:cover;display:block"><source src="images/soft-arm-loop.webm" type="video/webm"><source src="images/soft-arm-loop.mp4" type="video/mp4"></video>
         <button class="launch" id="launch"><span>launch interactive simulation</span><small>live mujoco physics in your browser · ~11 mb</small></button>
       </div>
       <div class="simlinks"><span>reach · path following · react · ropes — drag the cylinder into the arm, orbit to look around</span><a href="sim/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
