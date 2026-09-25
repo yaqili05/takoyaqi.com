@@ -41,6 +41,11 @@ nav a.active{color:var(--muted)}
 
 main{max-width:1320px;margin:0 auto;padding:10px 24px 80px;min-height:60vh}
 .intro{max-width:620px;margin:18px auto 38px;font-size:16px}
+.hello{display:flex;flex-direction:column;align-items:center;gap:0;margin:14px auto 0}
+.hello .intro{margin-top:18px}
+.avatar{width:150px;height:150px;border-radius:50%;object-fit:cover;display:block}
+.avatar.big{width:min(280px,70vw);height:auto;aspect-ratio:1;margin:0 auto}
+a.u{color:var(--ink);border-bottom:1px solid var(--line)}
 h1.page{font-size:30px;font-weight:normal;color:var(--title);letter-spacing:1px;margin:30px 0 30px}
 h2{font-size:22px;font-weight:normal;color:var(--title);letter-spacing:1px;margin:0 0 14px}
 h3{font-size:16px;font-weight:normal;color:var(--ink);letter-spacing:1px}
@@ -183,8 +188,8 @@ footer .social{display:flex;justify-content:center;gap:22px;margin-bottom:10px}
 <footer>
   <div class="social">
     <a href="https://github.com/yaqili05" target="_blank" rel="noopener">github</a>
-    <a href="#" aria-label="linkedin">linkedin</a>
-    <a href="mailto:hello@takoyaqi.com">email</a>
+    <a href="https://www.linkedin.com/in/yaqi-li-mit/" target="_blank" rel="noopener">linkedin</a>
+    <a href="mailto:yaqilius@gmail.com">email</a>
   </div>
   © <span id="yr"></span> yaqi li · takoyaqi.com
 </footer>
@@ -198,8 +203,10 @@ footer .social{display:flex;justify-content:center;gap:22px;margin-bottom:10px}
    (or in gallery), and it will replace the grey placeholder block.
    ================================================================= */
 const SITE = {
-  intro: "a designer and researcher at mit exploring [placeholder: one sentence about what you do — materials, environments, objects, systems].",
-  email: "hello@takoyaqi.com",
+  intro: "undergraduate at mit studying computation and cognition, with a minor in design. i build intelligent systems that live alongside people — soft robots that learn by touch, multimodal machine learning, and ai for design.",
+  email: "yaqilius@gmail.com",
+  linkedin: "https://www.linkedin.com/in/yaqi-li-mit/",
+  portrait: "images/portrait.jpg",
 };
 
 const PROJECTS = [
@@ -233,7 +240,7 @@ const PROJECTS = [
 
 const SOFT_ARM = {
   tagline: "a modular, cable-driven origami soft arm that learns to move — and to navigate — by touch.",
-  meta: ["research", "2026", "mit cdfg", "mujoco · python · arduino"],
+  meta: ["research", "2025–", "multisensory intelligence group, mit media lab / csail", "mujoco · python · arduino"],
   question: "can a soft continuum robot learn a tactile exploration policy in simulation that transfers to the real robot and lets it navigate unknown spaces using only contact at its tip?",
   overview: [
     "soft continuum arms are safe around people and can squeeze through places rigid robots can't, but they are hard to model and even harder to control. this arm is eight 3d-printed origami modules strung on three cables; pulling the cables bends it in 3d.",
@@ -268,10 +275,11 @@ const SOFT_ARM = {
 
 const ABOUT = {
   bio:[
-    "yaqi li is a [role] at mit [department / lab]. placeholder bio — two or three sentences on background, focus, and approach.",
-    "a second paragraph for education, past practice, teaching, and the kinds of collaborations you're open to."
+    "yaqi li is an undergraduate at mit majoring in computation and cognition (6-9) with a minor in design. her work sits at the intersection of artificial intelligence, design and human-robot interaction, with a focus on intelligent systems that fit into human environments.",
+    "she is a research intern in the multisensory intelligence group (mit media lab / csail), working on multimodal machine learning, tactile sensing and sim-to-real learning for soft robotics — including a modular soft arm that learns to navigate by touch, and the opentouch dataset of synchronized video, touch and pose.",
+    "before that she built ai-driven generative pipelines and eye-tracking installations with the critical matter group at the mit media lab, designed hydrogel neural interfaces in the liu lab at the national university of singapore, and, in summer 2026, shipped a production llm agent for maritime voyage data at signal ocean in london.",
+    "outside the lab she is a program lead for mit hacking medicine, an associate advisor for designplus, performs with the mit chamber music society, and plays with club golf."
   ],
-  // img: "images/portrait.jpg",
 };
 
 // put your resume pdf in the folder and keep this name (or change it)
@@ -289,7 +297,10 @@ const media = (src, ratio, label, i=0) => src
 const views = {
   projects(){
     return `
-      <p class="intro">${esc(SITE.intro)}</p>
+      <div class="hello">
+        <img class="avatar" src="${esc(SITE.portrait)}" alt="portrait of yaqi li">
+        <p class="intro">${esc(SITE.intro)} <a class="u" href="#/about">more about me</a></p>
+      </div>
       <div class="bricks">${PROJECTS.map((p,i) => `
         <a class="brick" href="#/projects/${p.slug}" style="animation-delay:${i*40}ms">
           ${media(p.img, p.ratio, 'image', i)}
@@ -344,7 +355,7 @@ const views = {
   },
   about(){
     return `<div class="about" style="margin-top:30px">
-      <div>${media(ABOUT.img, 4/5, 'portrait', 1)}</div>
+      <div><img class="avatar big" src="${esc(SITE.portrait)}" alt="portrait of yaqi li"></div>
       <div class="bio">${ABOUT.bio.map(t=>`<p>${esc(t)}</p>`).join('')}</div>
     </div>`;
   },
@@ -358,10 +369,10 @@ const views = {
   },
   contact(){
     return `<div class="contact" style="margin-top:30px">
-      <p>for projects, collaborations, or research — placeholder line.</p>
+      <p>for research, collaborations, or just to say hi.</p>
       <a class="big" href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>
       <dl><dt>github</dt><dd><a href="https://github.com/yaqili05" target="_blank" rel="noopener">yaqili05</a></dd>
-      <dt>linkedin</dt><dd><a href="#">/in/placeholder</a></dd></dl></div>`;
+      <dt>linkedin</dt><dd><a href="${esc(SITE.linkedin)}" target="_blank" rel="noopener">/in/yaqi-li-mit</a></dd></dl></div>`;
   },
   notfound(){ return `<p style="margin-top:40px">not found · <a href="#/">back to projects</a></p>`; }
 };
