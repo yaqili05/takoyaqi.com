@@ -193,8 +193,10 @@ p + p{margin-top:1em}
 .ph::after{content:attr(data-label)}
 
 /* work grid — masonry "bricks" */
-.bricks{columns:4 260px;column-gap:14px}
-.brick{break-inside:avoid;margin:0 0 14px;display:block;position:relative;overflow:hidden;animation:fade .5s ease both}
+.bricks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1240px;margin:0 auto}
+@media (max-width:900px){.bricks{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.bricks{grid-template-columns:1fr}}
+.brick{margin:0;display:block;position:relative;overflow:hidden;animation:fade .5s ease both}
 .brick .ph{transition:transform .6s ease}
 .brick:hover .ph{transform:scale(1.03)}
 .brick .label{position:absolute;inset:0;background:var(--overlay);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;opacity:0;transition:opacity .35s}
@@ -303,23 +305,10 @@ const SITE = {
 };
 
 const PROJECTS = [
-  // slug, title, category, year, ratio (w/h of thumbnail), optional img
-  {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:720/560, img:"images/soft-arm.jpg", custom:true},
-  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:820/648, img:"images/gaze-thumb.jpg", custom:true},
-  {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:900/640, img:"images/voyages-thumb.jpg", custom:true},
-  {slug:"project-four",  title:"project four",  cat:"installations", year:2025, ratio:1},
-  {slug:"project-five",  title:"project five",  cat:"research",      year:2025, ratio:.8},
-  {slug:"project-six",   title:"project six",   cat:"teaching",      year:2025, ratio:1.5},
-  {slug:"project-seven", title:"project seven", cat:"objects",       year:2024, ratio:1},
-  {slug:"project-eight", title:"project eight", cat:"spaces",        year:2024, ratio:.7},
-  {slug:"project-nine",  title:"project nine",  cat:"research",      year:2024, ratio:1.25},
-  {slug:"project-ten",   title:"project ten",   cat:"installations", year:2024, ratio:1},
-  {slug:"project-eleven",title:"project eleven",cat:"objects",       year:2023, ratio:.85},
-  {slug:"project-twelve",title:"project twelve",cat:"teaching",      year:2023, ratio:1.33},
-  {slug:"project-thirteen",title:"project thirteen",cat:"research",  year:2023, ratio:1},
-  {slug:"project-fourteen",title:"project fourteen",cat:"spaces",    year:2022, ratio:.75},
-  {slug:"project-fifteen",title:"project fifteen",cat:"objects",     year:2022, ratio:1.2},
-  {slug:"project-sixteen",title:"project sixteen",cat:"installations",year:2022, ratio:1},
+  // slug, title, category, year, ratio (w/h of thumbnail), img
+  {slug:"soft-arm", title:"soft arm", cat:"research", year:2026, ratio:4/3, img:"images/soft-arm.jpg", custom:true},
+  {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", custom:true},
+  {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-thumb.jpg", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
   location:"cambridge, ma",
