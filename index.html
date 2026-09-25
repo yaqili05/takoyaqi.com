@@ -90,6 +90,26 @@ p + p{margin-top:1em}
   .results em{grid-column:1 / -1}
   .case blockquote{font-size:18px}
 }
+/* 3d printed chainmail */
+.cm-hero{margin:0;background:#eeeeec}
+.cm-hero img{width:100%;height:auto;display:block}
+.cm figure{margin:0;background:#eeeeec;overflow:hidden}
+.cm figure img{width:100%;height:100%;object-fit:cover;display:block}
+.cm-design{margin-top:90px!important}
+.cm-head{display:grid;grid-template-columns:220px 1fr;gap:6px 40px;align-items:baseline;margin-bottom:22px}
+.cm-head .n{font-size:13px;color:var(--muted);letter-spacing:2px;grid-row:span 2}
+.cm-head h3{font-size:20px;color:var(--title)}
+.cm-head p{grid-column:2;font-size:16px;max-width:640px}
+.cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cm-grid .wide{grid-column:1 / -1;aspect-ratio:16/8.5}
+.cm-grid figure:not(.wide){aspect-ratio:4/3}
+.cm-grid.three{grid-template-columns:repeat(3,1fr)}
+.cm-grid.three figure{aspect-ratio:4/3}
+@media (max-width:760px){
+  .cm-head{grid-template-columns:1fr}
+  .cm-head p{grid-column:1}
+  .cm-grid,.cm-grid.three{grid-template-columns:1fr}
+}
 /* gaze to the stars — night palette */
 .case.gz{background:#000;color:#ccc;margin:20px -24px 0;padding:0 24px 40px;max-width:none}
 .gz-hero{position:relative;height:min(72vh,640px);min-height:340px;overflow:hidden;margin:0 -24px;background:#000}
@@ -193,8 +213,8 @@ p + p{margin-top:1em}
 .ph::after{content:attr(data-label)}
 
 /* work grid — masonry "bricks" */
-.bricks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1240px;margin:0 auto}
-@media (max-width:900px){.bricks{grid-template-columns:1fr 1fr}}
+.bricks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1320px;margin:0 auto}
+@media (max-width:1000px){.bricks{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.bricks{grid-template-columns:1fr}}
 .brick{margin:0;display:block;position:relative;overflow:hidden;animation:fade .5s ease both}
 .brick .ph{transition:transform .6s ease}
@@ -309,6 +329,7 @@ const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
   {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-thumb.jpg", custom:true},
+  {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-thumb.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
@@ -427,6 +448,25 @@ const GAZE = {
   credits: "critical matter group, mit media lab — behnaz farahi (pi); chenyue “xdd” dai, yaluo wang, frank cong, suwan kim, sergio mutis, haolei zhang (ras); julian ceipek (software); jiaji li (postdoc); milin tunsiricharoengul; krystal jiang, linda xue, jd hagood, nebus kitessa, yaqi li, pria sawhney (urops). presented as part of artfinity at mit. media courtesy of the project.",
 };
 
+const CHAINMAIL = {
+  tagline: "flexible textiles made from rigid parts — three families of interlocking units, designed parametrically and 3d printed as articulated sheets that drape, fold and wrap the body.",
+  meta: ["urop · critical matter group, mit media lab", "2025", "rhino · grasshopper · 3d printing"],
+  intro: [
+    "chainmail gets its drape from geometry, not material: every unit is stiff, but the way units hook into their neighbours leaves each joint free to rotate and slide. i explored how far that idea stretches when the unit itself is designed computationally — and when the whole fabric can be printed at once instead of linked by hand.",
+    "each design is a small parametric system in grasshopper: a unit, the rule for how it interlocks with its neighbours, and the clearances that keep printed parts from fusing. changing a few sliders changes the unit, the spacing and the sheet size, so variants go straight from model to print.",
+  ],
+  designs: [
+    { n:"01", name:"spherical chainmail", text:"crossed rings form hollow spherical cells that nest into each other on a square grid. the sheet stays loose in every direction and bunches up in the hand like woven metal.",
+      imgs:[["cm-sphere-hand.jpg","spherical chainmail flexing in the hand","wide"],["cm-sphere.jpg","printed spherical chainmail sheet"],["cm-sphere-model.jpg","rhino model of the ring lattice"]] },
+    { n:"02", name:"interlocking fabric", text:"teardrop scales on a zig-zag spine: each scale rides over the next like fish scales, so the sheet slides and folds over itself but closes into a continuous surface when laid flat.",
+      imgs:[["cm-fabric-drape.jpg","interlocking fabric draped over itself","wide"],["cm-fabric.jpg","interlocking fabric laid flat"],["cm-fabric-fold.jpg","interlocking fabric folded into a pile"]] },
+    { n:"03", name:"interlocking spikes", text:"v-shaped spike units hook into a diamond lattice. the backing is soft and conformable enough to wrap a wrist, while the spikes stand up as an armoured, almost animal texture.",
+      imgs:[["cm-spikes-wrist.jpg","interlocking spikes wrapped around a wrist","wide"],["cm-spikes.jpg","interlocking spikes sheet"],["cm-spike-unit.jpg","single spike unit in rhino"]] },
+  ],
+  process: [["cm-gh-2.jpg","grasshopper definition for the unit geometry"],["cm-fabric-model.jpg","patterned model of the interlocking fabric"],["cm-spikes-model.jpg","patterned model of the spike lattice"]],
+  role: "designed the three unit families and their parametric grasshopper definitions, iterated on clearances and spacing through print tests, and photographed the final samples.",
+};
+
 const ABOUT = {
   bio:[
     "yaqi li is an undergraduate at mit majoring in computation and cognition (6-9) with a minor in design. her work sits at the intersection of artificial intelligence, design and human-robot interaction, with a focus on intelligent systems that fit into human environments.",
@@ -470,6 +510,7 @@ const views = {
     if (slug === 'soft-arm') return views.softarm(i);
     if (slug === 'voyages-agent') return views.voyages(i);
     if (slug === 'gaze-to-the-stars') return views.gaze(i);
+    if (slug === '3d-printed-chainmail') return views.chainmail(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -508,6 +549,29 @@ const views = {
 
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
+
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+    </article>`;
+  },
+  chainmail(i){
+    const C = CHAINMAIL, prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    const fig = ([f,alt,cls]) => `<figure class="${cls||''}"><img src="images/${esc(f)}" alt="${esc(alt)}" loading="lazy"></figure>`;
+    return `<article class="case cm">
+      <h1 class="page">3d printed chainmail</h1>
+      <p class="lead">${esc(C.tagline)}</p>
+      <div class="meta">${C.meta.map(m=>`<span>${esc(m)}</span>`).join('')}</div>
+      <figure class="cm-hero"><img src="images/cm-all.jpg" alt="the three printed chainmail samples together"></figure>
+
+      <section class="two"><h2>overview</h2><div>${C.intro.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
+
+      ${C.designs.map(d=>`<section class="cm-design">
+        <div class="cm-head"><span class="n">${esc(d.n)}</span><h3>${esc(d.name)}</h3><p>${esc(d.text)}</p></div>
+        <div class="cm-grid">${d.imgs.map(fig).join('')}</div></section>`).join('')}
+
+      <section><h2>process</h2><div class="cm-grid three">${C.process.map(fig).join('')}</div></section>
+
+      <section class="two"><h2>my role</h2><div><p>${esc(C.role)}</p>
+        <p style="margin-top:18px"><a class="u" href="https://www.instagram.com/criticalmattergroup/" target="_blank" rel="noopener">critical matter on instagram ↗</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
