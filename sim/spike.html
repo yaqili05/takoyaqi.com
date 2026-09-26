@@ -27,28 +27,24 @@
   #panel{width:100%;height:auto;max-height:46%;bottom:0;top:auto;padding:12px 16px}
   .sub,#hud{display:none}
  }
+.fixed{font-size:11px;line-height:1.5;color:#8a8f98;margin:10px 0 4px}.fixed b{color:#cfd3da;font-weight:400}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="panel">
  <h1>interlocking spikes</h1>
- <p class="sub">a parametric version of the spike chainmail unit. drag a slider and the unit — and the whole sheet — regenerates. the clearance check flags units that would fuse when printed, or fall apart.</p>
+ <p class="sub">the spike chainmail rebuilt from the original grasshopper file. density and angle stay as designed — only the array size and the roundness of the unit change. the clearance check flags units that would fuse when printed, or fall apart.</p>
 
  <div class="seg" id="viewseg"><button data-v="sheet" class="on">sheet</button><button data-v="unit">single unit</button></div>
  <div class="seg" id="matseg"><button data-m="print" class="on">printed</button><button data-m="model">model</button></div>
 
- <div class="grp">spike</div>
- <div class="row"><label>spread (x) <span><span class="v" id="Xv"></span> mm</span></label><input type="range" id="X" min="8" max="30" step="0.5" value="18"></div>
- <div class="row"><label>loop width (y) <span><span class="v" id="Yv"></span> mm</span></label><input type="range" id="Y" min="1.5" max="9" step="0.25" value="4"></div>
- <div class="row"><label>height <span><span class="v" id="Hv"></span> mm</span></label><input type="range" id="H" min="6" max="40" step="0.5" value="22"></div>
- <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0.3"></div>
- <div class="row"><label>tilt <span><span class="v" id="Tv"></span>°</span></label><input type="range" id="T" min="0" max="40" step="1" value="25"></div>
- <div class="row"><label>strand thickness <span><span class="v" id="Dv"></span> mm</span></label><input type="range" id="D" min="0.6" max="3" step="0.05" value="1.3"></div>
-
  <div class="grp">sheet</div>
- <div class="row"><label>row pitch <span><span class="v" id="Pv"></span> mm</span></label><input type="range" id="P" min="1.5" max="12" step="0.1" value="4"></div>
- <div class="row"><label>columns <span><span class="v" id="Nv"></span></span></label><input type="range" id="N" min="2" max="10" step="1" value="6"></div>
+ <div class="row"><label>columns <span><span class="v" id="Nv"></span></span></label><input type="range" id="N" min="1" max="20" step="1" value="10"></div>
+ <div class="row"><label>rows <span><span class="v" id="Mv"></span></span></label><input type="range" id="M" min="1" max="30" step="1" value="10"></div>
+ <div class="grp">spike</div>
+ <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0"></div>
+ <div class="fixed">locked to the original grasshopper definition: column pitch <b id="fx"></b> · row pitch <b id="fy"></b> · tilt <b id="ft"></b> · 10 × 10 array by default. roundness 0 = the sharp-cornered offset used in the original.</div>
 
  <div id="stat" class="ok">ready</div>
 </div>
@@ -67,7 +63,8 @@
      minus the strand diameter (fdm/mjf rule of thumb: >= 0.4 mm)
    --------------------------------------------------------------- */
 const $ = id => document.getElementById(id);
-const P = { X:18, Y:4, H:22, R:0.3, T:25, D:1.3, P:4, N:6 };
+const P = { X:18, Y:4, H:22, R:0, T:25, D:1.3, P:4, N:10, M:10 };   // X,Y,H,T,D,P fixed; N,M,R live
+const LIVE = ['N','M','R'];
 let view = 'sheet', matMode = 'print';
 const MIN_CLEAR = 0.4;
 
@@ -114,7 +111,7 @@ function placements(){
   return out;
 }
 function colPitch(){ return P.X + P.D + 0.6; }
-function rowCount(){ return Math.max(2, Math.min(48, Math.round(P.N*colPitch()/P.P))); }   // keep the sheet roughly square
+function rowCount(){ return P.M; }
 function xform(p, pl){ const s = pl.flip ? -1 : 1; return [pl.x + s*p[0], pl.y + s*p[1], p[2]]; }
 
 // ---------- clearance ----------
@@ -181,23 +178,23 @@ function rebuild(){
 
   // bounds + stats
   const n = view==='unit'?1:P.N;
-  const w = view==='unit' ? P.X : (n-0.5)*colPitch() + P.X, d = view==='unit' ? P.Y : (rowCount()-1)*P.P + P.Y + Math.abs(Math.sin(P.T*Math.PI/180)*P.H);
+  const w = view==='unit' ? P.X : (n-(rowCount()>1?0.5:1))*colPitch() + P.X, d = view==='unit' ? P.Y : (rowCount()-1)*P.P + P.Y + Math.abs(Math.sin(P.T*Math.PI/180)*P.H);
   diag = Math.hypot(w, d, P.H);
   let len = 0; for (let k=0;k<cl.length;k++){ const a=cl[k], b=cl[(k+1)%cl.length]; len += Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); }
   const vol = len*Math.PI*(P.D/2)**2*pl.length/1000;   // cm^3
   const st = $('stat');
   if (view==='sheet' && fused){ st.className='err';
-    st.innerHTML = `units fuse ✕ gap ${gap.toFixed(2)} mm<small>neighbouring strands are closer than ${MIN_CLEAR} mm — the sheet would print solid. increase the row pitch, add tilt or thin the strand.</small>`; }
+    st.innerHTML = `units fuse ✕ gap ${gap.toFixed(2)} mm<small>neighbouring strands are closer than ${MIN_CLEAR} mm — the sheet would print solid. lower the roundness.</small>`; }
   else if (view==='sheet' && loose){ st.className='warn';
-    st.innerHTML = `too loose ! gap ${gap.toFixed(1)} mm<small>arms no longer pass through their neighbours' loops — the sheet falls apart. reduce the row pitch.</small>`; }
+    st.innerHTML = `too loose ! gap ${gap.toFixed(1)} mm<small>arms no longer pass through their neighbours' loops — the sheet falls apart. lower the roundness.</small>`; }
   else { st.className='ok';
     st.innerHTML = `${view==='unit'?'unit':'sheet'} regenerated ✓${view==='sheet'?` · gap ${gap.toFixed(2)} mm`:''}<small>${pl.length} unit${pl.length>1?'s':''} · ${w.toFixed(0)} × ${d.toFixed(0)} × ${(Math.cos(P.T*Math.PI/180)*P.H+P.D).toFixed(0)} mm · ${vol.toFixed(1)} cm³ of material</small>`; }
 }
 
 // ---------- ui ----------
-const fmt = { X:1, Y:2, H:1, R:2, T:0, D:2, P:2, N:0 };
-function readUI(){ for (const k in P){ P[k] = +$(k).value; $(k+'v').textContent = (+$(k).value).toFixed(fmt[k]); } }
-for (const k in P) $(k).addEventListener('input', ()=>{ readUI(); rebuild(); });
+const fmt = { R:2, N:0, M:0 };
+function readUI(){ for (const k of LIVE){ P[k] = +$(k).value; $(k+'v').textContent = (+$(k).value).toFixed(fmt[k]); } }
+for (const k of LIVE) $(k).addEventListener('input', ()=>{ readUI(); rebuild(); });
 document.querySelectorAll('#viewseg button').forEach(b=>b.onclick=()=>{ view=b.dataset.v; document.querySelectorAll('#viewseg button').forEach(x=>x.classList.toggle('on',x===b)); rebuild(); resetView(); });
 document.querySelectorAll('#matseg button').forEach(b=>b.onclick=()=>{ matMode=b.dataset.m; document.querySelectorAll('#matseg button').forEach(x=>x.classList.toggle('on',x===b)); rebuild(); });
 
@@ -220,6 +217,7 @@ c.addEventListener('wheel', e=>{ e.preventDefault(); dist *= Math.exp(e.deltaY*0
 c.addEventListener('dblclick', resetView);
 c.addEventListener('contextmenu', e=>e.preventDefault());
 
+$('fx').textContent=colPitch().toFixed(1)+' mm'; $('fy').textContent=P.P.toFixed(1)+' mm'; $('ft').textContent=P.T+'°';
 readUI(); rebuild(); resetView(); resize();
 (function loop(){ requestAnimationFrame(loop); setC(); renderer.render(scene, cam); })();
 window.__spike = { P, rebuild, setView:v=>{view=v; rebuild(); resetView();} };
