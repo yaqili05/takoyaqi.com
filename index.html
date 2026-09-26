@@ -91,6 +91,8 @@ p + p{margin-top:1em}
   .case blockquote{font-size:18px}
 }
 /* 3d printed chainmail */
+.cm-live{position:relative;margin-top:14px;height:min(72vh,620px);min-height:420px;background:#e9eaec}
+.cm-live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cm-intro{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center;margin-top:34px!important}
 .cm-intro h2{margin-bottom:18px;font-size:14px;color:var(--muted);letter-spacing:2px}
 .cm-portrait{aspect-ratio:1042/1400;max-height:640px}
@@ -457,7 +459,7 @@ const CHAINMAIL = {
     "each design is a small parametric system in grasshopper: a unit, the rule for how it interlocks with its neighbours, and the clearances that keep printed parts from fusing. changing a few sliders changes the unit, the spacing and the sheet size, so variants go straight from model to print.",
   ],
   designs: [
-    { n:"01", name:"interlocking spikes", text:"v-shaped spike units hook into a diamond lattice. the backing is soft and conformable enough to wrap a wrist, while the spikes stand up as an armoured, almost animal texture.",
+    { n:"01", name:"interlocking spikes", interactive:"sim/spike.html", text:"v-shaped spike units hook into a diamond lattice. the backing is soft and conformable enough to wrap a wrist, while the spikes stand up as an armoured, almost animal texture.",
       imgs:[["cm-spikes-wrist-s.jpg","interlocking spikes wrapped around a wrist","wide"],["cm-spikes-s.jpg","interlocking spikes sheet"],["cm-spike-unit.jpg","single spike unit in rhino"]] },
     { n:"02", name:"spherical chainmail", text:"crossed rings form hollow spherical cells that nest into each other on a square grid. the sheet stays loose in every direction and bunches up in the hand like woven metal.",
       imgs:[["cm-sphere-hand-s.jpg","spherical chainmail flexing in the hand","wide"],["cm-sphere-s.jpg","printed spherical chainmail sheet"],["cm-sphere-model.jpg","rhino model of the ring lattice"]] },
@@ -570,7 +572,9 @@ const views = {
 
       ${C.designs.map(d=>`<section class="cm-design">
         <div class="cm-head"><span class="n">${esc(d.n)}</span><h3>${esc(d.name)}</h3><p>${esc(d.text)}</p></div>
-        <div class="cm-grid">${d.imgs.map(fig).join('')}</div></section>`).join('')}
+        <div class="cm-grid">${d.imgs.map(fig).join('')}</div>
+        ${d.interactive ? `<div class="cm-live"><iframe src="${esc(d.interactive)}" title="parametric spike chainmail" loading="lazy"></iframe></div>
+        <div class="simlinks"><span>parametric model — change the spike's spread, loop width, height, roundness and tilt; the sheet regenerates and checks clearance</span><a href="${esc(d.interactive)}" target="_blank" rel="noopener">open full screen ↗</a></div>` : ''}</section>`).join('')}
 
       <section class="two"><h2>my role</h2><div><p>${esc(C.role)}</p>
         <p style="margin-top:18px"><a class="u" href="https://www.instagram.com/criticalmattergroup/" target="_blank" rel="noopener">critical matter on instagram ↗</a></p></div></section>

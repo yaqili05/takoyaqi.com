@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>spike chainmail — parametric</title>
+<style>
+ html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;background:linear-gradient(#fafafa,#dfe1e4);text-transform:lowercase}
+ #c{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+ #panel{position:fixed;top:0;left:0;width:272px;height:100%;background:#1c2024f2;color:#e8eaec;padding:18px 20px;box-sizing:border-box;overflow-y:auto}
+ h1{font-size:14px;font-weight:normal;margin:0 0 6px;letter-spacing:2px}
+ .sub{font-size:11px;color:#9aa2a9;margin:0 0 14px;line-height:1.5}
+ .grp{font-size:10.5px;color:#6a727a;letter-spacing:1.5px;margin:18px 0 2px;border-top:1px solid #30363c;padding-top:12px}
+ .row{margin:10px 0;font-size:12px}
+ .row label{display:flex;justify-content:space-between;color:#c6cbd0;margin-bottom:4px}
+ .row .v{color:#e8590c;font-weight:bold}
+ .row input{width:100%;accent-color:#e8590c}
+ .seg{display:flex;border:1px solid #3a4148;margin:8px 0}
+ .seg button{flex:1;background:none;border:0;color:#9aa2a9;font:inherit;font-size:11.5px;text-transform:inherit;letter-spacing:1px;padding:6px 0;cursor:pointer}
+ .seg button.on{background:#e8eaec;color:#1c2024}
+ #stat{margin-top:14px;font-size:12px;line-height:1.55;min-height:58px}
+ #stat.ok{color:#8fd0a8}#stat.err{color:#f0a26b}#stat.warn{color:#e8d27a}
+ #stat small{color:#9aa2a9;display:block}
+ #hud{position:fixed;right:14px;bottom:10px;color:#8a9096;font-size:11px}
+ #toggle{display:none}
+ @media (max-width:640px){
+  #panel{width:100%;height:auto;max-height:46%;bottom:0;top:auto;padding:12px 16px}
+  .sub,#hud{display:none}
+ }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="panel">
+ <h1>interlocking spikes</h1>
+ <p class="sub">a parametric version of the spike chainmail unit. drag a slider and the unit — and the whole sheet — regenerates. the clearance check flags units that would fuse when printed, or fall apart.</p>
+
+ <div class="seg" id="viewseg"><button data-v="sheet" class="on">sheet</button><button data-v="unit">single unit</button></div>
+ <div class="seg" id="matseg"><button data-m="print" class="on">printed</button><button data-m="model">model</button></div>
+
+ <div class="grp">spike</div>
+ <div class="row"><label>spread (x) <span><span class="v" id="Xv"></span> mm</span></label><input type="range" id="X" min="8" max="30" step="0.5" value="18"></div>
+ <div class="row"><label>loop width (y) <span><span class="v" id="Yv"></span> mm</span></label><input type="range" id="Y" min="1.5" max="9" step="0.25" value="4"></div>
+ <div class="row"><label>height <span><span class="v" id="Hv"></span> mm</span></label><input type="range" id="H" min="6" max="40" step="0.5" value="22"></div>
+ <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0.3"></div>
+ <div class="row"><label>tilt <span><span class="v" id="Tv"></span>°</span></label><input type="range" id="T" min="0" max="40" step="1" value="25"></div>
+ <div class="row"><label>strand thickness <span><span class="v" id="Dv"></span> mm</span></label><input type="range" id="D" min="0.6" max="3" step="0.05" value="1.3"></div>
+
+ <div class="grp">sheet</div>
+ <div class="row"><label>row pitch <span><span class="v" id="Pv"></span> mm</span></label><input type="range" id="P" min="1.5" max="12" step="0.1" value="4"></div>
+ <div class="row"><label>columns <span><span class="v" id="Nv"></span></span></label><input type="range" id="N" min="2" max="10" step="1" value="6"></div>
+
+ <div id="stat" class="ok">ready</div>
+</div>
+<div id="hud">drag orbit · wheel zoom · right-drag pan · double-click reset</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------------------------------------------------------------
+   spike chainmail unit (simplified from the rhino/grasshopper model)
+   - a closed centreline: two v-shaped arms, each a narrow loop that
+     meets in a pointed tip, joined at a shared base
+   - roundness replaces every corner of that polyline with a curve
+   - the strand is swept as a tube; the sheet is a diamond lattice in
+     which every other row is flipped so arms pass through loops
+   - clearance = min distance between neighbouring centrelines
+     minus the strand diameter (fdm/mjf rule of thumb: >= 0.4 mm)
+   --------------------------------------------------------------- */
+const $ = id => document.getElementById(id);
+const P = { X:18, Y:4, H:22, R:0.3, T:25, D:1.3, P:4, N:6 };
+let view = 'sheet', matMode = 'print';
+const MIN_CLEAR = 0.4;
+
+// ---------- geometry ----------
+function corners(){
+  const {X,Y,H} = P, t = P.T*Math.PI/180;
+  // base (y = ±Y/2), two tips; tilt leans tips toward +y
+  const lean = Math.sin(t)*H, up = Math.cos(t)*H;
+  return [
+    [0,-Y/2,0],
+    [-X/2, lean, up],        // left tip
+    [0, Y/2, 0],
+    [ X/2, lean, up],        // right tip
+  ];
+}
+// round the corners of a closed polyline: r in [0,1] sets how far along each edge the curve starts
+function rounded(poly, r, seg=18){
+  const n = poly.length, out = [];
+  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], mul=(a,s)=>[a[0]*s,a[1]*s,a[2]*s];
+  for (let i=0;i<n;i++){
+    const p0 = poly[(i-1+n)%n], p1 = poly[i], p2 = poly[(i+1)%n];
+    const a = add(p1, mul(sub(p0,p1), 0.5*Math.max(0.001,r)));
+    const b = add(p1, mul(sub(p2,p1), 0.5*Math.max(0.001,r)));
+    for (let k=0;k<seg;k++){ const u=k/seg, v=1-u;              // quadratic bezier a -> p1 -> b
+      out.push([v*v*a[0]+2*v*u*p1[0]+u*u*b[0], v*v*a[1]+2*v*u*p1[1]+u*u*b[1], v*v*a[2]+2*v*u*p1[2]+u*u*b[2]]); }
+    // straight run to the next corner's start
+    const q1 = poly[(i+1)%n], q2 = poly[(i+2)%n];
+    const na = add(q1, mul(sub(p1,q1), 0.5*Math.max(0.001,r)));
+    for (let k=0;k<6;k++){ const u=k/6; out.push([b[0]+(na[0]-b[0])*u, b[1]+(na[1]-b[1])*u, b[2]+(na[2]-b[2])*u]); }
+  }
+  return out;
+}
+function centreline(){ return rounded(corners(), P.R); }
+
+// lattice placement: diamond grid; odd rows shifted by half a pitch and flipped
+function placements(){
+  const n = view === 'unit' ? 1 : P.N, out = [];
+  const px = colPitch(), py = P.P;          // columns sit just clear of each other; rows interlock
+  const rows = view === 'unit' ? 1 : rowCount();
+  for (let j=0;j<rows;j++) for (let i=0;i<n;i++){
+    const odd = j%2===1;
+    out.push({ x:(i - (n-1)/2 + (odd?0.5:0))*px, y:(j-(rows-1)/2)*py, flip: odd });
+  }
+  return out;
+}
+function colPitch(){ return P.X + P.D + 0.6; }
+function rowCount(){ return Math.max(2, Math.min(48, Math.round(P.N*colPitch()/P.P))); }   // keep the sheet roughly square
+function xform(p, pl){ const s = pl.flip ? -1 : 1; return [pl.x + s*p[0], pl.y + s*p[1], p[2]]; }
+
+// ---------- clearance ----------
+function clearance(cl){
+  // compare a unit with its neighbours (same row, row above) using sparse samples
+  const S = cl.filter((_,k)=>k%2===0);
+  const me = {x:0,y:0,flip:false};
+  const px = colPitch();
+  const nbrs = [{x:px,y:0,flip:false},{x:px*0.5,y:P.P,flip:true},{x:-px*0.5,y:P.P,flip:true},{x:0,y:2*P.P,flip:false}];
+  let best = Infinity;
+  const A = S.map(p=>xform(p,me));
+  for (const nb of nbrs){ const B = S.map(p=>xform(p,nb));
+    for (const a of A) for (const b of B){ const d=Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); if (d<best) best=d; } }
+  return best - P.D;       // surface-to-surface gap
+}
+
+// ---------- three.js ----------
+const c = $('c');
+const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true, alpha:true});
+renderer.setClearColor(0x000000, 0);
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(32, 1, 0.1, 4000);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x666666, 0.95));
+const key = new THREE.DirectionalLight(0xffffff, 0.9); key.position.set(60,-80,140); key.castShadow = true;
+key.shadow.mapSize.set(1536,1536); Object.assign(key.shadow.camera,{left:-90,right:90,top:90,bottom:-90,near:1,far:500}); key.shadow.bias=-0.0005;
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(-80,60,40); scene.add(fill);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(600,600), new THREE.ShadowMaterial({opacity:0.18}));
+ground.receiveShadow = true; scene.add(ground);
+
+const mats = {
+  print: new THREE.MeshStandardMaterial({ color:0x1b1c1e, roughness:0.78, metalness:0.0 }),
+  model: new THREE.MeshStandardMaterial({ color:0xeceef0, roughness:0.45, metalness:0.05, polygonOffset:true, polygonOffsetFactor:1, polygonOffsetUnits:1 }),
+  fuse:  new THREE.MeshStandardMaterial({ color:0xd9463b, roughness:0.6 }),
+};
+let inst = null, wire = null, diag = 120;
+
+function rebuild(){
+  const cl = centreline();
+  const curve = new THREE.CatmullRomCurve3(cl.map(p=>new THREE.Vector3(...p)), true, 'centripetal');
+  const geo = new THREE.TubeGeometry(curve, Math.min(480, Math.round(cl.length*1.6)), P.D/2, 8, true);
+  const pl = placements();
+  const gap = clearance(cl);
+  const fused = gap < MIN_CLEAR, loose = gap > P.Y*1.2 + 2;
+
+  if (inst){ scene.remove(inst); inst.geometry.dispose(); }
+  if (wire){ scene.remove(wire); wire.geometry.dispose(); wire = null; }
+  const mat = view==='sheet' && fused ? mats.fuse : mats[matMode];
+  inst = new THREE.InstancedMesh(geo, mat, pl.length); inst.castShadow = true; inst.receiveShadow = true;
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(1,1,1);
+  pl.forEach((p,k)=>{ q.setFromAxisAngle(new THREE.Vector3(0,0,1), p.flip?Math.PI:0); m.compose(new THREE.Vector3(p.x,p.y,P.D/2), q, s); inst.setMatrixAt(k, m); });
+  scene.add(inst);
+
+  // rhino-style centreline in model mode
+  if (matMode === 'model'){
+    const pts = []; pl.forEach(p=>{ for (let k=0;k<cl.length;k++){ const a=xform(cl[k],p), b=xform(cl[(k+1)%cl.length],p); pts.push(a[0],a[1],a[2]+P.D/2, b[0],b[1],b[2]+P.D/2); } });
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts,3));
+    wire = new THREE.LineSegments(g, new THREE.LineBasicMaterial({color:0x111111, transparent:true, opacity:.55})); scene.add(wire);
+  }
+
+  // bounds + stats
+  const n = view==='unit'?1:P.N;
+  const w = view==='unit' ? P.X : (n-0.5)*colPitch() + P.X, d = view==='unit' ? P.Y : (rowCount()-1)*P.P + P.Y + Math.abs(Math.sin(P.T*Math.PI/180)*P.H);
+  diag = Math.hypot(w, d, P.H);
+  let len = 0; for (let k=0;k<cl.length;k++){ const a=cl[k], b=cl[(k+1)%cl.length]; len += Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); }
+  const vol = len*Math.PI*(P.D/2)**2*pl.length/1000;   // cm^3
+  const st = $('stat');
+  if (view==='sheet' && fused){ st.className='err';
+    st.innerHTML = `units fuse ✕ gap ${gap.toFixed(2)} mm<small>neighbouring strands are closer than ${MIN_CLEAR} mm — the sheet would print solid. increase the row pitch, add tilt or thin the strand.</small>`; }
+  else if (view==='sheet' && loose){ st.className='warn';
+    st.innerHTML = `too loose ! gap ${gap.toFixed(1)} mm<small>arms no longer pass through their neighbours' loops — the sheet falls apart. reduce the row pitch.</small>`; }
+  else { st.className='ok';
+    st.innerHTML = `${view==='unit'?'unit':'sheet'} regenerated ✓${view==='sheet'?` · gap ${gap.toFixed(2)} mm`:''}<small>${pl.length} unit${pl.length>1?'s':''} · ${w.toFixed(0)} × ${d.toFixed(0)} × ${(Math.cos(P.T*Math.PI/180)*P.H+P.D).toFixed(0)} mm · ${vol.toFixed(1)} cm³ of material</small>`; }
+}
+
+// ---------- ui ----------
+const fmt = { X:1, Y:2, H:1, R:2, T:0, D:2, P:2, N:0 };
+function readUI(){ for (const k in P){ P[k] = +$(k).value; $(k+'v').textContent = (+$(k).value).toFixed(fmt[k]); } }
+for (const k in P) $(k).addEventListener('input', ()=>{ readUI(); rebuild(); });
+document.querySelectorAll('#viewseg button').forEach(b=>b.onclick=()=>{ view=b.dataset.v; document.querySelectorAll('#viewseg button').forEach(x=>x.classList.toggle('on',x===b)); rebuild(); resetView(); });
+document.querySelectorAll('#matseg button').forEach(b=>b.onclick=()=>{ matMode=b.dataset.m; document.querySelectorAll('#matseg button').forEach(x=>x.classList.toggle('on',x===b)); rebuild(); });
+
+// ---------- camera (same orbit scheme as the reference) ----------
+let az=-2.1, el=0.62, dist=240, panx=0, pany=0, panz=0;
+function resetView(){ az=-2.1; el=0.62; dist = diag*2.3; panx=pany=0; panz = P.H*0.35; }
+function setC(){ const r=dist; cam.up.set(0,0,1);
+  cam.position.set(panx + r*Math.cos(el)*Math.cos(az), pany + r*Math.cos(el)*Math.sin(az), panz + r*Math.sin(el));
+  cam.lookAt(panx, pany, panz); }
+function resize(){ const w=innerWidth, h=innerHeight; renderer.setSize(w,h); cam.aspect=w/h;
+  const pw = w > 640 ? 272 : 0; if (pw) cam.setViewOffset(w, h, -pw/2, 0, w, h); else cam.clearViewOffset(); cam.updateProjectionMatrix(); }
+addEventListener('resize', resize);
+let px, py, btn=-1;
+c.addEventListener('pointerdown', e=>{ btn=e.button; px=e.clientX; py=e.clientY; c.setPointerCapture(e.pointerId); });
+c.addEventListener('pointerup', ()=>btn=-1);
+c.addEventListener('pointermove', e=>{ if (btn<0) return; const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY;
+  if (btn===0){ az -= dx*0.01; el = Math.max(0.05, Math.min(1.5, el + dy*0.01)); }
+  else { const k = diag*0.002; panx -= (Math.cos(az+Math.PI/2)*dx)*k; pany -= (Math.sin(az+Math.PI/2)*dx)*k; panz += dy*k; } });
+c.addEventListener('wheel', e=>{ e.preventDefault(); dist *= Math.exp(e.deltaY*0.001); }, {passive:false});
+c.addEventListener('dblclick', resetView);
+c.addEventListener('contextmenu', e=>e.preventDefault());
+
+readUI(); rebuild(); resetView(); resize();
+(function loop(){ requestAnimationFrame(loop); setC(); renderer.render(scene, cam); })();
+window.__spike = { P, rebuild, setView:v=>{view=v; rebuild(); resetView();} };
+</script>
+</body>
+</html>
