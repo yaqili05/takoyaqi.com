@@ -34,7 +34,7 @@
 <canvas id="c"></canvas>
 <div id="panel">
  <h1>interlocking spikes</h1>
- <p class="sub">the spike chainmail rebuilt from the original grasshopper file. density and angle stay as designed — only the array size and the roundness of the unit change. the clearance check flags units that would fuse when printed, or fall apart.</p>
+ <p class="sub">the spike chainmail unit rebuilt from the rhino model: a post, a hook that wraps the next post, and a leaning spike that slips between the posts behind. density and angle stay fixed — only the array size and the roundness of the unit change. the clearance check flags units that would fuse when printed, or fall apart.</p>
 
  <div class="seg" id="viewseg"><button data-v="sheet" class="on">sheet</button><button data-v="unit">single unit</button></div>
  <div class="seg" id="matseg"><button data-m="print" class="on">printed</button><button data-m="model">model</button></div>
@@ -44,7 +44,7 @@
  <div class="row"><label>rows <span><span class="v" id="Mv"></span></span></label><input type="range" id="M" min="1" max="30" step="1" value="10"></div>
  <div class="grp">spike</div>
  <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0.6"></div>
- <div class="fixed">locked to the original grasshopper definition: column pitch <b id="fx"></b> · row pitch <b id="fy"></b> · spike lean <b id="ft"></b> · 10 × 10 array by default. roundness sets every bend of the strand — 0 is the tightest bend that still prints.</div>
+ <div class="fixed">fixed, as in the original array: column pitch <b id="fx"></b> · row pitch <b id="fy"></b> · spike lean <b id="ft"></b> · 10 × 10 array by default. roundness sets every bend of the strand — 0 is the tightest bend that still prints.</div>
 
  <div id="stat" class="ok">ready</div>
 </div>
