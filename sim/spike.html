@@ -43,8 +43,8 @@
  <div class="row"><label>columns <span><span class="v" id="Nv"></span></span></label><input type="range" id="N" min="1" max="20" step="1" value="10"></div>
  <div class="row"><label>rows <span><span class="v" id="Mv"></span></span></label><input type="range" id="M" min="1" max="30" step="1" value="10"></div>
  <div class="grp">spike</div>
- <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0"></div>
- <div class="fixed">locked to the original grasshopper definition: column pitch <b id="fx"></b> · row pitch <b id="fy"></b> · tilt <b id="ft"></b> · 10 × 10 array by default. roundness 0 = the sharp-cornered offset used in the original.</div>
+ <div class="row"><label>roundness <span><span class="v" id="Rv"></span></span></label><input type="range" id="R" min="0" max="1" step="0.01" value="0.6"></div>
+ <div class="fixed">locked to the original grasshopper definition: column pitch <b id="fx"></b> · row pitch <b id="fy"></b> · spike lean <b id="ft"></b> · 10 × 10 array by default. roundness sets every bend of the strand — 0 is the tightest bend that still prints.</div>
 
  <div id="stat" class="ok">ready</div>
 </div>
@@ -53,79 +53,76 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ---------------------------------------------------------------
-   spike chainmail unit (simplified from the rhino/grasshopper model)
-   - a closed centreline: two v-shaped arms, each a narrow loop that
-     meets in a pointed tip, joined at a shared base
-   - roundness replaces every corner of that polyline with a curve
-   - the strand is swept as a tube; the sheet is a diamond lattice in
-     which every other row is flipped so arms pass through loops
-   - clearance = min distance between neighbouring centrelines
-     minus the strand diameter (fdm/mjf rule of thumb: >= 0.4 mm)
+   spike chainmail unit (rebuilt from the rhino renders)
+   one continuous strand per unit:
+     post    – a vertical column rising from the sheet
+     hook    – at its foot the strand turns flat and wraps around the
+               NEXT unit's post (a three-sided loop that ramps up so it
+               clears the neighbour's own loop)
+     spike   – from the end of the hook the strand leans back as a long
+               blade that slips between the posts of the row behind,
+               finishing in a small curled tip
+   the sheet is two linear arrays (columns × rows), as in grasshopper;
+   pitch and lean are fixed, roundness sets every bend radius.
+   clearance = min distance between neighbouring centrelines − strand ø
    --------------------------------------------------------------- */
 const $ = id => document.getElementById(id);
-const P = { X:18, Y:4, H:22, R:0, T:25, D:1.3, P:4, N:10, M:10 };   // X,Y,H,T,D,P fixed; N,M,R live
+const G = { px:9, py:9, g:3, H:22, Ls:15, D:2.2, dz:3.8 };      // fixed (original density + angle)
+const P = { R:0, N:10, M:10 };                                   // live
 const LIVE = ['N','M','R'];
 let view = 'sheet', matMode = 'print';
 const MIN_CLEAR = 0.4;
+const V = (x,y,z)=>new THREE.Vector3(x,y,z);
 
-// ---------- geometry ----------
-function corners(){
-  const {X,Y,H} = P, t = P.T*Math.PI/180;
-  // base (y = ±Y/2), two tips; tilt leans tips toward +y
-  const lean = Math.sin(t)*H, up = Math.cos(t)*H;
+function ctrl(){
+  const {px,g,H,Ls,D,dz} = G, z0 = D/2, xs = -(g+2.9);   // spike plane, between the posts
   return [
-    [0,-Y/2,0],
-    [-X/2, lean, up],        // left tip
-    [0, Y/2, 0],
-    [ X/2, lean, up],        // right tip
+    V(0,0,H),              // post top
+    V(0,0,z0),             // post foot
+    V(0,g,z0),             // turn into the hook
+    V(-px-g, g, z0+dz),    // around the neighbour's post …
+    V(-px-g,-g, z0+dz),
+    V(xs,-g, z0+dz),    // spike root
+    V(xs,-Ls*0.42, H*0.62), // blade bows upward
+    V(xs,-Ls, H),       // spike tip
+    V(xs,-Ls-2.6, H+0.6), // tip flicks forward …
+    V(xs,-Ls-2.4, H+3.4)  // … and curls up
   ];
 }
-// round the corners of a closed polyline: r in [0,1] sets how far along each edge the curve starts
-function rounded(poly, r, seg=18){
-  const n = poly.length, out = [];
-  const sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], mul=(a,s)=>[a[0]*s,a[1]*s,a[2]*s];
-  for (let i=0;i<n;i++){
-    const p0 = poly[(i-1+n)%n], p1 = poly[i], p2 = poly[(i+1)%n];
-    const a = add(p1, mul(sub(p0,p1), 0.5*Math.max(0.001,r)));
-    const b = add(p1, mul(sub(p2,p1), 0.5*Math.max(0.001,r)));
-    for (let k=0;k<seg;k++){ const u=k/seg, v=1-u;              // quadratic bezier a -> p1 -> b
-      out.push([v*v*a[0]+2*v*u*p1[0]+u*u*b[0], v*v*a[1]+2*v*u*p1[1]+u*u*b[1], v*v*a[2]+2*v*u*p1[2]+u*u*b[2]]); }
-    // straight run to the next corner's start
-    const q1 = poly[(i+1)%n], q2 = poly[(i+2)%n];
-    const na = add(q1, mul(sub(p1,q1), 0.5*Math.max(0.001,r)));
-    for (let k=0;k<6;k++){ const u=k/6; out.push([b[0]+(na[0]-b[0])*u, b[1]+(na[1]-b[1])*u, b[2]+(na[2]-b[2])*u]); }
-  }
-  return out;
-}
-function centreline(){ return rounded(corners(), P.R); }
+function lean(){ const {g,Ls,H,D,dz}=G; return Math.atan((Ls-g)/(H-D/2-dz))*180/Math.PI; }
 
-// lattice placement: diamond grid; odd rows shifted by half a pitch and flipped
-function placements(){
-  const n = view === 'unit' ? 1 : P.N, out = [];
-  const px = colPitch(), py = P.P;          // columns sit just clear of each other; rows interlock
-  const rows = view === 'unit' ? 1 : rowCount();
-  for (let j=0;j<rows;j++) for (let i=0;i<n;i++){
-    const odd = j%2===1;
-    out.push({ x:(i - (n-1)/2 + (odd?0.5:0))*px, y:(j-(rows-1)/2)*py, flip: odd });
+// polyline -> curve path; every interior corner filleted with a quadratic bezier
+function strand(r){
+  const p = ctrl(), path = new THREE.CurvePath();
+  let cur = p[0].clone();
+  for (let i=1;i<p.length-1;i++){
+    const e0 = p[i-1].distanceTo(p[i]), e1 = p[i+1].distanceTo(p[i]);
+    const f = Math.max(G.D*0.55, r*0.5*Math.min(e0,e1));
+    const A = p[i].clone().add(p[i-1].clone().sub(p[i]).setLength(Math.min(f,e0*0.5)));
+    const B = p[i].clone().add(p[i+1].clone().sub(p[i]).setLength(Math.min(f,e1*0.5)));
+    if (cur.distanceTo(A)>1e-4) path.add(new THREE.LineCurve3(cur, A));
+    path.add(new THREE.QuadraticBezierCurve3(A, p[i].clone(), B));
+    cur = B;
   }
+  path.add(new THREE.LineCurve3(cur, p[p.length-1].clone()));
+  return path;
+}
+
+function placements(){
+  const n = view==='unit'?1:P.N, m = view==='unit'?1:P.M, out=[];
+  for (let j=0;j<m;j++) for (let i=0;i<n;i++)
+    out.push({ x:(i-(n-1)/2)*G.px + G.px/2 + G.g/2 - 0.5, y:(j-(m-1)/2)*G.py + (G.Ls+2.6-G.g)/2 });
   return out;
 }
-function colPitch(){ return P.X + P.D + 0.6; }
-function rowCount(){ return P.M; }
-function xform(p, pl){ const s = pl.flip ? -1 : 1; return [pl.x + s*p[0], pl.y + s*p[1], p[2]]; }
 
 // ---------- clearance ----------
-function clearance(cl){
-  // compare a unit with its neighbours (same row, row above) using sparse samples
-  const S = cl.filter((_,k)=>k%2===0);
-  const me = {x:0,y:0,flip:false};
-  const px = colPitch();
-  const nbrs = [{x:px,y:0,flip:false},{x:px*0.5,y:P.P,flip:true},{x:-px*0.5,y:P.P,flip:true},{x:0,y:2*P.P,flip:false}];
+function clearance(S){
   let best = Infinity;
-  const A = S.map(p=>xform(p,me));
-  for (const nb of nbrs){ const B = S.map(p=>xform(p,nb));
-    for (const a of A) for (const b of B){ const d=Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); if (d<best) best=d; } }
-  return best - P.D;       // surface-to-surface gap
+  for (let j=-2;j<=2;j++) for (let i=-2;i<=2;i++){ if (!i && !j) continue;
+    const ox=i*G.px, oy=j*G.py;
+    for (const a of S) for (const b of S){ const dx=a.x-b.x-ox, dy=a.y-b.y-oy, dz=a.z-b.z;
+      const d=dx*dx+dy*dy+dz*dz; if (d<best) best=d; } }
+  return Math.sqrt(best) - G.D;
 }
 
 // ---------- three.js ----------
@@ -153,42 +150,45 @@ const mats = {
 };
 let inst = null, wire = null, diag = 120;
 
+const capGeo = new THREE.SphereGeometry(G.D/2, 14, 10);
+let caps = null;
 function rebuild(){
-  const cl = centreline();
-  const curve = new THREE.CatmullRomCurve3(cl.map(p=>new THREE.Vector3(...p)), true, 'centripetal');
-  const geo = new THREE.TubeGeometry(curve, Math.min(480, Math.round(cl.length*1.6)), P.D/2, 8, true);
+  const path = strand(P.R);
+  const len = path.getLength();
+  const geo = new THREE.TubeGeometry(path, Math.round(len*5), G.D/2, 10, false);
+  const S = path.getSpacedPoints(Math.round(len*2.5));
   const pl = placements();
-  const gap = clearance(cl);
-  const fused = gap < MIN_CLEAR, loose = gap > P.Y*1.2 + 2;
+  const gap = clearance(S);
+  const fused = gap < MIN_CLEAR;
 
-  if (inst){ scene.remove(inst); inst.geometry.dispose(); }
+  for (const o of [inst, caps]) if (o){ scene.remove(o); }
+  if (inst) inst.geometry.dispose();
   if (wire){ scene.remove(wire); wire.geometry.dispose(); wire = null; }
   const mat = view==='sheet' && fused ? mats.fuse : mats[matMode];
   inst = new THREE.InstancedMesh(geo, mat, pl.length); inst.castShadow = true; inst.receiveShadow = true;
-  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(1,1,1);
-  pl.forEach((p,k)=>{ q.setFromAxisAngle(new THREE.Vector3(0,0,1), p.flip?Math.PI:0); m.compose(new THREE.Vector3(p.x,p.y,P.D/2), q, s); inst.setMatrixAt(k, m); });
-  scene.add(inst);
+  caps = new THREE.InstancedMesh(capGeo, mat, pl.length*2); caps.castShadow = true;
+  const m = new THREE.Matrix4(), e0 = S[0], e1 = S[S.length-1];
+  pl.forEach((p,k)=>{ m.makeTranslation(p.x,p.y,0); inst.setMatrixAt(k,m);
+    m.makeTranslation(p.x+e0.x,p.y+e0.y,e0.z); caps.setMatrixAt(2*k,m);
+    m.makeTranslation(p.x+e1.x,p.y+e1.y,e1.z); caps.setMatrixAt(2*k+1,m); });
+  scene.add(inst); scene.add(caps);
 
-  // rhino-style centreline in model mode
   if (matMode === 'model'){
-    const pts = []; pl.forEach(p=>{ for (let k=0;k<cl.length;k++){ const a=xform(cl[k],p), b=xform(cl[(k+1)%cl.length],p); pts.push(a[0],a[1],a[2]+P.D/2, b[0],b[1],b[2]+P.D/2); } });
+    const pts = []; pl.forEach(p=>{ for (let k=0;k<S.length-1;k++){ const a=S[k], b=S[k+1];
+      pts.push(p.x+a.x,p.y+a.y,a.z, p.x+b.x,p.y+b.y,b.z); } });
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts,3));
     wire = new THREE.LineSegments(g, new THREE.LineBasicMaterial({color:0x111111, transparent:true, opacity:.55})); scene.add(wire);
   }
 
-  // bounds + stats
-  const n = view==='unit'?1:P.N;
-  const w = view==='unit' ? P.X : (n-(rowCount()>1?0.5:1))*colPitch() + P.X, d = view==='unit' ? P.Y : (rowCount()-1)*P.P + P.Y + Math.abs(Math.sin(P.T*Math.PI/180)*P.H);
-  diag = Math.hypot(w, d, P.H);
-  let len = 0; for (let k=0;k<cl.length;k++){ const a=cl[k], b=cl[(k+1)%cl.length]; len += Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); }
-  const vol = len*Math.PI*(P.D/2)**2*pl.length/1000;   // cm^3
+  const n = view==='unit'?1:P.N, mm = view==='unit'?1:P.M;
+  const w = (n-1)*G.px + G.px + 2*G.g + G.D, d = (mm-1)*G.py + G.Ls + 2.6 + G.g + G.D;
+  diag = Math.hypot(w, d, G.H);
+  const vol = len*Math.PI*(G.D/2)**2*pl.length/1000;
   const st = $('stat');
   if (view==='sheet' && fused){ st.className='err';
     st.innerHTML = `units fuse ✕ gap ${gap.toFixed(2)} mm<small>neighbouring strands are closer than ${MIN_CLEAR} mm — the sheet would print solid. lower the roundness.</small>`; }
-  else if (view==='sheet' && loose){ st.className='warn';
-    st.innerHTML = `too loose ! gap ${gap.toFixed(1)} mm<small>arms no longer pass through their neighbours' loops — the sheet falls apart. lower the roundness.</small>`; }
   else { st.className='ok';
-    st.innerHTML = `${view==='unit'?'unit':'sheet'} regenerated ✓${view==='sheet'?` · gap ${gap.toFixed(2)} mm`:''}<small>${pl.length} unit${pl.length>1?'s':''} · ${w.toFixed(0)} × ${d.toFixed(0)} × ${(Math.cos(P.T*Math.PI/180)*P.H+P.D).toFixed(0)} mm · ${vol.toFixed(1)} cm³ of material</small>`; }
+    st.innerHTML = `${view==='unit'?'unit':'sheet'} regenerated ✓${view==='sheet'?` · gap ${gap.toFixed(2)} mm`:''}<small>${pl.length} unit${pl.length>1?'s':''} · ${w.toFixed(0)} × ${d.toFixed(0)} × ${(G.H+3.4+G.D/2).toFixed(0)} mm · ${vol.toFixed(1)} cm³ of material</small>`; }
 }
 
 // ---------- ui ----------
@@ -200,7 +200,7 @@ document.querySelectorAll('#matseg button').forEach(b=>b.onclick=()=>{ matMode=b
 
 // ---------- camera (same orbit scheme as the reference) ----------
 let az=-2.1, el=0.62, dist=240, panx=0, pany=0, panz=0;
-function resetView(){ az=-2.1; el=0.62; dist = diag*2.3; panx=pany=0; panz = P.H*0.35; }
+function resetView(){ az=-2.1; el=0.62; dist = diag*2.3; panx=pany=0; panz = G.H*0.35; }
 function setC(){ const r=dist; cam.up.set(0,0,1);
   cam.position.set(panx + r*Math.cos(el)*Math.cos(az), pany + r*Math.cos(el)*Math.sin(az), panz + r*Math.sin(el));
   cam.lookAt(panx, pany, panz); }
@@ -217,10 +217,10 @@ c.addEventListener('wheel', e=>{ e.preventDefault(); dist *= Math.exp(e.deltaY*0
 c.addEventListener('dblclick', resetView);
 c.addEventListener('contextmenu', e=>e.preventDefault());
 
-$('fx').textContent=colPitch().toFixed(1)+' mm'; $('fy').textContent=P.P.toFixed(1)+' mm'; $('ft').textContent=P.T+'°';
+$('fx').textContent=G.px+' mm'; $('fy').textContent=G.py+' mm'; $('ft').textContent=lean().toFixed(0)+'°';
 readUI(); rebuild(); resetView(); resize();
 (function loop(){ requestAnimationFrame(loop); setC(); renderer.render(scene, cam); })();
-window.__spike = { P, rebuild, setView:v=>{view=v; rebuild(); resetView();} };
+window.__spike = { P, G, rebuild, setView:v=>{view=v; rebuild(); resetView();} };
 </script>
 </body>
 </html>
