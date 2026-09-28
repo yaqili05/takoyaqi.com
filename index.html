@@ -689,9 +689,10 @@ const views = {
   },
   contact(){
     const L = [
-      ["instagram", "@"+SITE.instagram, "https://www.instagram.com/"+SITE.instagram+"/"],
       ["linkedin", "/in/yaqi-li-mit", SITE.linkedin],
       ["github", "yaqili05", "https://github.com/yaqili05"],
+      ["phone", "+1 (919) 455-4906", "tel:+19194554906"],
+      ["instagram", "@"+SITE.instagram, "https://www.instagram.com/"+SITE.instagram+"/"],
     ];
     return `<div class="contact">
       <div class="who">
@@ -701,7 +702,7 @@ const views = {
       </div>
       <div>
         <div class="mail"><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a><button type="button" id="copymail">copy</button></div>
-        <ul class="links">${L.map(([k,v,h]) => `<li><a href="${esc(h)}"${h.startsWith('#')?'':' target="_blank" rel="noopener"'}><span class="k">${k}</span><span class="v">${esc(v)}</span><span class="ar">↗</span></a></li>`).join('')}</ul>
+        <ul class="links">${L.map(([k,v,h]) => `<li><a href="${esc(h)}"${/^(#|tel:)/.test(h)?'':' target="_blank" rel="noopener"'}><span class="k">${k}</span><span class="v">${esc(v)}</span><span class="ar">↗</span></a></li>`).join('')}</ul>
       </div>
     </div>`;
   },
