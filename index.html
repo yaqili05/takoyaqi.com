@@ -266,7 +266,7 @@ p + p{margin-top:1em}
 .names h3{margin:0 0 10px;column-span:all}
 
 /* contact */
-.contact{max-width:880px;margin:30px auto 0;display:grid;grid-template-columns:260px 1fr;gap:56px;align-items:start;text-align:left}
+.contact{max-width:880px;margin:30px auto 0;display:grid;grid-template-columns:260px 1fr;gap:56px;align-items:center;text-align:left}
 .contact .who{text-align:center}
 .contact .who img{width:180px;height:180px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 18px}
 .contact .who .nm{font-size:18px;color:var(--ink);letter-spacing:1px}
@@ -692,18 +692,14 @@ const views = {
       ["instagram", "@"+SITE.instagram, "https://www.instagram.com/"+SITE.instagram+"/"],
       ["linkedin", "/in/yaqi-li-mit", SITE.linkedin],
       ["github", "yaqili05", "https://github.com/yaqili05"],
-      ["resume", "resume.pdf", "#/resume"],
     ];
     return `<div class="contact">
       <div class="who">
         <img src="${esc(SITE.portrait)}" alt="portrait of yaqi li">
         <div class="nm">yaqi li</div>
         <div class="meta">mit · computation &amp; cognition<br>minor in design · cambridge, ma</div>
-        <div class="status"><i></i>open to research &amp; collaborations</div>
       </div>
       <div>
-        <p class="lede">working on soft robots, ai agents, or design + fabrication? i'd love to hear about it.</p>
-        <p class="sub">email is the best way to reach me — i usually reply within a couple of days.</p>
         <div class="mail"><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a><button type="button" id="copymail">copy</button></div>
         <ul class="links">${L.map(([k,v,h]) => `<li><a href="${esc(h)}"${h.startsWith('#')?'':' target="_blank" rel="noopener"'}><span class="k">${k}</span><span class="v">${esc(v)}</span><span class="ar">↗</span></a></li>`).join('')}</ul>
       </div>
