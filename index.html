@@ -359,7 +359,7 @@ const PROJECTS = [
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-cover-v2.jpg", custom:true},
   {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-cover-s.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
-  {slug:"peel-toss", title:"peel toss", cat:"physics simulation · game", year:2026, ratio:4/3, img:"images/peel-toss-loop.jpg", video:"images/peel-toss-loop", custom:true},
+  {slug:"banana-crush", title:"banana crush", cat:"physics simulation · game", year:2026, ratio:4/3, img:"images/peel-toss-loop.jpg", video:"images/peel-toss-loop", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
   location:"cambridge, ma",
@@ -539,7 +539,7 @@ const views = {
     if (slug === 'voyages-agent') return views.voyages(i);
     if (slug === 'gaze-to-the-stars') return views.gaze(i);
     if (slug === '3d-printed-chainmail') return views.chainmail(i);
-    if (slug === 'peel-toss') return views.peel(i);
+    if (slug === 'banana-crush') return views.peel(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -612,10 +612,10 @@ const views = {
     const prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     const M = [["even spread","flaps 90° apart","30"],["skin side up","yellow faces the sky","25"],["flaps unfurled","fully stretched out","20"],["stalk up","neck stands upright","15"],["lying flat","every flap on the floor","10"]];
     return `<article class="case pt">
-      <h1 class="page">peel toss</h1>
+      <h1 class="page">banana crush</h1>
       <p class="lead">fling a banana peel into the air and see how close it lands to the perfect cartoon splay.</p>
       <div class="meta"><span>physics simulation · game</span><span>2026</span><span>three.js · webgl</span></div>
-      <div class="cm-live pt-live"><iframe src="sim/peel-toss.html" title="peel toss game" loading="lazy" allow="fullscreen"></iframe></div>
+      <div class="cm-live pt-live"><iframe src="sim/peel-toss.html" title="banana crush game" loading="lazy" allow="fullscreen"></iframe></div>
       <div class="simlinks"><span>drag the peel and let go to throw · or press “toss for me”</span><a href="sim/peel-toss.html" target="_blank" rel="noopener">play full screen ↗</a></div>
       <section class="two"><h2>overview</h2><div>
         <p>a small browser game about a very specific shape: the four-flap banana peel you see in cartoons. you grab the peel by its stalk, swing it and let go. it tumbles, bounces and settles, then gets scored against the ideal.</p>
