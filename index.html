@@ -93,6 +93,11 @@ p + p{margin-top:1em}
 /* 3d printed chainmail */
 .cm-live{position:relative;margin-top:14px;height:min(72vh,620px);min-height:420px;background:#e9eaec}
 .cm-live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pt-live{height:min(80vh,720px);background:#171E55;margin-top:30px}
+.pt-metrics{list-style:none;margin-top:14px;max-width:680px;border-top:1px solid var(--line)}
+.pt-metrics li{display:grid;grid-template-columns:150px 1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.pt-metrics li span{color:var(--ink)}.pt-metrics li i{font-style:normal;color:var(--muted)}.pt-metrics li b{font-weight:400;color:var(--ink)}
+@media (max-width:640px){.pt-live{height:78vh}.pt-metrics li{grid-template-columns:1fr auto}.pt-metrics li i{display:none}}
 .cm-intro{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center;margin-top:34px!important}
 .cm-intro h2{margin-bottom:18px;font-size:14px;color:var(--muted);letter-spacing:2px}
 .cm-portrait{aspect-ratio:1042/1400;max-height:640px}
@@ -353,6 +358,7 @@ const PROJECTS = [
   {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-cover-v2.jpg", custom:true},
   {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-cover-s.jpg", custom:true},
+  {slug:"peel-toss", title:"peel toss", cat:"physics simulation · game", year:2026, ratio:4/3, img:"images/peel-toss-cover.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
@@ -533,6 +539,7 @@ const views = {
     if (slug === 'voyages-agent') return views.voyages(i);
     if (slug === 'gaze-to-the-stars') return views.gaze(i);
     if (slug === '3d-printed-chainmail') return views.chainmail(i);
+    if (slug === 'peel-toss') return views.peel(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -593,11 +600,30 @@ const views = {
         <div class="cm-head"><span class="n">${esc(d.n)}</span><h3>${esc(d.name)}</h3><p>${esc(d.text)}</p></div>
         <div class="cm-grid">${d.imgs.map(fig).join('')}</div>
         ${d.interactive ? `<div class="cm-live"><iframe src="${esc(d.interactive)}" title="parametric spike chainmail" loading="lazy"></iframe></div>
-        <div class="simlinks"><span>parametric model — change the spike's spread, loop width, height, roundness and tilt; the sheet regenerates and checks clearance</span><a href="${esc(d.interactive)}" target="_blank" rel="noopener">open full screen ↗</a></div>` : ''}</section>`).join('')}
+        <div class="simlinks"><span>parametric model — set the columns, rows and roundness; the sheet regenerates and checks clearance</span><a href="${esc(d.interactive)}" target="_blank" rel="noopener">open full screen ↗</a></div>` : ''}</section>`).join('')}
 
       <section class="two"><h2>my role</h2><div><p>${esc(C.role)}</p>
         <p style="margin-top:18px"><a class="u" href="https://www.instagram.com/criticalmattergroup/" target="_blank" rel="noopener">critical matter on instagram ↗</a></p></div></section>
 
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+    </article>`;
+  },
+  peel(i){
+    const prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    const M = [["even spread","flaps 90° apart","30"],["skin side up","yellow faces the sky","25"],["flaps unfurled","fully stretched out","20"],["stalk up","neck stands upright","15"],["lying flat","every flap on the floor","10"]];
+    return `<article class="case pt">
+      <h1 class="page">peel toss</h1>
+      <p class="lead">fling a banana peel into the air and see how close it lands to the perfect cartoon splay.</p>
+      <div class="meta"><span>physics simulation · game</span><span>2026</span><span>three.js · webgl</span></div>
+      <div class="cm-live pt-live"><iframe src="sim/peel-toss.html" title="peel toss game" loading="lazy" allow="fullscreen"></iframe></div>
+      <div class="simlinks"><span>drag the peel and let go to throw · or press “toss for me”</span><a href="sim/peel-toss.html" target="_blank" rel="noopener">play full screen ↗</a></div>
+      <section class="two"><h2>overview</h2><div>
+        <p>a small browser game about a very specific shape: the four-flap banana peel you see in cartoons. you grab the peel by its stalk, swing it and let go. it tumbles, bounces and settles, then gets scored against the ideal.</p>
+        <p>the peel is a soft body, not an animation. like a real peel, only the thin neck holds the four long curved flaps together, so every throw lands differently.</p></div></section>
+      <section class="two"><h2>how it works</h2><div>
+        <p>the peel is a set of verlet particles tied together by distance constraints: a rigid core at the neck, and flaps built from rows of three particles with cross-bracing and bending links so they curl but don't stretch. gravity, floor contact and friction are stepped at a fixed rate, and the mesh, skin and inner-pith textures are generated in code and rendered with three.js.</p>
+        <p>once the peel stops moving, it's compared with the perfect peel on five weighted measures, which add up to a score out of 100 and a grade from s to d:</p>
+        <ul class="pt-metrics">${M.map(([a,b,w])=>`<li><span>${a}</span><i>${b}</i><b>${w}</b></li>`).join('')}</ul></div></section>
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
   },
