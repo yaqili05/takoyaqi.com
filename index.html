@@ -115,6 +115,7 @@ h1.page.fo-title{text-transform:none;max-width:860px;margin:30px auto 18px;line-
 .fo-t th,.fo-t td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;font-weight:400}
 .fo-t th:first-child{text-align:left;color:var(--ink)}
 .fo-t thead th{color:var(--muted);font-size:12px;letter-spacing:.5px}
+.fo-credit{margin-top:60px!important;text-align:left}
 .fo-cap{font-size:13px!important;color:var(--muted);margin-top:10px}
 @media (max-width:640px){.fo-steps li{grid-template-columns:30px 1fr}.fo-steps li span{grid-column:2}.fo-t{font-size:12px}}
 .pt-live{height:min(80vh,720px);background:#171E55;margin-top:30px}
@@ -380,7 +381,7 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
   {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
-  {slug:"fontan-liver-cfd", title:"fontan liver hemodynamics", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop.jpg", video:"images/fontan-loop", custom:true},
+  {slug:"fontan-liver-cfd", title:"fontan liver hemodynamics", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop2.jpg", video:"images/fontan-loop2", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-cover-v2.jpg", custom:true},
   {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-cover-s.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
@@ -648,7 +649,6 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
 
       <section class="two"><h2>overview</h2><div>
         <p>children born with a single working ventricle — hypoplastic left heart syndrome (hlhs) or double outlet right ventricle (dorv) — are palliated with the fontan procedure. venous blood then reaches the lungs passively, without a pump, and the raised venous pressure backs up into the liver. over time this can scar the liver: fontan-associated liver disease. it is especially common in hlhs patients.</p>
-        ${fig(1,'fontan-fig1.jpg','a healthy heart compared with hlhs and dorv hearts, before and after fontan repair. the hlhs patient has also had the aorta reconstructed.')}
         <p>we built patient-specific 1d fluid dynamics models of the liver's two blood supplies, the hepatic artery and the portal vein. using them, we compared an hlhs patient with an age-matched dorv patient, and simulated early and late stages of fald.</p></div></section>
 
       <section class="two"><h2>the circuit</h2><div>
@@ -670,16 +670,9 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
         <p>the hlhs patient has higher hepatic arterial pressure than the dorv patient, and the gap widens as fald progresses. perfusion maps show rising pressure and falling flow in the liver tissue fed by the portal vein: the regions most at risk of fibrosis.</p>
         <table class="fo-t"><thead><tr><th>pressure (mmHg)</th><th>dorv</th><th>hlhs</th><th>early fald</th><th>late fald</th></tr></thead>
         <tbody>${T.map(r=>`<tr>${r.map((c,k)=>k?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table>
-        <p class="fo-cap">hepatic artery wall shear, main branch: 9.61 pa (hlhs) vs 6.50 pa (dorv).</p>
-        ${fig(5,'fontan-fig5.jpg','pressure and flow in the portal vein network for the dorv, hlhs and simulated fald patients. as fald progresses the flow peak shifts earlier and systolic pressure rises slightly.')}
-        ${fig(6,'fontan-fig6.jpg','pressure and flow in hepatic artery vessels 0 and 13. systolic pressure rises under fald conditions.')}
-        ${fig(8,'fontan-fig8.jpg','perfusion maps: average flow in each terminal vessel, spread to the nearby liver tissue, seen from the back and the front.')}
-        <p class="fo-cap">figures from li et al. (2026), int. j. numer. method. biomed. eng., <a class="u" href="${PMC}" target="_blank" rel="noopener">open access</a> under cc by-nc 4.0.</p></div></section>
+        <p class="fo-cap">hepatic artery wall shear, main branch: 9.61 pa (hlhs) vs 6.50 pa (dorv).</p></div></section>
 
-      <section class="two"><h2>my role</h2><div>
-        <p>i am first author on the paper. i segmented the patient vasculature in 3d slicer and extracted the vmtk centerlines that become the vessel networks of the 1d model. the viewer above uses the aortas i segmented for the study's patients (dorv and hlhs).</p>
-        <p class="fo-cap">co-authors: justin d. weigand (baylor college of medicine / texas children's hospital), charles puelz (university of houston), mette s. olufsen (nc state) and alyssa taylor-lapole (rice).</p>
-        <p style="margin-top:18px"><a class="u" href="${PAPER}" target="_blank" rel="noopener">read the paper ↗</a> &nbsp; <a class="u" href="${PMC}" target="_blank" rel="noopener">open access (pmc) ↗</a></p></div></section>
+      <p class="fo-cap fo-credit">figures from li et al. (2026), <i>int. j. numer. method. biomed. eng.</i>, open access under cc by-nc 4.0 · <a class="u" href="${PAPER}" target="_blank" rel="noopener">read the paper ↗</a> &nbsp; <a class="u" href="${PMC}" target="_blank" rel="noopener">pmc ↗</a></p>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
