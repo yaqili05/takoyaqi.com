@@ -381,7 +381,7 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
   {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
-  {slug:"fontan-liver-cfd", title:"fontan liver hemodynamics", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop2.jpg", video:"images/fontan-loop2", custom:true},
+  {slug:"fontan-liver-cfd", title:"FALD prediction modeling", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop2.jpg", video:"images/fontan-loop2", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-cover-v2.jpg", custom:true},
   {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-cover-s.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
@@ -538,6 +538,7 @@ const RESUME_PDF = "resume.pdf";
 
 const app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ttl = t => esc(t).replace(/\bFALD\b/g,'<span style="text-transform:none">FALD</span>');
 const tone = i => 't' + (i % 4 + 1);
 const media = (src, ratio, label, i=0) => src
   ? `<img src="${esc(src)}" alt="${esc(label)}" loading="lazy" style="width:100%;aspect-ratio:${ratio};object-fit:cover">`
@@ -555,7 +556,7 @@ const views = {
       <div class="bricks">${PROJECTS.map((p,i) => `
         <a class="brick" href="#/projects/${p.slug}" style="animation-delay:${i*40}ms">
           ${p.video ? loopVideo(p.video, p.img, p.ratio) : media(p.img, p.ratio, 'image', i)}
-          <span class="label"><span class="cat">${esc(p.cat)}</span><span class="name">${esc(p.title)}</span></span>
+          <span class="label"><span class="cat">${esc(p.cat)}</span><span class="name">${ttl(p.title)}</span></span>
         </a>`).join('')}</div>`;
   },
   project(slug){
@@ -569,13 +570,13 @@ const views = {
     if (slug === 'fontan-liver-cfd') return views.fontan(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
-      <h1 class="page">${esc(p.title)}</h1>
+      <h1 class="page">${ttl(p.title)}</h1>
       <div class="meta"><span>${esc(p.cat)}</span><span>${p.year}</span><span>${esc(p.location)}</span></div>
       ${media(p.img, 16/9, 'hero image', i)}
       <div class="body">${p.text.map(t=>`<p>${esc(t)}</p>`).join('')}
         <p style="font-size:14px;color:var(--muted);margin-top:1.6em">with ${esc(p.collaborators)}</p></div>
       <div class="gallery">${p.gallery.map((g,k)=>`<div class="${g.wide?'wide':''}">${media(g.img, g.wide?16/9:1, 'image '+String(k+1).padStart(2,'0'), i+k+1)}</div>`).join('')}</div>
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   softarm(i){
@@ -606,7 +607,7 @@ const views = {
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
 
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   chainmail(i){
@@ -632,7 +633,7 @@ const views = {
       <section class="two"><h2>my role</h2><div><p>${esc(C.role)}</p>
         <p style="margin-top:18px"><a class="u" href="https://www.instagram.com/criticalmattergroup/" target="_blank" rel="noopener">critical matter on instagram ↗</a></p></div></section>
 
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   fontan(i){
@@ -674,7 +675,7 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
 
       <p class="fo-cap fo-credit">figures from li et al. (2026), <i>int. j. numer. method. biomed. eng.</i>, open access under cc by-nc 4.0 · <a class="u" href="${PAPER}" target="_blank" rel="noopener">read the paper ↗</a> &nbsp; <a class="u" href="${PMC}" target="_blank" rel="noopener">pmc ↗</a></p>
 
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   peel(i){
@@ -693,7 +694,7 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
         <p>the peel is a set of verlet particles tied together by distance constraints: a rigid core at the neck, and flaps built from rows of three particles with cross-bracing and bending links so they curl but don't stretch. gravity, floor contact and friction are stepped at a fixed rate, and the mesh, skin and inner-pith textures are generated in code and rendered with three.js.</p>
         <p>once the peel stops moving, it's compared with the perfect peel on five weighted measures, which add up to a score out of 100 and a grade from s to d:</p>
         <ul class="pt-metrics">${M.map(([a,b,w])=>`<li><span>${a}</span><i>${b}</i><b>${w}</b></li>`).join('')}</ul></div></section>
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   gaze(i){
@@ -725,7 +726,7 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
       <section class="two"><h2>links</h2><div class="gz-links">${G.links.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join('')}
         <p class="fine">${esc(G.credits)}</p></div></section>
 
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   voyages(i){
@@ -764,7 +765,7 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
       <section class="two"><h2>next</h2><div><p>${esc(V.next)}</p><p class="fine">${esc(V.credit)}</p>
         <p style="margin-top:22px"><a class="so-btn" href="${esc(V.company.url)}" target="_blank" rel="noopener">signal ocean platform ↗</a></p></div></section>
 
-      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
   about(){
