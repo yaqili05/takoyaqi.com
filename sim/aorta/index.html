@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>aortic flow · single-ventricle patients</title>
+<style>
+:root{--bg:#0d1016;--panel:#161a22;--line:#2a303b;--ink:#e8ebf0;--mut:#8a93a3;--acc:#ff5a4e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font:13px/1.45 Arial,Helvetica,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;display:block;width:100%;height:100%;touch-action:none}
+#panel{position:fixed;left:0;top:0;bottom:0;width:290px;background:var(--panel);border-right:1px solid var(--line);padding:20px 20px 16px;overflow-y:auto;z-index:2}
+h1{font-size:15px;font-weight:400;letter-spacing:2px;text-transform:lowercase}
+.sub{color:var(--mut);margin:8px 0 16px;font-size:12px}
+.grp{font-size:10.5px;letter-spacing:1.6px;color:var(--mut);text-transform:uppercase;margin:16px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+select{width:100%;background:#0f1218;color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:7px 8px;font:inherit}
+.seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.seg button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:12px;padding:6px 0;cursor:pointer}
+.seg button.on{background:#e8ebf0;color:#111}
+.row{margin:8px 0}
+.row label{display:flex;justify-content:space-between;color:var(--mut);font-size:12px;margin-bottom:3px}
+.row label b{color:var(--ink);font-weight:400}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.chk{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:12px}
+.chk input{accent-color:var(--acc);margin-right:4px;vertical-align:-2px}
+canvas.plot{width:100%;height:96px;display:block;background:#0f1218;border:1px solid var(--line);border-radius:4px}
+.probe{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin-top:8px}
+.probe div{background:#0f1218;border:1px solid var(--line);border-radius:4px;padding:6px 8px}
+.probe span{display:block;color:var(--mut);font-size:10.5px;letter-spacing:.5px}
+.probe b{font-weight:400;font-size:14px}
+.note{color:var(--mut);font-size:11px;margin-top:12px;line-height:1.5}
+#legend{position:fixed;right:18px;bottom:18px;z-index:2;color:var(--mut);font-size:11px;text-align:right}
+#legend .bar{width:180px;height:8px;border-radius:4px;margin:5px 0 3px auto}
+#legend .ends{display:flex;justify-content:space-between;width:180px;margin-left:auto}
+#hud{position:fixed;right:18px;top:16px;z-index:2;color:var(--mut);font-size:11px;text-align:right}
+#hud b{color:var(--ink);font-weight:400;font-size:13px}
+#play{background:none;border:1px solid var(--line);color:var(--ink);border-radius:4px;padding:6px 12px;font:inherit;cursor:pointer;width:100%}
+#play:hover{border-color:var(--mut)}
+#load{position:fixed;inset:0;display:grid;place-items:center;color:var(--mut);z-index:1}
+@media (max-width:700px){
+  #panel{top:auto;width:auto;right:0;height:46vh;border-right:0;border-top:1px solid var(--line)}
+  #legend{bottom:calc(46vh + 12px)}
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="load">loading patient geometry…</div>
+<div id="panel">
+  <h1>aortic flow</h1>
+  <p class="sub">patient-specific aortas I segmented in 3d slicer, with vmtk centerlines. blood is driven through each one over a cardiac cycle.</p>
+
+  <div class="grp">patient</div>
+  <select id="pat"></select>
+
+  <div class="grp">circulation</div>
+  <div class="row"><label>cardiac output <b><span id="cov"></span> L/min</b></label><input type="range" id="co" min="2" max="7" step="0.01"></div>
+  <div class="row"><label>heart rate <b><span id="hrv"></span> bpm</b></label><input type="range" id="hr" min="50" max="130" step="1" value="80"></div>
+  <div class="row"><label>slow motion <b><span id="smv"></span>×</b></label><input type="range" id="sm" min="0.05" max="1" step="0.01" value="0.2"></div>
+  <button id="play" type="button">pause</button>
+
+  <div class="grp">colour the wall by</div>
+  <div class="seg" id="mode"><button data-m="u" class="on">velocity</button><button data-m="w">wall shear</button><button data-m="r">radius</button><button data-m="n">none</button></div>
+  <div class="chk"><label><input type="checkbox" id="tp" checked>particles</label><label><input type="checkbox" id="tc">centerline</label><label><input type="checkbox" id="ts" checked>wall</label></div>
+
+  <div class="grp">probe <span style="text-transform:none;letter-spacing:0">— click the vessel</span></div>
+  <canvas class="plot" id="plot"></canvas>
+  <div class="probe">
+    <div><span>radius</span><b id="pr">–</b></div>
+    <div><span>flow</span><b id="pq">–</b></div>
+    <div><span>mean velocity</span><b id="pu">–</b></div>
+    <div><span>wall shear</span><b id="pw">–</b></div>
+    <div><span>reynolds no.</span><b id="pre">–</b></div>
+    <div><span>share of output</span><b id="ps">–</b></div>
+  </div>
+  <p class="note">illustrative 1d estimate: inflow is a typical aortic waveform scaled to the cardiac output, travelling at 5 m/s; 70% leaves through the descending aorta and the rest splits between head and arm vessels by murray's law. velocity = q/a, wall shear = 4μq/πr³ (μ = 3.5 mPa·s).</p>
+</div>
+<div id="hud"><b id="phase">systole</b><br><span id="tt"></span></div>
+<div id="legend"><span id="lgt">velocity</span><div class="bar" id="lgb"></div><div class="ends"><span id="lg0"></span><span id="lg1"></span></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const MU=0.0035, RHO=1060, PWV=5.0;            // Pa·s, kg/m³, m/s
+const CO_DEF={DORV:4.06, HLHS:5.08};             // L/min, from the paper's two subjects
+const NAMES={DORV1:'DORV patient 1',DORV2:'DORV patient 2',DORV3:'DORV patient 3',HLHS7:'HLHS patient 7',HLHS8:'HLHS patient 8',HLHS6:'HLHS patient 6'};
+
+// ---------- inflow waveform (normalised, mean 1) ----------
+const NW=400, WAVE=new Float32Array(NW);
+(function(){ let m=0;
+  for(let i=0;i<NW;i++){ const t=i/NW; let f;
+    if(t<0.34) f=Math.pow(Math.sin(Math.PI*t/0.34),1.5);
+    else if(t<0.42) f=-0.10*Math.sin(Math.PI*(t-0.34)/0.08);
+    else f=0.035*Math.exp(-(t-0.42)*4)+0.01;
+    WAVE[i]=f; m+=f; }
+  m/=NW; for(let i=0;i<NW;i++) WAVE[i]/=m; })();
+const wave=ph=>{ ph-=Math.floor(ph); const x=ph*NW, i=Math.floor(x)%NW, j=(i+1)%NW, a=x-Math.floor(x); return WAVE[i]*(1-a)+WAVE[j]*a; };
+
+// ---------- colour maps ----------
+const CMAP=[[0,[0.13,0.20,0.45]],[0.25,[0.12,0.52,0.75]],[0.5,[0.30,0.80,0.62]],[0.75,[0.98,0.80,0.28]],[1,[0.98,0.33,0.25]]];
+function cmap(v,o,k){ v=Math.max(0,Math.min(1,v)); for(let i=1;i<CMAP.length;i++) if(v<=CMAP[i][0]){ const [a,ca]=CMAP[i-1],[b,cb]=CMAP[i],t=(v-a)/(b-a);
+  o[k]=ca[0]+(cb[0]-ca[0])*t; o[k+1]=ca[1]+(cb[1]-ca[1])*t; o[k+2]=ca[2]+(cb[2]-ca[2])*t; return; } }
+$('lgb').style.background='linear-gradient(90deg,'+CMAP.map(([p,c])=>`rgb(${c.map(x=>Math.round(x*255))}) ${p*100}%`).join(',')+')';
+const MODES={u:['mean velocity',0,0.9,'m/s'], w:['wall shear stress',0,4,'Pa'], r:['radius',0,14,'mm']};
+
+// ---------- three.js ----------
+const c=$('c'), renderer=new THREE.WebGLRenderer({canvas:c,antialias:true});
+renderer.setPixelRatio(Math.min(2,devicePixelRatio)); renderer.setClearColor(0x0d1016,1);
+const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(34,1,1,5000);
+scene.add(new THREE.HemisphereLight(0xffffff,0x334455,0.9));
+const key=new THREE.DirectionalLight(0xffffff,0.7); key.position.set(-200,-300,300); scene.add(key);
+const rim=new THREE.DirectionalLight(0x88aaff,0.35); rim.position.set(200,300,-100); scene.add(rim);
+const group=new THREE.Group(); scene.add(group);
+
+let P=null, mesh=null, cl=null, pts=null, marker=null;
+const dec=(s,T)=>{ const b=atob(s), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return new T(u.buffer); };
+
+function load(name){
+  const d=DATA[name]; group.clear();
+  const nodes=dec(d.nodes,Float32Array), r=dec(d.r,Float32Array), q=dec(d.q,Float32Array);
+  const verts=dec(d.verts,Float32Array), tris=dec(d.tris,Uint32Array), vmap=dec(d.vmap,Uint16Array);
+  const nn=r.length;
+  // arc distance from the root (for pulse-wave delay)
+  const dist=new Float32Array(nn).fill(-1); dist[d.lines[0][0]]=0;
+  for(const L of d.lines) for(let i=1;i<L.length;i++){ const a=L[i-1],b=L[i];
+    if(dist[b]<0) dist[b]=dist[a]+Math.hypot(nodes[3*b]-nodes[3*a],nodes[3*b+1]-nodes[3*a+1],nodes[3*b+2]-nodes[3*a+2]); }
+  // lines: cumulative arc, frames
+  const lines=d.lines.map((L,k)=>{ const n=L.length, s=new Float32Array(n), T=[],N=[],B=[];
+    for(let i=1;i<n;i++){ const a=L[i-1],b=L[i]; s[i]=s[i-1]+Math.hypot(nodes[3*b]-nodes[3*a],nodes[3*b+1]-nodes[3*a+1],nodes[3*b+2]-nodes[3*a+2]); }
+    for(let i=0;i<n;i++){ const a=L[Math.max(0,i-1)], b=L[Math.min(n-1,i+1)];
+      const t=new THREE.Vector3(nodes[3*b]-nodes[3*a],nodes[3*b+1]-nodes[3*a+1],nodes[3*b+2]-nodes[3*a+2]).normalize(); T.push(t); }
+    let nv=new THREE.Vector3(0,0,1); if(Math.abs(T[0].z)>0.9) nv.set(1,0,0); nv.sub(T[0].clone().multiplyScalar(nv.dot(T[0]))).normalize();
+    for(let i=0;i<n;i++){ if(i>0){ nv.sub(T[i].clone().multiplyScalar(nv.dot(T[i]))).normalize(); } N.push(nv.clone()); B.push(T[i].clone().cross(nv)); }
+    return {L,s,T,N,B,len:s[n-1],share:d.share[k]}; });
+
+  // wall
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(verts,3)); g.setIndex(new THREE.BufferAttribute(tris,1));
+  g.computeVertexNormals(); const col=new Float32Array(verts.length).fill(0.8); g.setAttribute('color',new THREE.BufferAttribute(col,3));
+  mesh=new THREE.Mesh(g,new THREE.MeshPhongMaterial({vertexColors:true,transparent:true,opacity:0.26,shininess:60,specular:0x333333,side:THREE.DoubleSide,depthWrite:false}));
+  mesh.renderOrder=2; group.add(mesh);
+  // centerline
+  const lp=[]; for(const L of d.lines) for(let i=1;i<L.length;i++){ const a=L[i-1],b=L[i]; lp.push(nodes[3*a],nodes[3*a+1],nodes[3*a+2],nodes[3*b],nodes[3*b+1],nodes[3*b+2]); }
+  const lg=new THREE.BufferGeometry(); lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));
+  cl=new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0.7})); cl.visible=$('tc').checked; group.add(cl);
+  // particles
+  const NP=Math.round(2600*Math.min(1.6,Math.max(0.7,d.lines.length/6)));
+  const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(NP*3),3)); pg.setAttribute('color',new THREE.BufferAttribute(new Float32Array(NP*3),3));
+  pts=new THREE.Points(pg,new THREE.PointsMaterial({size:3.2*Math.min(2,devicePixelRatio),vertexColors:true,transparent:true,opacity:0.95,sizeAttenuation:false,depthWrite:false,blending:THREE.AdditiveBlending,map:dot()}));
+  pts.renderOrder=1; pts.visible=$('tp').checked; group.add(pts);
+  // weights: particle count ∝ share, with a floor so small vessels still show flow
+  const wsum=lines.reduce((a,l)=>a+Math.max(0.04,l.share),0);
+  const part=[]; for(let i=0;i<NP;i++){ let x=Math.random()*wsum, k=0; for(;k<lines.length-1;k++){ x-=Math.max(0.04,lines[k].share); if(x<0) break; }
+    part.push({k, s:Math.random()*lines[k].len, rho:Math.sqrt(Math.random())*0.85, th:Math.random()*6.283}); }
+  marker=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),new THREE.MeshBasicMaterial({color:0xff5a4e})); marker.visible=false; group.add(marker);
+
+  P={d,nodes,r,q,dist,verts,vmap,col,lines,part,nn,val:new Float32Array(nn),probe:-1,hist:new Float32Array(120)};
+  // frame camera
+  let mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9]; for(let i=0;i<verts.length;i+=3) for(let j=0;j<3;j++){ mn[j]=Math.min(mn[j],verts[i+j]); mx[j]=Math.max(mx[j],verts[i+j]); }
+  P.ctr=new THREE.Vector3((mn[0]+mx[0])/2,(mn[1]+mx[1])/2,(mn[2]+mx[2])/2); P.size=Math.max(mx[0]-mn[0],mx[2]-mn[2],mx[1]-mn[1]);
+  $('co').value=CO_DEF[d.type]; readUI(); resetView();
+  { const D=d.lines[d.desc]; setProbe(D[Math.round(D.length*0.55)]); }
+}
+function dot(){ const cv=document.createElement('canvas'); cv.width=cv.height=32; const x=cv.getContext('2d'); const gr=x.createRadialGradient(16,16,0,16,16,16);
+  gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(0.4,'rgba(255,255,255,.6)'); gr.addColorStop(1,'rgba(255,255,255,0)'); x.fillStyle=gr; x.fillRect(0,0,32,32); return new THREE.CanvasTexture(cv); }
+
+// ---------- state + physics ----------
+let CO=4.06, HR=80, SM=0.2, mode='u', playing=true, t=0.08;
+function readUI(){ CO=+$('co').value; HR=+$('hr').value; SM=+$('sm').value; $('cov').textContent=CO.toFixed(2); $('hrv').textContent=HR; $('smv').textContent=SM.toFixed(2); }
+['co','hr','sm'].forEach(k=>$(k).addEventListener('input',readUI));
+$('play').onclick=()=>{ playing=!playing; $('play').textContent=playing?'pause':'play'; };
+document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{ mode=b.dataset.m; document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x===b)); });
+$('tp').onchange=e=>pts.visible=e.target.checked; $('tc').onchange=e=>cl.visible=e.target.checked; $('ts').onchange=e=>mesh.visible=e.target.checked;
+
+const Qmean=()=>CO/60000;                                    // m³/s
+function flowAt(i,T){ const per=60/HR; return Qmean()*P.q[i]*wave((T-P.dist[i]/1000/PWV)/per); }   // m³/s
+const vel=(Q,rmm)=>Q/(Math.PI*(rmm/1000)**2);
+const wss=(Q,rmm)=>4*MU*Math.abs(Q)/(Math.PI*(rmm/1000)**3);
+
+function step(dt){
+  const per=60/HR; if(playing) t+=dt*SM;
+  const {nodes,r,lines,part,val,vmap,col}=P;
+  // node values
+  const [,lo,hi]=MODES[mode]||[0,0,1];
+  for(let i=0;i<P.nn;i++){ const Q=flowAt(i,t); let v;
+    if(mode==='u') v=Math.abs(vel(Q,r[i])); else if(mode==='w') v=wss(Q,r[i]); else v=r[i]; val[i]=(v-lo)/(hi-lo); }
+  if(mesh.visible){ if(mode==='n') col.fill(0.82); else for(let k=0;k<vmap.length;k++) cmap(val[vmap[k]],col,3*k); mesh.geometry.attributes.color.needsUpdate=true; }
+  // particles
+  if(pts.visible){ const pos=pts.geometry.attributes.position.array, pc=pts.geometry.attributes.color.array;
+    for(let n=0;n<part.length;n++){ const p=part[n], l=lines[p.k], L=l.L, s=l.s;
+      let i=0, lo2=0, hi2=L.length-1; while(hi2-lo2>1){ const m=(lo2+hi2)>>1; if(s[m]<=p.s) lo2=m; else hi2=m; } i=lo2;
+      const a=L[i], b=L[Math.min(L.length-1,i+1)], f=s[i+1]>s[i]?(p.s-s[i])/(s[i+1]-s[i]):0;
+      const rr=r[a]+(r[b]-r[a])*f, Q=flowAt(a,t), u=vel(Q,rr)*2*(1-p.rho*p.rho);      // poiseuille profile
+      if(playing){ p.s+=u*1000*dt*SM; if(p.s>l.len||p.s<0){ p.s=l.len*Math.random()*0.06; p.rho=Math.sqrt(Math.random())*0.85; p.th=Math.random()*6.283; } }
+      const N=l.N[i], B=l.B[i], ox=rr*p.rho*(Math.cos(p.th)*N.x+Math.sin(p.th)*B.x), oy=rr*p.rho*(Math.cos(p.th)*N.y+Math.sin(p.th)*B.y), oz=rr*p.rho*(Math.cos(p.th)*N.z+Math.sin(p.th)*B.z);
+      pos[3*n]=nodes[3*a]+(nodes[3*b]-nodes[3*a])*f+ox; pos[3*n+1]=nodes[3*a+1]+(nodes[3*b+1]-nodes[3*a+1])*f+oy; pos[3*n+2]=nodes[3*a+2]+(nodes[3*b+2]-nodes[3*a+2])*f+oz;
+      cmap(0.1+Math.abs(u)/1.2,pc,3*n); pc[3*n]=Math.min(1,pc[3*n]*1.25+0.15); pc[3*n+1]=Math.min(1,pc[3*n+1]*1.25+0.15); pc[3*n+2]=Math.min(1,pc[3*n+2]*1.25+0.15); }
+    pts.geometry.attributes.position.needsUpdate=true; pts.geometry.attributes.color.needsUpdate=true; }
+  // hud
+  const ph=(t/per)%1; $('phase').textContent=ph<0.34?'systole':ph<0.42?'valve closure':'diastole';
+  $('tt').textContent=`t = ${(ph*per).toFixed(2)} s of ${per.toFixed(2)} s · inflow ${(Qmean()*wave(ph)*1e6).toFixed(0)} mL/s`;
+  const md=MODES[mode]; if(md){ $('legend').style.display=''; $('lgt').textContent=md[0]; $('lg0').textContent=md[1]; $('lg1').textContent=md[2]+' '+md[3]; } else $('legend').style.display='none';
+  updateProbe(ph,per);
+}
+
+// ---------- probe ----------
+const ray=new THREE.Raycaster(), mouse=new THREE.Vector2();
+function setProbe(i){ P.probe=i; const s=Math.max(1.2,P.r[i]*0.25); marker.scale.set(s,s,s); marker.position.set(P.nodes[3*i],P.nodes[3*i+1],P.nodes[3*i+2]); marker.visible=true; }
+function updateProbe(ph,per){ const i=P.probe; if(i<0) return; const Q=flowAt(i,t), rr=P.r[i], u=vel(Q,rr);
+  $('pr').textContent=rr.toFixed(1)+' mm'; $('pq').textContent=(Q*1e6).toFixed(0)+' mL/s'; $('pu').textContent=u.toFixed(2)+' m/s';
+  $('pw').textContent=wss(Q,rr).toFixed(2)+' Pa'; $('pre').textContent=Math.round(RHO*Math.abs(u)*2*rr/1000/MU); $('ps').textContent=(P.q[i]*100).toFixed(0)+'%';
+  drawPlot(ph,per); }
+function drawPlot(ph,per){ const cv=$('plot'), w=cv.clientWidth, h=cv.clientHeight, dpr=Math.min(2,devicePixelRatio);
+  if(cv.width!==w*dpr){ cv.width=w*dpr; cv.height=h*dpr; } const x=cv.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0); x.clearRect(0,0,w,h);
+  const i=P.probe, qi=P.q[i], lag=P.dist[i]/1000/PWV/per, top=1.15*Math.max(...WAVE), bot=-0.25, Y=v=>h-6-(v-bot)/(top-bot)*(h-14);
+  x.strokeStyle='#2a303b'; x.beginPath(); x.moveTo(0,Y(0)); x.lineTo(w,Y(0)); x.stroke();
+  const line=(f,stroke,lw)=>{ x.strokeStyle=stroke; x.lineWidth=lw; x.beginPath(); for(let k=0;k<=w;k++){ const v=f(k/w); k?x.lineTo(k,Y(v)):x.moveTo(k,Y(v)); } x.stroke(); };
+  line(p=>wave(p),'#4a5262',1);
+  // probe flow, scaled to its own peak so the shape and delay are visible
+  line(p=>wave(p-lag),'#ff5a4e',1.6);
+  x.fillStyle='#e8ebf0'; x.fillRect(ph*w-0.5,4,1,h-8);
+  x.fillStyle='#8a93a3'; x.font='10px Arial'; x.fillText('inflow',6,12); x.fillStyle='#ff5a4e'; x.fillText('at probe (delay '+(lag*per*1000).toFixed(0)+' ms)',46,12); }
+c.addEventListener('click',e=>{ if(moved>4) return; mouse.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1); ray.setFromCamera(mouse,cam);
+  const hit=ray.intersectObject(mesh)[0]; if(!hit) return; setProbe(P.vmap[hit.face.a]); });
+
+// ---------- camera ----------
+let az=-Math.PI/2+0.9, el=0.12, dist=500, pan=new THREE.Vector3();
+function resetView(){ az=-Math.PI/2+0.9; el=0.12; dist=P.size*2.1; pan.copy(P.ctr); }
+function setC(){ cam.up.set(0,0,1); cam.position.set(pan.x+dist*Math.cos(el)*Math.cos(az), pan.y+dist*Math.cos(el)*Math.sin(az), pan.z+dist*Math.sin(el)); cam.lookAt(pan); }
+function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h); cam.aspect=w/h; const pw=w>700?290:0, ph=w>700?0:h*0.46;
+  if(pw) cam.setViewOffset(w,h,-pw/2,0,w,h); else if(ph) cam.setViewOffset(w,h,0,ph/2,w,h); else cam.clearViewOffset(); cam.updateProjectionMatrix(); }
+addEventListener('resize',resize);
+let px,py,btn=-1,moved=0;
+c.addEventListener('pointerdown',e=>{ btn=e.button; px=e.clientX; py=e.clientY; moved=0; c.setPointerCapture(e.pointerId); });
+c.addEventListener('pointerup',()=>btn=-1);
+c.addEventListener('pointermove',e=>{ if(btn<0) return; const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+  if(btn===0&&!e.shiftKey){ az-=dx*0.008; el=Math.max(-1.4,Math.min(1.4,el+dy*0.008)); }
+  else { const k=dist*0.0016, rx=new THREE.Vector3(-Math.sin(az),Math.cos(az),0); pan.addScaledVector(rx,-dx*k); pan.z+=dy*k; } });
+c.addEventListener('wheel',e=>{ e.preventDefault(); dist*=Math.exp(e.deltaY*0.001); },{passive:false});
+c.addEventListener('dblclick',()=>resetView()); c.addEventListener('contextmenu',e=>e.preventDefault());
+
+// ---------- boot ----------
+let DATA=null, last=performance.now();
+fetch('patients.json').then(r=>r.json()).then(d=>{ DATA=d; $('load').remove();
+  const sel=$('pat'); Object.keys(d).forEach(k=>{ const o=document.createElement('option'); o.value=k; o.textContent=NAMES[k]||k; sel.appendChild(o); });
+  sel.onchange=()=>load(sel.value); load('DORV1'); resize();
+  (function loop(now){ requestAnimationFrame(loop); const dt=Math.min(0.05,(now-last)/1000); last=now; step(dt); setC(); renderer.render(scene,cam); })(performance.now());
+}).catch(()=>{ $('load').textContent='could not load the patient data.'; });
+window.__aorta={get P(){return P}, setT:v=>t=v, step, view:(a,e,k)=>{az=a;el=e;dist=P.size*k;}};
+</script>
+</body>
+</html>

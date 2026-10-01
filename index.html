@@ -93,6 +93,20 @@ p + p{margin-top:1em}
 /* 3d printed chainmail */
 .cm-live{position:relative;margin-top:14px;height:min(72vh,620px);min-height:420px;background:#e9eaec}
 .cm-live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.fo-live{height:min(80vh,720px);background:#0d1016;margin-top:30px}
+.fo-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:0 0 18px;font-size:13px;color:var(--ink)}
+.fo-flow span{border:1px solid var(--line);border-radius:3px;padding:6px 10px;line-height:1.35;text-align:center}
+.fo-flow i{font-style:normal;color:var(--muted)}
+.fo-steps{list-style:none;counter-reset:s;border-top:1px solid var(--line);max-width:680px}
+.fo-steps li{counter-increment:s;display:grid;grid-template-columns:34px 120px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px}
+.fo-steps li::before{content:counter(s,decimal-leading-zero);color:var(--muted);font-size:12px;padding-top:2px}
+.fo-steps b{font-weight:400;color:var(--ink)}
+.fo-t{border-collapse:collapse;margin-top:16px;font-size:14px;width:100%;max-width:680px}
+.fo-t th,.fo-t td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;font-weight:400}
+.fo-t th:first-child{text-align:left;color:var(--ink)}
+.fo-t thead th{color:var(--muted);font-size:12px;letter-spacing:.5px}
+.fo-cap{font-size:13px!important;color:var(--muted);margin-top:10px}
+@media (max-width:640px){.fo-steps li{grid-template-columns:30px 1fr}.fo-steps li span{grid-column:2}.fo-t{font-size:12px}}
 .pt-live{height:min(80vh,720px);background:#171E55;margin-top:30px}
 .pt-metrics{list-style:none;margin-top:14px;max-width:680px;border-top:1px solid var(--line)}
 .pt-metrics li{display:grid;grid-template-columns:150px 1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
@@ -356,6 +370,7 @@ const SITE = {
 const PROJECTS = [
   // slug, title, category, year, ratio (w/h of thumbnail), img
   {slug:"soft-arm", title:"tactile soft robot arm", cat:"soft robotics · sim-to-real", year:2026, ratio:4/3, img:"images/soft-arm-loop.jpg", video:"images/soft-arm-loop", custom:true},
+  {slug:"fontan-liver-cfd", title:"fontan liver hemodynamics", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop.jpg", video:"images/fontan-loop", custom:true},
   {slug:"voyages-agent", title:"voyages agent", cat:"ai agents", year:2026, ratio:4/3, img:"images/voyages-cover-v2.jpg", custom:true},
   {slug:"3d-printed-chainmail", title:"3d printed chainmail", cat:"computational design · fabrication", year:2025, ratio:4/3, img:"images/cm-cover-s.jpg", custom:true},
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
@@ -540,6 +555,7 @@ const views = {
     if (slug === 'gaze-to-the-stars') return views.gaze(i);
     if (slug === '3d-printed-chainmail') return views.chainmail(i);
     if (slug === 'banana-crush') return views.peel(i);
+    if (slug === 'fontan-liver-cfd') return views.fontan(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${esc(p.title)}</h1>
@@ -604,6 +620,48 @@ const views = {
 
       <section class="two"><h2>my role</h2><div><p>${esc(C.role)}</p>
         <p style="margin-top:18px"><a class="u" href="https://www.instagram.com/criticalmattergroup/" target="_blank" rel="noopener">critical matter on instagram ↗</a></p></div></section>
+
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
+    </article>`;
+  },
+  fontan(i){
+    const prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    const PAPER = "https://onlinelibrary.wiley.com/doi/10.1002/cnm.70128", PMC = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12791198/";
+    const T = [["portal vein, mean","9.7","10.0","10.1","10.1"],["portal vein, systolic","12.7","12.6","12.7","12.9"],["hepatic artery, mean","88.2","88.2","88.9","88.8"],["hepatic artery, systolic","95.1","95.3","99.5","99.8"]];
+    return `<article class="case fo">
+      <h1 class="page">fontan liver hemodynamics</h1>
+      <p class="lead">a one-dimensional computational fluid dynamics study of fontan-associated liver disease (fald) in single-ventricle patients.</p>
+      <div class="meta"><span>int. j. numerical methods in biomedical engineering</span><span>2026</span><span>first author</span></div>
+      <div class="cm-live fo-live"><iframe src="sim/aorta/index.html" title="patient-specific aortic flow" loading="lazy" allow="fullscreen"></iframe></div>
+      <div class="simlinks"><span>patient-specific aortas from 3d slicer · pick a patient, change cardiac output, click a vessel to probe flow and wall shear</span><a href="sim/aorta/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
+
+      <section class="two"><h2>overview</h2><div>
+        <p>children born with a single working ventricle — hypoplastic left heart syndrome (hlhs) or double outlet right ventricle (dorv) — are palliated with the fontan procedure. venous blood then reaches the lungs passively, without a pump, and the raised venous pressure backs up into the liver. over time this can scar the liver: fontan-associated liver disease. it is especially common in hlhs patients.</p>
+        <p>we built patient-specific 1d fluid dynamics models of the liver's two blood supplies, the hepatic artery and the portal vein. using them, we compared an hlhs patient with an age-matched dorv patient, and simulated early and late stages of fald.</p></div></section>
+
+      <section class="two"><h2>the circuit</h2><div>
+        <div class="fo-flow">${["right heart","aorta","hepatic artery · 30%<br>portal vein · 70%","liver","systemic veins","lungs (passive)"].map(x=>`<span>${x}</span>`).join('<i>→</i>')}<i>↺</i></div>
+        <p>in a fontan circulation, the single ventricle pumps blood into the aorta. the liver is fed by the portal vein (about 70% of its blood) and the hepatic artery (about 30%). blood then drains into the systemic veins and passes through the lungs without a pump before returning to the heart.</p></div></section>
+
+      <section class="two"><h2>method</h2><div>
+        <ol class="fo-steps">
+          <li><b>segment</b><span>vessel geometry segmented from imaging in 3d slicer</span></li>
+          <li><b>centerlines</b><span>vmtk centerlines from maximum inscribed spheres, with junctions corrected, give each vessel's length and radius</span></li>
+          <li><b>network</b><span>networks scaled allometrically to each patient's height and weight</span></li>
+          <li><b>solve</b><span>1d mass and momentum conservation with a linear elastic wall, flow waveforms at the inlets and structured-tree outflow conditions</span></li>
+          <li><b>fald</b><span>disease progression modelled by stiffening the portal vein (k₃ from 3.0 to 3.6 to 4.2 × 10⁵ g/cm/s²) and raising outlet resistance</span></li>
+        </ol></div></section>
+
+      <section class="two"><h2>findings</h2><div>
+        <p>the hlhs patient has higher hepatic arterial pressure than the dorv patient, and the gap widens as fald progresses. perfusion maps show rising pressure and falling flow in the liver tissue fed by the portal vein: the regions most at risk of fibrosis.</p>
+        <table class="fo-t"><thead><tr><th>pressure (mmHg)</th><th>dorv</th><th>hlhs</th><th>early fald</th><th>late fald</th></tr></thead>
+        <tbody>${T.map(r=>`<tr>${r.map((c,k)=>k?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table>
+        <p class="fo-cap">hepatic artery wall shear, main branch: 9.61 pa (hlhs) vs 6.50 pa (dorv).</p></div></section>
+
+      <section class="two"><h2>my role</h2><div>
+        <p>i am first author on the paper. i segmented the patient vasculature in 3d slicer and extracted the vmtk centerlines that become the vessel networks of the 1d model. the viewer above uses the aortas i segmented for the study's patients (dorv and hlhs).</p>
+        <p class="fo-cap">with justin d. weigand (baylor / texas children's), charles puelz (university of houston), mette s. olufsen (nc state) and alyssa taylor-lapole (rice).</p>
+        <p style="margin-top:18px"><a class="u" href="${PAPER}" target="_blank" rel="noopener">read the paper ↗</a> &nbsp; <a class="u" href="${PMC}" target="_blank" rel="noopener">open access (pmc) ↗</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
     </article>`;
