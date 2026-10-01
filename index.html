@@ -93,6 +93,12 @@ p + p{margin-top:1em}
 /* 3d printed chainmail */
 .cm-live{position:relative;margin-top:14px;height:min(72vh,620px);min-height:420px;background:#e9eaec}
 .cm-live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+h1.page.fo-title{text-transform:none;max-width:860px;margin:30px auto 18px;line-height:1.3;font-size:28px}
+.fo-authors{text-transform:none;font-size:16px;color:var(--ink);margin:0 auto 6px;max-width:760px}
+.fo-authors b{font-weight:700}
+.fo-cite{text-transform:none;font-size:13px;color:var(--muted);margin:0 auto 4px}
+.fo-cite a{color:var(--ink)}
+@media (max-width:640px){h1.page.fo-title{font-size:21px}}
 .fo-live{height:min(80vh,720px);background:#0d1016;margin-top:30px}
 .fo-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:0 0 18px;font-size:13px;color:var(--ink)}
 .fo-flow span{border:1px solid var(--line);border-radius:3px;padding:6px 10px;line-height:1.35;text-align:center}
@@ -629,9 +635,9 @@ const views = {
     const PAPER = "https://onlinelibrary.wiley.com/doi/10.1002/cnm.70128", PMC = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12791198/";
     const T = [["portal vein, mean","9.7","10.0","10.1","10.1"],["portal vein, systolic","12.7","12.6","12.7","12.9"],["hepatic artery, mean","88.2","88.2","88.9","88.8"],["hepatic artery, systolic","95.1","95.3","99.5","99.8"]];
     return `<article class="case fo">
-      <h1 class="page">fontan liver hemodynamics</h1>
-      <p class="lead">a one-dimensional computational fluid dynamics study of fontan-associated liver disease (fald) in single-ventricle patients.</p>
-      <div class="meta"><span>int. j. numerical methods in biomedical engineering</span><span>2026</span><span>first author</span></div>
+      <h1 class="page fo-title">A One‐Dimensional (1D) Computational Fluid Dynamics Study of Fontan‐Associated Liver Disease (FALD)</h1>
+      <p class="fo-authors"><b>Yaqi Li</b>, Justin D. Weigand, Charles Puelz, Mette S. Olufsen, Alyssa Taylor‐Lapole</p>
+      <p class="fo-cite"><i>International Journal for Numerical Methods in Biomedical Engineering</i>, 2026 · <a class="u" href="${PAPER}" target="_blank" rel="noopener">doi:10.1002/cnm.70128</a></p>
       <div class="cm-live fo-live"><iframe src="sim/aorta/index.html" title="patient-specific aortic flow" loading="lazy" allow="fullscreen"></iframe></div>
       <div class="simlinks"><span>patient-specific aortas from 3d slicer · pick a patient, change cardiac output, click a vessel to probe flow and wall shear</span><a href="sim/aorta/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
 
@@ -660,7 +666,7 @@ const views = {
 
       <section class="two"><h2>my role</h2><div>
         <p>i am first author on the paper. i segmented the patient vasculature in 3d slicer and extracted the vmtk centerlines that become the vessel networks of the 1d model. the viewer above uses the aortas i segmented for the study's patients (dorv and hlhs).</p>
-        <p class="fo-cap">with justin d. weigand (baylor / texas children's), charles puelz (university of houston), mette s. olufsen (nc state) and alyssa taylor-lapole (rice).</p>
+        <p class="fo-cap">co-authors: justin d. weigand (baylor college of medicine / texas children's hospital), charles puelz (university of houston), mette s. olufsen (nc state) and alyssa taylor-lapole (rice).</p>
         <p style="margin-top:18px"><a class="u" href="${PAPER}" target="_blank" rel="noopener">read the paper ↗</a> &nbsp; <a class="u" href="${PMC}" target="_blank" rel="noopener">open access (pmc) ↗</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${esc(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${esc(next.title)} →</a></div>
