@@ -99,6 +99,10 @@ h1.page.fo-title{text-transform:none;max-width:860px;margin:30px auto 18px;line-
 .fo-cite{text-transform:none;font-size:13px;color:var(--muted);margin:0 auto 4px}
 .fo-cite a{color:var(--ink)}
 @media (max-width:640px){h1.page.fo-title{font-size:21px}}
+.fo-fig{margin:26px 0 6px;max-width:680px}
+.fo-fig img{width:100%;height:auto;display:block;border:1px solid var(--line);background:#fff}
+.fo-fig figcaption{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5}
+.fo-fig figcaption b{font-weight:400;color:var(--ink)}
 .fo-live{height:min(80vh,720px);background:#0d1016;margin-top:30px}
 .fo-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:0 0 18px;font-size:13px;color:var(--ink)}
 .fo-flow span{border:1px solid var(--line);border-radius:3px;padding:6px 10px;line-height:1.35;text-align:center}
@@ -634,6 +638,7 @@ const views = {
     const prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     const PAPER = "https://onlinelibrary.wiley.com/doi/10.1002/cnm.70128", PMC = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12791198/";
     const T = [["portal vein, mean","9.7","10.0","10.1","10.1"],["portal vein, systolic","12.7","12.6","12.7","12.9"],["hepatic artery, mean","88.2","88.2","88.9","88.8"],["hepatic artery, systolic","95.1","95.3","99.5","99.8"]];
+const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blank" rel="noopener"><img src="images/${f}" alt="figure ${n}: ${cap.replace(/"/g,'')}" loading="lazy"></a><figcaption><b>figure ${n}.</b> ${cap}</figcaption></figure>`;
     return `<article class="case fo">
       <h1 class="page fo-title">A One‐Dimensional (1D) Computational Fluid Dynamics Study of Fontan‐Associated Liver Disease (FALD)</h1>
       <p class="fo-authors"><b>Yaqi Li</b>, Justin D. Weigand, Charles Puelz, Mette S. Olufsen, Alyssa Taylor‐Lapole</p>
@@ -643,11 +648,13 @@ const views = {
 
       <section class="two"><h2>overview</h2><div>
         <p>children born with a single working ventricle — hypoplastic left heart syndrome (hlhs) or double outlet right ventricle (dorv) — are palliated with the fontan procedure. venous blood then reaches the lungs passively, without a pump, and the raised venous pressure backs up into the liver. over time this can scar the liver: fontan-associated liver disease. it is especially common in hlhs patients.</p>
+        ${fig(1,'fontan-fig1.jpg','a healthy heart compared with hlhs and dorv hearts, before and after fontan repair. the hlhs patient has also had the aorta reconstructed.')}
         <p>we built patient-specific 1d fluid dynamics models of the liver's two blood supplies, the hepatic artery and the portal vein. using them, we compared an hlhs patient with an age-matched dorv patient, and simulated early and late stages of fald.</p></div></section>
 
       <section class="two"><h2>the circuit</h2><div>
         <div class="fo-flow">${["right heart","aorta","hepatic artery · 30%<br>portal vein · 70%","liver","systemic veins","lungs (passive)"].map(x=>`<span>${x}</span>`).join('<i>→</i>')}<i>↺</i></div>
-        <p>in a fontan circulation, the single ventricle pumps blood into the aorta. the liver is fed by the portal vein (about 70% of its blood) and the hepatic artery (about 30%). blood then drains into the systemic veins and passes through the lungs without a pump before returning to the heart.</p></div></section>
+        <p>in a fontan circulation, the single ventricle pumps blood into the aorta. the liver is fed by the portal vein (about 70% of its blood) and the hepatic artery (about 30%). blood then drains into the systemic veins and passes through the lungs without a pump before returning to the heart.</p>
+        ${fig(2,'fontan-fig2.jpg','(a) the fontan circulation, including flow to the liver. (b) 3d rendering of the hepatic artery (green) and portal vein (red) vasculature extracted from ct. (c) inflow waveforms to the hepatic artery and portal vein for the two patients.')}</div></section>
 
       <section class="two"><h2>method</h2><div>
         <ol class="fo-steps">
@@ -656,13 +663,18 @@ const views = {
           <li><b>network</b><span>networks scaled allometrically to each patient's height and weight</span></li>
           <li><b>solve</b><span>1d mass and momentum conservation with a linear elastic wall, flow waveforms at the inlets and structured-tree outflow conditions</span></li>
           <li><b>fald</b><span>disease progression modelled by stiffening the portal vein (k₃ from 3.0 to 3.6 to 4.2 × 10⁵ g/cm/s²) and raising outlet resistance</span></li>
-        </ol></div></section>
+        </ol>
+        ${fig(4,'fontan-fig4.jpg','simulation workflow: progressive fald (left) and controls for the effects of inflow and patient geometry (right).')}</div></section>
 
       <section class="two"><h2>findings</h2><div>
         <p>the hlhs patient has higher hepatic arterial pressure than the dorv patient, and the gap widens as fald progresses. perfusion maps show rising pressure and falling flow in the liver tissue fed by the portal vein: the regions most at risk of fibrosis.</p>
         <table class="fo-t"><thead><tr><th>pressure (mmHg)</th><th>dorv</th><th>hlhs</th><th>early fald</th><th>late fald</th></tr></thead>
         <tbody>${T.map(r=>`<tr>${r.map((c,k)=>k?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</tbody></table>
-        <p class="fo-cap">hepatic artery wall shear, main branch: 9.61 pa (hlhs) vs 6.50 pa (dorv).</p></div></section>
+        <p class="fo-cap">hepatic artery wall shear, main branch: 9.61 pa (hlhs) vs 6.50 pa (dorv).</p>
+        ${fig(5,'fontan-fig5.jpg','pressure and flow in the portal vein network for the dorv, hlhs and simulated fald patients. as fald progresses the flow peak shifts earlier and systolic pressure rises slightly.')}
+        ${fig(6,'fontan-fig6.jpg','pressure and flow in hepatic artery vessels 0 and 13. systolic pressure rises under fald conditions.')}
+        ${fig(8,'fontan-fig8.jpg','perfusion maps: average flow in each terminal vessel, spread to the nearby liver tissue, seen from the back and the front.')}
+        <p class="fo-cap">figures from li et al. (2026), int. j. numer. method. biomed. eng., <a class="u" href="${PMC}" target="_blank" rel="noopener">open access</a> under cc by-nc 4.0.</p></div></section>
 
       <section class="two"><h2>my role</h2><div>
         <p>i am first author on the paper. i segmented the patient vasculature in 3d slicer and extracted the vmtk centerlines that become the vessel networks of the 1d model. the viewer above uses the aortas i segmented for the study's patients (dorv and hlhs).</p>
