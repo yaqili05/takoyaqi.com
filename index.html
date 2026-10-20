@@ -119,6 +119,7 @@ h1.page.fo-title{text-transform:none;max-width:860px;margin:30px auto 18px;line-
 .fo-cap{font-size:13px!important;color:var(--muted);margin-top:10px}
 @media (max-width:640px){.fo-steps li{grid-template-columns:30px 1fr}.fo-steps li span{grid-column:2}.fo-t{font-size:12px}}
 .pt-live{height:min(80vh,720px);background:#171E55;margin-top:30px}
+.st-session{max-width:520px;border:1px solid var(--line)}
 .st-live{height:min(82vh,760px);min-height:560px;background:#e9ecef;margin-top:30px}
 .pt-metrics{list-style:none;margin-top:14px;max-width:680px;border-top:1px solid var(--line)}
 .pt-metrics li{display:grid;grid-template-columns:150px 1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
@@ -717,6 +718,9 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
         <ul class="pt-metrics">${M.map(([a,b,w])=>`<li><span>${a}</span><i>${b}</i><b>${w}</b></li>`).join('')}</ul>
         <p style="margin-top:1.2em">crossover blends the parents' genes across a soft seam, and mutations can mirror, duplicate or reverse a run of bends. colour mixes like paint on a colour wheel: red and yellow make orange, blue and yellow make green, and complements turn muddy brown, so a canvas left alone slowly converges.</p>
         <p>a new drawing breaks that up. it joins the youngest generation, lands like a stone in water, pushing its neighbours away, then blooms: for a while it pulls far harder than anything else and breeds almost at once, so its shape and colour spread through the population. the colony starts compact and widens its territory until it fills the screen.</p></div></section>
+      <section class="two"><h2>a session</h2><div>
+        <div class="st-session">${loopVideo('images/strokontogeny-session', 'images/strokontogeny-session.jpg', 720/802)}</div>
+        <p class="fine">screen recording at 2× speed: two founders, one red and one yellow, fill the canvas with orange children; then new drawings (a blue loop, a red star) break into the converged colony.</p></div></section>
       <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },
