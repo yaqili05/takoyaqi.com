@@ -119,6 +119,7 @@ h1.page.fo-title{text-transform:none;max-width:860px;margin:30px auto 18px;line-
 .fo-cap{font-size:13px!important;color:var(--muted);margin-top:10px}
 @media (max-width:640px){.fo-steps li{grid-template-columns:30px 1fr}.fo-steps li span{grid-column:2}.fo-t{font-size:12px}}
 .pt-live{height:min(80vh,720px);background:#171E55;margin-top:30px}
+.st-live{height:min(82vh,760px);min-height:560px;background:#e9ecef;margin-top:30px}
 .pt-metrics{list-style:none;margin-top:14px;max-width:680px;border-top:1px solid var(--line)}
 .pt-metrics li{display:grid;grid-template-columns:150px 1fr auto;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
 .pt-metrics li span{color:var(--ink)}.pt-metrics li i{font-style:normal;color:var(--muted)}.pt-metrics li b{font-weight:400;color:var(--ink)}
@@ -386,6 +387,7 @@ const PROJECTS = [
   {slug:"gaze-to-the-stars", title:"gaze to the stars", cat:"installation", year:2025, ratio:4/3, img:"images/gaze-thumb.jpg", video:"images/gaze-loop", custom:true},
   {slug:"fontan-liver-cfd", title:"FALD prediction modeling", cat:"computational biomechanics · 1d cfd", year:2026, ratio:4/3, img:"images/fontan-loop2.jpg", video:"images/fontan-loop2", custom:true},
   {slug:"banana-crush", title:"banana crush", cat:"physics simulation · game", year:2026, ratio:4/3, img:"images/peel-toss-loop.jpg", video:"images/peel-toss-loop", custom:true},
+  {slug:"strokontogeny", title:"strokontogeny", cat:"computational drawing · artificial life", year:2026, ratio:4/3, img:"images/strokontogeny-loop.jpg", video:"images/strokontogeny-loop", custom:true},
 ].map(p => ({
   collaborators:"collaborator name, collaborator name",
   location:"cambridge, ma",
@@ -568,6 +570,7 @@ const views = {
     if (slug === '3d-printed-chainmail') return views.chainmail(i);
     if (slug === 'banana-crush') return views.peel(i);
     if (slug === 'fontan-liver-cfd') return views.fontan(i);
+    if (slug === 'strokontogeny') return views.strokontogeny(i);
     const p = PROJECTS[i], prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
     return `<article class="project">
       <h1 class="page">${ttl(p.title)}</h1>
@@ -694,6 +697,26 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
         <p>the peel is a set of verlet particles tied together by distance constraints: a rigid core at the neck, and flaps built from rows of three particles with cross-bracing and bending links so they curl but don't stretch. gravity, floor contact and friction are stepped at a fixed rate, and the mesh, skin and inner-pith textures are generated in code and rendered with three.js.</p>
         <p>once the peel stops moving, it's compared with the perfect peel on five weighted measures, which add up to a score out of 100 and a grade from s to d:</p>
         <ul class="pt-metrics">${M.map(([a,b,w])=>`<li><span>${a}</span><i>${b}</i><b>${w}</b></li>`).join('')}</ul></div></section>
+      <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
+    </article>`;
+  },
+  strokontogeny(i){
+    const prev = PROJECTS[(i-1+PROJECTS.length)%PROJECTS.length], next = PROJECTS[(i+1)%PROJECTS.length];
+    const M = [["shape","the bend at every segment, so a square stays a square","angle–length"],["weight","how slowly each part was drawn becomes ink thickness","speed"],["paint","one colour in red, yellow and blue pigment","ryb"],["form","closed loops stay closed in every descendant","closure"],["mass","drawn length — heavy strokes move slowly","gravity"]];
+    return `<article class="case st">
+      <h1 class="page">strokontogeny</h1>
+      <p class="lead">a drawing tool where you draw parents, not pictures. strokes that touch breed, and the canvas becomes a family tree of your gestures.</p>
+      <div class="meta"><span>computational drawing · artificial life</span><span>2026</span><span>javascript · canvas 2d</span></div>
+      <div class="cm-live st-live"><iframe src="sim/strokontogeny.html" title="strokontogeny drawing tool" loading="lazy"></iframe></div>
+      <div class="simlinks"><span>draw a shape on empty space · drag one stroke into another to breed · click a stroke for its record · e exploded view · c clear</span><a href="sim/strokontogeny.html" target="_blank" rel="noopener">open full screen ↗</a></div>
+      <section class="two"><h2>overview</h2><div>
+        <p>every stroke you draw becomes a living founder. it crawls, trembles and slowly fades unless you touch it. when two strokes cross, they have a child at the crossing point: the head of one parent's gesture joined to the tail of the other's, with a little mutation, drawing itself in segment by segment.</p>
+        <p>you act more like a breeder than an artist. you choose which strokes meet and which survive, and the pedigree on the side keeps the whole lineage. every so often the canvas lifts into an exploded view, with each generation on its own sheet and dashed threads tying children to their parents.</p></div></section>
+      <section class="two"><h2>how it works</h2><div>
+        <p>each stroke is resampled and stored as a genome, following the angle–length line from the drawing++ examples:</p>
+        <ul class="pt-metrics">${M.map(([a,b,w])=>`<li><span>${a}</span><i>${b}</i><b>${w}</b></li>`).join('')}</ul>
+        <p style="margin-top:1.2em">crossover blends the parents' genes across a soft seam, and mutations can mirror, duplicate or reverse a run of bends. colour mixes like paint on a colour wheel: red and yellow make orange, blue and yellow make green, and complements turn muddy brown, so a canvas left alone slowly converges.</p>
+        <p>a new drawing breaks that up. it joins the youngest generation, lands like a stone in water, pushing its neighbours away, then blooms: for a while it pulls far harder than anything else and breeds almost at once, so its shape and colour spread through the population. the colony starts compact and widens its territory until it fills the screen.</p></div></section>
       <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
   },

@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strokontogeny</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>[hidden]{display:none!important} body{margin:0;font-size:14px} img{max-width:100%}</style>
+<style>
+/* Layout: a breeding bench — live canvas on the left, pedigree ledger on the right; stacks on phones. */
+:root {
+  --bg: #e9ecef;
+  --stage: #f7f8f6;
+  --ink: #1d2328;
+  --muted: #5d6870;
+  --line: #c9d0d5;
+  --accent: #2f6f5e;
+  --accent-ink: #ffffff;
+  --panel: #f1f3f2;
+  --stroke-l: 56;
+  --stroke-s: 62;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111518; --stage: #171c20; --ink: #e4e9ec; --muted: #8e9aa2; --line: #2b343a;
+    --accent: #6cc3a6; --accent-ink: #0d1412; --panel: #14191c; --stroke-l: 78; --stroke-s: 70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111518; --stage: #171c20; --ink: #e4e9ec; --muted: #8e9aa2; --line: #2b343a;
+  --accent: #6cc3a6; --accent-ink: #0d1412; --panel: #14191c; --stroke-l: 78; --stroke-s: 70;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body);
+  display: flex; flex-direction: column; overflow: hidden;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px;
+  gap: 10px; box-sizing: border-box;
+}
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px; }
+.stage { position: relative; background: var(--stage); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; min-height: 0; }
+#world { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; display: block; }
+#world.grab { cursor: grab; }
+#world.grabbing { cursor: grabbing; }
+#world.orbit { cursor: move; }
+.hint { position: absolute; left: 12px; bottom: 10px; right: 12px; font-size: 12.5px; color: var(--muted); pointer-events: none; line-height: 1.45; }
+.hint kbd { font-family: var(--mono); font-size: 11px; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+.sample-tag { position: absolute; top: 10px; left: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+aside { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.box h2 { font-family: var(--display); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin: 0; color: var(--muted); }
+.pedigree { flex: 1; min-height: 140px; }
+#treeWrap { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+#tree { display: block; width: 100%; }
+#inspect { font-family: var(--mono); font-size: 11.5px; color: var(--muted); min-height: 2.9em; line-height: 1.45; }
+#inspect b { color: var(--ink); font-weight: 500; }
+/* stroke record card */
+.card {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  width: min(300px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow-y: auto; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 32px rgba(10, 20, 25, 0.14);
+  padding: 14px; display: flex; flex-direction: column; gap: 12px;
+}
+.card[hidden] { display: none; }
+.card-head { display: flex; gap: 12px; align-items: center; }
+.card-glyph { width: 84px; height: 84px; flex: none; border-radius: 6px; background: var(--stage); border: 1px solid var(--line); display: grid; place-items: center; }
+.card-title { flex: 1; min-width: 0; }
+.card h3 { font-family: var(--display); font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.card-title p { margin: 3px 0 0; color: var(--muted); font-size: 12.5px; }
+.card .x { align-self: flex-start; padding: 1px 8px; font-size: 16px; line-height: 1.4; }
+.card dl { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 5px 10px; margin: 0; font-size: 12.5px; }
+.card dt { color: var(--muted); }
+.card dd { margin: 0; font-family: var(--mono); font-size: 11.5px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.card h4 { margin: 0; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.card h4 span { font-family: var(--mono); letter-spacing: 0; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 6px; }
+.thumb { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 4px 4px 2px; font-family: var(--mono); font-size: 10px; }
+.thumb.dead { opacity: 0.55; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 3px; }
+.empty { font-size: 12px; color: var(--muted); }
+.card .find { align-self: flex-start; }
+button {
+  font: 500 12.5px var(--body); border: 1px solid var(--line); background: var(--stage); color: var(--ink);
+  padding: 6px 10px; border-radius: 4px; cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 760px) {
+  body { overflow: auto; height: auto; }
+  main { grid-template-columns: 1fr; }
+  .stage { height: 62svh; flex: none; }
+  .pedigree { min-height: 260px; }
+  #treeWrap { max-height: 320px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="stage" id="stage">
+    <canvas id="world" aria-label="Breeding canvas: draw strokes, drag them into each other to breed"></canvas>
+    <div class="sample-tag" id="sampleTag">Sample founders · draw your own</div>
+    <div class="hint" id="hint">Draw a shape on empty space: it joins the youngest generation and pulls the others in for a while. Drag one stroke into another to breed them. Strokes you touch stay alive; the rest fade. Click a stroke or a pedigree glyph to open its record. <kbd>space</kbd> pause · <kbd>e</kbd> exploded view · <kbd>c</kbd> clear</div>
+    <div class="card" id="card" role="dialog" aria-labelledby="cardTitle" hidden></div>
+  </div>
+  <aside>
+    <div class="box pedigree">
+      <h2>Pedigree</h2>
+      <div id="treeWrap"><canvas id="tree"></canvas></div>
+      <div id="inspect">Hover a stroke or a glyph to read its lineage.</div>
+    </div>
+  </aside>
+</main>
+
+<script>
+(() => {
+"use strict";
+const N = 48;                 // segments per genome
+const GROW_TIME = 1.6;        // seconds for a child to draw itself in
+const TAU = Math.PI * 2;
+
+const world = document.getElementById("world");
+const ctx = world.getContext("2d");
+const ink = document.createElement("canvas");
+const ictx = ink.getContext("2d");
+const tree = document.getElementById("tree");
+const tctx = tree.getContext("2d");
+const treeWrap = document.getElementById("treeWrap");
+const inspectEl = document.getElementById("inspect");
+const stage = document.getElementById("stage");
+const sampleTag = document.getElementById("sampleTag");
+
+// fixed breeding conditions (the settings panel was removed; these are its defaults)
+const flag = v => ({ v, click() { this.v = !this.v; } });
+const ui = {
+  mut: { value: 0.35 }, life: { value: 30 }, cap: { value: 32 },
+  crawl: flag(true), auto: flag(true), inkB: flag(true), pause: flag(false),
+};
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (reduceMotion) ui.crawl.v = false;
+const on = b => b.v;
+
+// ---------- theme ----------
+let theme = {};
+function readTheme() {
+  const cs = getComputedStyle(document.documentElement);
+  const g = k => cs.getPropertyValue(k).trim();
+  theme = { stage: g("--stage"), ink: g("--ink"), muted: g("--muted"), line: g("--line"), accent: g("--accent"),
+            L: +g("--stroke-l") || 40, S: +g("--stroke-s") || 60 };
+}
+readTheme();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readTheme(); ictx.clearRect(0,0,ink.width,ink.height); });
+new MutationObserver(() => { readTheme(); ictx.clearRect(0,0,ink.width,ink.height); })
+  .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+const col = (h, a = 1, dl = 0) => `hsla(${h}, ${theme.S}%, ${theme.L + dl}%, ${a})`;
+
+// ---------- sizing ----------
+let W = 0, H = 0, DPR = 1;
+function resize() {
+  const r = stage.getBoundingClientRect();
+  DPR = Math.min(2, devicePixelRatio || 1);
+  const old = document.createElement("canvas"); old.width = ink.width; old.height = ink.height;
+  if (ink.width) old.getContext("2d").drawImage(ink, 0, 0);
+  W = r.width; H = r.height;
+  for (const c of [world, ink]) { c.width = Math.round(W * DPR); c.height = Math.round(H * DPR); }
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ictx.setTransform(1, 0, 0, 1, 0, 0); ictx.drawImage(old, 0, 0); ictx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  sizeTree();
+}
+new ResizeObserver(resize).observe(stage);
+
+// ---------- helpers ----------
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const gauss = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v); };
+const wrapA = a => { while (a > Math.PI) a -= TAU; while (a < -Math.PI) a += TAU; return a; };
+const lerpHue = (a, b, t) => { let d = ((b - a + 540) % 360) - 180; return (a + d * t + 360) % 360; };
+
+// resample a timed polyline by arc length into M points, carrying time along
+function resample(pts, M) {
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+  const total = cum[cum.length - 1], out = [];
+  let j = 0;
+  for (let k = 0; k < M; k++) {
+    const target = total * k / (M - 1);
+    while (j < pts.length - 2 && cum[j + 1] < target) j++;
+    const seg = cum[j + 1] - cum[j] || 1, t = clamp((target - cum[j]) / seg, 0, 1);
+    out.push({ x: lerp(pts[j].x, pts[j + 1].x, t), y: lerp(pts[j].y, pts[j + 1].y, t), t: lerp(pts[j].t, pts[j + 1].t, t) });
+  }
+  return { out, total };
+}
+
+// ---------- genome ----------
+// turns: angle change per segment (the angleLengthLine idea), thick: ink weight per segment (slow = heavy),
+// seg: segment length, wobAmp/wobFreq: how much the bends breathe, speed/spin: how it crawls, hue: lineage colour.
+function genomeFromStroke(raw) {
+  const { out: p, total } = resample(raw, N + 1);
+  const turns = new Float32Array(N), thick = new Float32Array(N);
+  let prev = 0, curl = 0;
+  const dts = [];
+  for (let i = 0; i < N; i++) {
+    const a = Math.atan2(p[i + 1].y - p[i].y, p[i + 1].x - p[i].x);
+    turns[i] = i === 0 ? 0 : wrapA(a - prev);   // keep corners exactly: a square stays a square
+    curl += turns[i]; prev = a;
+    dts.push(Math.max(1, p[i + 1].t - p[i].t));
+  }
+  const meanDt = dts.reduce((s, v) => s + v, 0) / N;
+  for (let i = 0; i < N; i++) thick[i] = clamp(dts[i] / meanDt, 0.35, 2.6);
+  for (let k = 0; k < 2; k++) for (let i = 1; i < N - 1; i++) thick[i] = (thick[i - 1] + thick[i] * 2 + thick[i + 1]) / 4;
+  const dur = Math.max(0.15, (raw[raw.length - 1].t - raw[0].t) / 1000);
+  // a shape whose end comes back to its start (square, circle, triangle) is a closed form,
+  // and closed forms stay closed in every descendant
+  const closed = total > 80 && Math.hypot(p[N].x - p[0].x, p[N].y - p[0].y) < Math.max(14, 0.12 * total);
+  return {
+    turns, thick, ryb: nextFounderPaint(), closed,
+    seg: clamp(total / N, 0.8, 30),
+    startAngle: Math.atan2(p[1].y - p[0].y, p[1].x - p[0].x),
+    weight: 2.2,
+    wobAmp: 1 + Math.random() * 1.2,          // pixels of sideways tremble, the shape itself holds
+    wobFreq: 0.9 + Math.random() * 0.6,
+    speed: clamp((total / dur) / 900, 0.08, 0.9),
+    spin: clamp(curl * 0.006, -0.04, 0.04),
+  };
+}
+
+// ---------- colour: painter's RYB wheel ----------
+// Each stroke is one paint, stored as amounts of red, yellow and blue pigment (0..1).
+// A child is the two parents' paints mixed in equal parts, the way the art-school colour wheel works:
+// red + yellow = orange, yellow + blue = green, blue + red = violet, complements mix to brown.
+// RYB is turned into screen RGB with Gosset & Chen's RYB cube (2004).
+const RYB_CUBE = [ // [r,y,b] corner -> rgb
+  [[0,0,0],[1,1,1]], [[1,0,0],[1,0,0]], [[0,1,0],[1,1,0]], [[0,0,1],[0.12,0.3,0.78]],
+  [[1,1,0],[1,0.5,0]], [[1,0,1],[0.5,0,0.5]], [[0,1,1],[0,0.62,0.25]], [[1,1,1],[0.2,0.094,0]],
+];
+function rybToRgb([r, y, b]) {
+  const out = [0, 0, 0];
+  for (const [[cr, cy, cb], rgb] of RYB_CUBE) {
+    const w = (cr ? r : 1 - r) * (cy ? y : 1 - y) * (cb ? b : 1 - b);
+    for (let k = 0; k < 3; k++) out[k] += w * rgb[k];
+  }
+  return out;
+}
+// mixing paint: add the pigments in equal parts, then keep the mix as strong as the stronger parent
+function mixPaint(A, B) {
+  const m = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2, (A[2] + B[2]) / 2];
+  const target = Math.max(...A, ...B), cur = Math.max(...m) || 1;
+  return m.map(v => clamp(v * target / cur, 0, 1));
+}
+// founders take turns around the wheel: primaries, secondaries and tertiaries
+const FOUNDER_PAINTS = [[1,0,0],[0,1,0],[0,0,1],[1,0,0.35],[0.25,1,0],[0,0.4,1],[1,0.55,0],[0.6,0,1],[0,1,0.5],[1,0.2,0],[0.25,0,1],[0.5,1,0]];
+function nextFounderPaint() { return FOUNDER_PAINTS[founderHueIdx++ % FOUNDER_PAINTS.length].slice(); }
+const PAINT_NAMES = [["red",[1,0,0]],["red-orange",[1,0.5,0]],["orange",[1,1,0].map((v,i)=>i<2?1:0)],["yellow",[0,1,0]],["yellow-green",[0,1,0.4]],["green",[0,1,1]],["blue-green",[0,0.6,1]],["blue",[0,0,1]],["blue-violet",[0.5,0,1]],["violet",[1,0,1]],["red-violet",[1,0,0.5]]];
+function paintName(p) {
+  const mx = Math.max(...p), mn = Math.min(...p);
+  if (mn > 0.55 * mx) return "brown";
+  const q = p.map(v => (v - mn) / ((mx - mn) || 1));
+  let best = "", bd = Infinity;
+  for (const [n, c] of PAINT_NAMES) { const d = (c[0] - q[0]) ** 2 + (c[1] - q[1]) ** 2 + (c[2] - q[2]) ** 2; if (d < bd) { bd = d; best = n; } }
+  return (mn > 0.25 * mx ? "muted " : "") + best;
+}
+// rgb cache per genome; on the dark theme the paint is lifted so it reads on the dark bench
+function rgbOf(g) {
+  if (g._L !== theme.L) {
+    g._L = theme.L;
+    let c = rybToRgb(g.ryb);
+    if (theme.L > 70) c = c.map(v => 1 - (1 - v) * 0.72);
+    else {
+      // darken light paints (yellow especially) so they still read on the pale bench
+      const lum = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      const k = lum > 0.62 ? 0.62 / lum : 0.92;
+      c = c.map(v => v * k);
+    }
+    g._rgb = c.map(v => Math.round(v * 255));
+  }
+  return g._rgb;
+}
+const segCol = (g, i, a) => { const c = rgbOf(g); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; };
+let founderHueIdx = 0;
+function nextFounderHue() { return (200 + founderHueIdx++ * 137.508) % 360; }
+
+function crossover(A, B, m) {
+  const turns = new Float32Array(N), thick = new Float32Array(N);
+  // head of one parent, tail of the other, blended across a soft seam (the animationMixLines idea, gene by gene)
+  const k = 6 + Math.random() * (N - 12), soft = 2 + Math.random() * 6, flip = Math.random() < 0.5;
+  for (let i = 0; i < N; i++) {
+    let w = 1 / (1 + Math.exp(-(i - k) / soft));
+    if (flip) w = 1 - w;
+    turns[i] = lerp(A.turns[i], B.turns[i], w);
+    thick[i] = lerp(A.thick[i], B.thick[i], w);
+  }
+  const t = 0.25 + Math.random() * 0.5;
+  const g = {
+    turns, thick, ryb: mixPaint(A.ryb, B.ryb), seam: Math.round(k),
+    closed: (A.closed && B.closed) || ((A.closed || B.closed) && Math.random() < 0.6),
+    seg: lerp(A.seg, B.seg, t), startAngle: Math.atan2(Math.sin(A.startAngle) + Math.sin(B.startAngle), Math.cos(A.startAngle) + Math.cos(B.startAngle)),
+    weight: lerp(A.weight, B.weight, t),
+    wobAmp: lerp(A.wobAmp, B.wobAmp, t), wobFreq: lerp(A.wobFreq, B.wobFreq, t),
+    speed: lerp(A.speed, B.speed, t), spin: lerp(A.spin, B.spin, t),
+  };
+  mutate(g, m);
+  return g;
+}
+
+function mutate(g, m) {
+  if (m <= 0) return;
+  const notes = [];
+  for (let i = 1; i < N; i++) if (Math.random() < 0.35) g.turns[i] = clamp(g.turns[i] + gauss() * 0.12 * m, -Math.PI, Math.PI);
+  for (let i = 0; i < N; i++) g.thick[i] = clamp(g.thick[i] * Math.exp(gauss() * 0.12 * m), 0.3, 3);
+  g.seg = clamp(g.seg * Math.exp(gauss() * 0.15 * m), 0.8, 30);
+  g.weight = clamp(g.weight * Math.exp(gauss() * 0.15 * m), 0.8, 5);
+  g.wobAmp = clamp(g.wobAmp + gauss() * 0.8 * m, 0, 4);
+  g.wobFreq = clamp(g.wobFreq * Math.exp(gauss() * 0.2 * m), 0.5, 2);
+  g.speed = clamp(g.speed * Math.exp(gauss() * 0.2 * m), 0.05, 1);
+  g.spin = clamp(g.spin + gauss() * 0.01 * m, -0.05, 0.05);
+  // structural mutations: rarer, bigger jumps
+  const run = () => { const a = 1 + Math.floor(Math.random() * (N - 10)); return [a, a + 4 + Math.floor(Math.random() * 8)]; };
+  if (Math.random() < 0.18 * m) { const [a, b] = run(); for (let i = a; i < b && i < N; i++) g.turns[i] *= -1; notes.push("mirrored a run"); }
+  if (Math.random() < 0.14 * m) { const [a, b] = run(); const seg = Array.from(g.turns.slice(a, b)); for (let i = 0; i < seg.length && b + i < N; i++) g.turns[b + i] = seg[i]; notes.push("duplicated a motif"); }
+  if (Math.random() < 0.10 * m) { const [a, b] = run(); const seg = Array.from(g.turns.slice(a, b)).reverse(); for (let i = 0; i < seg.length; i++) g.turns[a + i] = seg[i]; notes.push("reversed a run"); }
+  if (Math.random() < 0.08 * m) { for (let i = 1; i < N; i++) g.turns[i] *= 1.35; notes.push("tightened every bend"); }  g.notes = notes;
+}
+
+// ---------- population ----------
+let creatures = [], records = new Map(), nextId = 1, births = 0, simTime = 0;
+
+function addCreature(g, x, y, gen, parents) {
+  const id = nextId++;
+  const c = { id, g, x, y, gen, parents, age: 0, energy: 1, cooldown: parents ? 5 : 1.5, bloom: 0,
+              phase: Math.random() * TAU, vx: 0, vy: 0, pts: null, tip: null, flash: 0 };
+  setDir(c, g.startAngle);
+  c.pts = phenotype(c, simTime); c.box = bbox(c.pts, N);
+  creatures.push(c);
+  records.set(id, { id, gen, parents, g, x, y, alive: true, born: simTime, kids: 0, children: [], notes: g.notes || [] });
+  if (parents) { births++; frontier = Math.min(FRONTIER_MAX, frontier + 0.0012); for (const p of parents) { const r = records.get(p); if (r) { r.kids++; r.children.push(id); } } }
+  return c;
+}
+
+// ---------- weight and gravity ----------
+// A stroke's mass is its drawn length. Heavy strokes cruise slowly and are hard to pull around;
+// every stroke pulls on every other (Newtonian, softened), so big shapes gather the small ones.
+// A freshly drawn stroke "blooms": for a while it pulls far harder and can breed again quickly.
+const G = 155000, SOFT2 = 6400, BLOOM = 22;
+// territory half-size as a fraction of the stage: starts compact, widens to the full screen
+const FRONTIER_START = 0.26, FRONTIER_MAX = 0.5;
+let frontier = FRONTIER_START;
+const massOf = g => g._mass || (g._mass = Math.max(0.35, g.seg * N / 300));
+const cruiseOf = c => c.g.speed * 34 / Math.sqrt(massOf(c.g));
+// ordinary strokes pull only faintly (so the canvas doesn't collapse into one clump); a blooming one pulls hard
+const pullOf = c => massOf(c.g) * (0.03 + 10 * clamp(c.bloom / BLOOM, 0, 1));
+function setDir(c, ang) { const s = cruiseOf(c); c.vx = Math.cos(ang) * s; c.vy = Math.sin(ang) * s; }
+// a new drawing lands like a stone in water: nearby strokes are pushed out, then drawn back in
+function splash(c) {
+  const R = 280;
+  for (const o of creatures) {
+    if (o === c) continue;
+    const dx = o.x - c.x, dy = o.y - c.y, d = Math.hypot(dx, dy) || 1;
+    if (d > R) continue;
+    const k = 150 * (1 - d / R) / Math.sqrt(massOf(o.g));
+    o.vx += dx / d * k; o.vy += dy / d * k; o.flash = Math.max(o.flash, 0.5);
+  }
+  sparks.push({ x: c.x, y: c.y, t: 0, g: c.g, i: 0, gen: c.gen, R });
+}
+
+function kill(c) {
+  const r = records.get(c.id); if (r) { r.alive = false; r.died = simTime; }
+  creatures.splice(creatures.indexOf(c), 1);
+  if (held === c) held = null;
+}
+
+// base shape: walk the genome once like angleLengthLine.draw(), centred on its own centroid
+function baseShape(g) {
+  if (g._base) return g._base;
+  const pts = new Array(N + 1);
+  let x = 0, y = 0, a = g.startAngle, sx = 0, sy = 0;
+  pts[0] = { x: 0, y: 0 };
+  for (let i = 0; i < N; i++) {
+    if (i > 0) a += g.turns[i];
+    x += Math.cos(a) * g.seg; y += Math.sin(a) * g.seg;
+    pts[i + 1] = { x, y };
+  }
+  // closure constraint: spread the end-to-start gap back along the body so the loop shuts
+  if (g.closed) {
+    const ex = pts[N].x - pts[0].x, ey = pts[N].y - pts[0].y;
+    for (let i = 0; i <= N; i++) { pts[i].x -= ex * i / N; pts[i].y -= ey * i / N; }
+  }
+  for (const p of pts) { sx += p.x; sy += p.y; }
+  sx /= pts.length; sy /= pts.length;
+  for (const p of pts) { p.x -= sx; p.y -= sy; }
+  return (g._base = pts);
+}
+// phenotype: the base shape held rigid, with a small sideways tremble and a slight sway, placed at (x, y)
+function phenotype(c, t) {
+  const g = c.g, b = baseShape(g), pts = new Array(N + 1);
+  const sw = 0.04 * Math.sin(0.3 * t + c.phase), cs = Math.cos(sw), sn = Math.sin(sw);
+  for (let i = 0; i <= N; i++) {
+    const p0 = b[Math.max(0, i - 1)], p1 = b[Math.min(N, i + 1)];
+    const dx = p1.x - p0.x, dy = p1.y - p0.y, l = Math.hypot(dx, dy) || 1;
+    const w = g.wobAmp * Math.sin(g.wobFreq * t + c.phase + i * 0.35);
+    const x = b[i].x - dy / l * w, y = b[i].y + dx / l * w;
+    pts[i] = { x: c.x + x * cs - y * sn, y: c.y + x * sn + y * cs };
+  }
+  return pts;
+}
+
+function visibleCount(c) { return Math.max(1, Math.min(N, Math.floor((c.age / GROW_TIME) * N))); }
+
+function bbox(pts, n) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (let i = 0; i <= n; i++) { const p = pts[i]; if (p.x < x0) x0 = p.x; if (p.x > x1) x1 = p.x; if (p.y < y0) y0 = p.y; if (p.y > y1) y1 = p.y; }
+  return { x0, y0, x1, y1 };
+}
+function segX(p1, p2, p3, p4) {
+  const d = (p2.x - p1.x) * (p4.y - p3.y) - (p2.y - p1.y) * (p4.x - p3.x);
+  if (Math.abs(d) < 1e-9) return null;
+  const u = ((p3.x - p1.x) * (p4.y - p3.y) - (p3.y - p1.y) * (p4.x - p3.x)) / d;
+  const v = ((p3.x - p1.x) * (p2.y - p1.y) - (p3.y - p1.y) * (p2.x - p1.x)) / d;
+  if (u < 0 || u > 1 || v < 0 || v > 1) return null;
+  return { x: p1.x + u * (p2.x - p1.x), y: p1.y + u * (p2.y - p1.y) };
+}
+function touchPoint(a, b) {
+  const A = a.box, B = b.box;
+  if (A.x1 < B.x0 || B.x1 < A.x0 || A.y1 < B.y0 || B.y1 < A.y0) return null;
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const hit = segX(a.pts[i], a.pts[i + 1], b.pts[j], b.pts[j + 1]);
+    if (hit) return hit;
+  }
+  return null;
+}
+function distToSeg(px, py, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y, l2 = dx * dx + dy * dy || 1;
+  const t = clamp(((px - a.x) * dx + (py - a.y) * dy) / l2, 0, 1);
+  return Math.hypot(px - a.x - t * dx, py - a.y - t * dy);
+}
+function hitTest(x, y, r = 12) {
+  let best = null, bd = r;
+  for (const c of creatures) {
+    if (!c.pts) continue;
+    const n = visibleCount(c);
+    for (let i = 0; i < n; i++) { const d = distToSeg(x, y, c.pts[i], c.pts[i + 1]); if (d < bd) { bd = d; best = c; } }
+  }
+  return best;
+}
+
+function breed(a, b, at) {
+  const cap = +ui.cap.value;
+  if (creatures.length >= cap) {
+    let weakest = null;
+    for (const c of creatures) if (c !== a && c !== b && c !== held && c.bloom <= 0 && (!weakest || c.energy < weakest.energy)) weakest = c;
+    if (!weakest) return;
+    kill(weakest);
+  }
+  const g = crossover(a.g, b.g, +ui.mut.value);
+  const child = addCreature(g, at.x, at.y, Math.max(a.gen, b.gen) + 1, [a.id, b.id]);
+  // children are launched away from the crowd they were born in, so new lines scatter instead of piling up
+  let mx = 0, my = 0, nn = 0;
+  for (const o of creatures) { if (o === child) continue; const d = Math.hypot(o.x - at.x, o.y - at.y); if (d < 220) { mx += o.x; my += o.y; nn++; } }
+  let ang = Math.random() * TAU;
+  if (nn) ang = Math.atan2(at.y - my / nn, at.x - mx / nn) + (Math.random() - 0.5) * 1.6;
+  child.vx = Math.cos(ang) * 45; child.vy = Math.sin(ang) * 45;
+  a.cooldown = b.cooldown = 4 + Math.random() * 2;
+  // a blooming stroke can breed again almost at once, and passes some of its bloom on
+  if (a.bloom > 0) a.cooldown = 1.2;
+  if (b.bloom > 0) b.cooldown = 1.2;
+  child.bloom = Math.max(a.bloom, b.bloom) * 0.35;
+  a.energy = Math.min(1, a.energy + 0.35); b.energy = Math.min(1, b.energy + 0.35);
+  a.flash = b.flash = 1; child.flash = 1;
+  sparks.push({ x: at.x, y: at.y, t: 0, g, i: g.seam, gen: child.gen });
+}
+const sparks = [];
+
+// ---------- input ----------
+let drawing = null, held = null, grabOff = { x: 0, y: 0 }, hover = null, pointer = { x: -1, y: -1, inside: false };
+function local(e) { const r = world.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+world.addEventListener("pointerdown", e => {
+  world.setPointerCapture(e.pointerId);
+  if (explodeTarget === 1) { orbit = { x: e.clientX, y: e.clientY, moved: 0 }; return; }
+  const p = local(e);
+  const c = hitTest(p.x, p.y, e.pointerType === "touch" ? 20 : 12);
+  if (c) { held = c; grabOff = { x: c.x - p.x, y: c.y - p.y }; c.energy = 1; world.className = "grabbing"; downAt = { ...p, moved: 0 }; }
+  else drawing = [{ x: p.x, y: p.y, t: performance.now() }];
+});
+world.addEventListener("pointermove", e => {
+  if (explodeTarget === 1) {
+    if (orbit) {
+      yawU += (e.clientX - orbit.x) * 0.008;
+      elU = clamp(elU + (e.clientY - orbit.y) * 0.006, 0.2, 1.45);
+      orbit = { x: e.clientX, y: e.clientY, moved: orbit.moved + Math.hypot(e.clientX - orbit.x, e.clientY - orbit.y) };
+    }
+    return;
+  }
+  const p = local(e); pointer = { ...p, inside: true };
+  if (drawing) {
+    const last = drawing[drawing.length - 1];
+    if (Math.hypot(p.x - last.x, p.y - last.y) > 1.5) drawing.push({ x: p.x, y: p.y, t: performance.now() });
+  } else if (held) {
+    if (downAt) downAt.moved = Math.max(downAt.moved, Math.hypot(p.x - downAt.x, p.y - downAt.y));
+    held.x = p.x + grabOff.x; held.y = p.y + grabOff.y; held.energy = 1;
+  }
+  else { hover = hitTest(p.x, p.y); world.className = hover ? "grab" : ""; if (hover) showInfo(hover.id); }
+});
+world.addEventListener("pointerleave", () => { pointer.inside = false; hover = null; });
+const end = () => {
+  if (drawing) {
+    let len = 0;
+    for (let i = 1; i < drawing.length; i++) len += Math.hypot(drawing[i].x - drawing[i - 1].x, drawing[i].y - drawing[i - 1].y);
+    if (drawing.length > 4 && len > 40) {
+      const g = genomeFromStroke(drawing);
+      // place the founder exactly where it was drawn (same centroid the base shape uses)
+      const rs = resample(drawing, N + 1).out;
+      let cx = 0, cy = 0; for (const p of rs) { cx += p.x; cy += p.y; }
+      // a new drawing joins the youngest generation alive, so it enters the current breeding pool
+      let youngest = 0; for (const k of creatures) youngest = Math.max(youngest, k.gen);
+      const c = addCreature(g, cx / rs.length, cy / rs.length, youngest, null);
+      c.age = GROW_TIME; c.cooldown = 0.6; c.bloom = BLOOM; c.flash = 1;
+      splash(c);
+      // drawing outside the frontier pushes the territory out to include the new stroke
+      frontier = Math.min(FRONTIER_MAX, Math.max(frontier, Math.abs(c.x - W / 2) / W + 0.04, Math.abs(c.y - H / 2) / H + 0.04));
+      sampleTag.hidden = true;
+      if (creatures.length > +ui.cap.value) { let w = null; for (const k of creatures) if (k !== c && k.bloom <= 0 && (!w || k.energy < w.energy)) w = k; if (w) kill(w); }
+    }
+  }
+  // a click on a stroke (no drag) opens its record
+  if (held && downAt && downAt.moved < 4) openCard(held.id);
+  // a click in the exploded view (no orbit drag) flattens it
+  if (orbit && orbit.moved < 4) setExplode(false);
+  drawing = null; held = null; orbit = null; downAt = null; world.className = explodeTarget === 1 ? "orbit" : hover ? "grab" : "";
+};
+let downAt = null;
+world.addEventListener("pointerup", end);
+world.addEventListener("pointercancel", () => { drawing = null; held = null; orbit = null; downAt = null; });
+addEventListener("keydown", e => {
+  const plain = !e.metaKey && !e.ctrlKey && !e.altKey && (e.target === document.body || e.target.tagName === "BUTTON");
+  if (e.code === "Space" && e.target === document.body) { e.preventDefault(); ui.pause.click(); }
+  if (e.code === "KeyE" && plain) setExplode(explodeTarget === 0);
+  if (e.code === "KeyC" && plain) {
+    creatures = []; records.clear(); births = 0; founderHueIdx = 0; frontier = FRONTIER_START; ictx.clearRect(0, 0, ink.width, ink.height);
+    inspectEl.textContent = "Draw a shape to start a new line."; closeCard();
+  }
+  if (e.code === "Escape") closeCard();
+});
+
+// ---------- samples ----------
+function synthStroke(kind, cx, cy, s) {
+  const pts = []; let t = 0;
+  for (let i = 0; i <= 80; i++) {
+    const u = i / 80; let x, y, dt = 12;
+    if (kind === "loop") { const a = u * TAU * 1.6; x = Math.cos(a) * s * (0.5 + u * 0.3) + u * s * 1.2; y = Math.sin(a) * s * 0.5; dt = 10 + 14 * Math.sin(a) ** 2; }
+    else if (kind === "zig") { x = (u - 0.5) * s * 2.4; y = ((Math.floor(u * 7) % 2 ? 1 : -1) * (u * 7 % 1) + (Math.floor(u * 7) % 2 ? -0.5 : 0.5)) * s * 0.4; dt = 8; }
+    else if (kind === "wave") { x = (u - 0.5) * s * 2.6; y = Math.sin(u * TAU * 1.5) * s * 0.35; dt = 14 + 10 * Math.cos(u * TAU * 1.5); }
+    else { const a = u * TAU * 2.3; const r = s * (0.08 + u * 0.7); x = Math.cos(a) * r; y = Math.sin(a) * r; dt = 18 - u * 10; }
+    t += dt; pts.push({ x: cx + x, y: cy + y, t });
+  }
+  return pts;
+}
+function seedSamples() {
+  const s = Math.min(W, H) * 0.12 + 20;
+  const spots = [["loop", 0.27, 0.32], ["wave", 0.7, 0.3], ["zig", 0.3, 0.68], ["spiral", 0.72, 0.66]];
+  for (const [k, fx, fy] of spots) {
+    const g = genomeFromStroke(synthStroke(k, W * fx, H * fy, s));
+    const c = addCreature(g, W * fx, H * fy, 0, null); c.age = GROW_TIME;
+    setDir(c, Math.atan2(0.5 - fy, 0.5 - fx));
+  }
+}
+
+// ---------- inspector ----------
+function showInfo(id) {
+  const r = records.get(id); if (!r) return;
+  let par = `founder (drawn by you) · ${paintName(r.g.ryb)}`;
+  if (r.parents) {
+    const pa = records.get(r.parents[0]), pb = records.get(r.parents[1]);
+    par = `#${r.parents[0]} × #${r.parents[1]} · ${pa ? paintName(pa.g.ryb) : "?"} + ${pb ? paintName(pb.g.ryb) : "?"} = ${paintName(r.g.ryb)}`;
+  }
+  const status = r.alive ? "alive" : "extinct";
+  const notes = r.notes && r.notes.length ? ` · ${r.notes.join(", ")}` : "";
+  inspectEl.innerHTML = `<b>#${r.id}</b> · gen ${r.gen} · ${status}<br>${par} · ${r.kids} offspring${notes}`;
+}
+
+// ---------- pedigree ----------
+let TW = 0, nodePos = new Map(), glyphCache = new Map(), treeHover = null;
+function sizeTree() {
+  TW = treeWrap.clientWidth || 260;
+}
+// glyph: the stroke's rigid shape scaled to fit a unit box
+function glyphUnit(r) {
+  if (glyphCache.has(r.id)) return glyphCache.get(r.id);
+  const pts = baseShape(r.g);
+  const b = bbox(pts, N), sc = 1 / Math.max(b.x1 - b.x0, b.y1 - b.y0, 1);
+  const out = pts.map(p => ({ x: (p.x - (b.x0 + b.x1) / 2) * sc, y: (p.y - (b.y0 + b.y1) / 2) * sc }));
+  glyphCache.set(r.id, out); return out;
+}
+const glyphPts = r => glyphUnit(r).map(p => ({ x: p.x * 22, y: p.y * 22 }));
+function drawGlyph(k, r, size, alpha, lw) {
+  const u = glyphUnit(r);
+  k.strokeStyle = segCol(r.g, 0, alpha); k.lineCap = "round"; k.lineJoin = "round";
+  for (let i = 0; i < N; i++) {
+    k.lineWidth = lw * clamp(r.g.thick[i], 0.5, 2);
+    k.beginPath(); k.moveTo(u[i].x * size, u[i].y * size); k.lineTo(u[i + 1].x * size, u[i + 1].y * size); k.stroke();
+  }
+}
+
+// ---------- record card ----------
+const card = document.getElementById("card");
+let cardId = null, cardSig = "", cardTimer = 0;
+const fmtT = s => { s = Math.max(0, Math.round(s)); return s < 60 ? s + "s" : Math.floor(s / 60) + "m " + (s % 60) + "s"; };
+const lifeText = r => r.alive ? `alive · ${fmtT(simTime - r.born)} so far` : `lived ${fmtT(r.died - r.born)} · gone ${fmtT(simTime - r.died)}`;
+function thumbCanvas(r, size, lw) {
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(size * DPR); cv.height = Math.round(size * DPR); cv.style.width = cv.style.height = size + "px";
+  const k = cv.getContext("2d"); k.setTransform(DPR, 0, 0, DPR, size / 2 * DPR, size / 2 * DPR);
+  drawGlyph(k, r, size * 0.74, r.alive ? 1 : 0.4, lw);
+  return cv;
+}
+function thumbButton(r) {
+  const b = document.createElement("button");
+  b.className = "thumb" + (r.alive ? "" : " dead"); b.dataset.id = r.id;
+  b.title = `#${r.id} · ${paintName(r.g.ryb)} · ${r.alive ? "alive" : "gone"}`;
+  b.append(thumbCanvas(r, 36, 1.4));
+  const s = document.createElement("span"); s.textContent = "#" + r.id; b.append(s);
+  return b;
+}
+const sigOf = r => `${r.id}:${r.alive}:${r.children.length}`;
+function openCard(id) { cardId = id; card.hidden = false; buildCard(); }
+function closeCard() { cardId = null; card.hidden = true; }
+function buildCard() {
+  const r = records.get(cardId); if (!r) { closeCard(); return; }
+  cardSig = sigOf(r);
+  const col1 = segCol(r.g, 0, 1);
+  let colour = `<span class="swatch" style="background:${col1}"></span>${paintName(r.g.ryb)}`;
+  if (r.parents) {
+    const pa = records.get(r.parents[0]), pb = records.get(r.parents[1]);
+    const sw = q => q ? `<span class="swatch" style="background:${segCol(q.g, 0, 1)}"></span>${paintName(q.g.ryb)}` : "?";
+    colour = `${sw(pa)} + ${sw(pb)} = ${colour}`;
+  }
+  const notes = r.notes && r.notes.length ? r.notes.join(", ") : (r.parents ? "none, a straight mix" : "none, drawn by hand");
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="card-glyph" id="cGlyph"></div>
+      <div class="card-title">
+        <h3 id="cardTitle">Stroke #${r.id}</h3>
+        <p>Generation ${r.gen} · ${r.parents ? "bred" : "founder"}</p>
+      </div>
+      <button class="x" aria-label="Close record">×</button>
+    </div>
+    <dl>
+      <dt>Lifespan</dt><dd id="cLife">${lifeText(r)}</dd>
+      <dt>Colour</dt><dd>${colour}</dd>
+      <dt>Form</dt><dd>${r.g.closed ? "closed" : "open"} · weight ${massOf(r.g).toFixed(1)}</dd>
+      <dt>Mutations</dt><dd>${notes}</dd>
+    </dl>
+    <h4>Parents</h4><div class="thumbs" id="cPar"></div>
+    <h4>Children <span>${r.children.length}</span></h4><div class="thumbs" id="cKids"></div>
+    ${r.alive ? '<button class="find">Show on canvas</button>' : ""}`;
+  card.querySelector("#cGlyph").append(thumbCanvas(r, 76, 2));
+  const par = card.querySelector("#cPar"), kids = card.querySelector("#cKids");
+  if (r.parents) for (const pid of r.parents) { const q = records.get(pid); if (q) par.append(thumbButton(q)); }
+  else par.innerHTML = '<span class="empty">None. You drew this one.</span>';
+  if (!r.children.length) kids.innerHTML = '<span class="empty">None yet.</span>';
+  const shownKids = r.children.slice(-24);
+  for (const kid of shownKids) { const q = records.get(kid); if (q) kids.append(thumbButton(q)); }
+  if (r.children.length > shownKids.length) { const m = document.createElement("span"); m.className = "empty"; m.textContent = `+${r.children.length - shownKids.length} earlier`; kids.prepend(m); }
+}
+card.addEventListener("click", e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.classList.contains("x")) closeCard();
+  else if (t.classList.contains("thumb")) openCard(+t.dataset.id);
+  else if (t.classList.contains("find")) {
+    const c = creatures.find(k => k.id === cardId);
+    if (c) { c.energy = 1; c.flash = 1.6; if (explodeTarget === 1) setExplode(false); }
+  }
+});
+function tickCard(dt) {
+  if (cardId == null) return;
+  cardTimer -= dt; if (cardTimer > 0) return; cardTimer = 0.4;
+  const r = records.get(cardId); if (!r) { closeCard(); return; }
+  if (sigOf(r) !== cardSig) buildCard();
+  else { const el = card.querySelector("#cLife"); if (el) el.textContent = lifeText(r); }
+}
+function drawTree() {
+  const gens = new Map();
+  for (const r of records.values()) { if (!gens.has(r.gen)) gens.set(r.gen, []); gens.get(r.gen).push(r); }
+  const keys = [...gens.keys()].sort((a, b) => a - b);
+  const cell = 34, rowH = 50, pad = 6;
+  const perRow = Math.max(3, Math.floor((TW - 28) / cell));
+  const shownGens = keys.slice(-14);
+  const h = Math.max(120, shownGens.length * rowH + 16);
+  if (tree.width !== Math.round(TW * DPR) || tree.height !== Math.round(h * DPR)) {
+    tree.width = Math.round(TW * DPR); tree.height = Math.round(h * DPR); tree.style.height = h + "px";
+  }
+  tctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  tctx.clearRect(0, 0, TW, h);
+  nodePos.clear();
+  if (!records.size) {
+    tctx.fillStyle = theme.muted; tctx.font = "12px " + getComputedStyle(document.body).fontFamily;
+    tctx.fillText("Lineages appear here as strokes breed.", 4, 20); return;
+  }
+  shownGens.forEach((gk, row) => {
+    const list = gens.get(gk);
+    const shown = list.slice(-perRow), hidden = list.length - shown.length;
+    const y = pad + row * rowH + 22;
+    tctx.fillStyle = theme.muted; tctx.font = "10px IBM Plex Mono, monospace";
+    tctx.fillText("G" + gk + (hidden ? ` +${hidden}` : ""), 0, y - 14);
+    shown.forEach((r, i) => nodePos.set(r.id, { x: 28 + i * cell + cell / 2, y }));
+  });
+  // links
+  tctx.lineWidth = 1;
+  for (const [id, p] of nodePos) {
+    const r = records.get(id); if (!r.parents) continue;
+    for (const pid of r.parents) {
+      const q = nodePos.get(pid); if (!q) continue;
+      // the link takes the colour of the half of the child that came from that parent
+      const pr = records.get(pid), fromA = r.parents[0] === pid;
+      tctx.strokeStyle = segCol(r.g, fromA ? 4 : N - 5, r.alive ? 0.5 : 0.15);
+      tctx.beginPath(); tctx.moveTo(q.x, q.y + 12);
+      tctx.bezierCurveTo(q.x, (q.y + p.y) / 2 + 6, p.x, (q.y + p.y) / 2 - 6, p.x, p.y - 12); tctx.stroke();
+    }
+  }
+  // glyphs
+  for (const [id, p] of nodePos) {
+    const r = records.get(id), gp = glyphPts(r);
+    tctx.save(); tctx.translate(p.x, p.y);
+    if (r.alive) { tctx.fillStyle = segCol(r.g, N >> 1, 0.13); tctx.beginPath(); tctx.arc(0, 0, 15, 0, TAU); tctx.fill(); }
+    if (treeHover === id || cardId === id) { tctx.strokeStyle = theme.ink; tctx.lineWidth = 1; tctx.beginPath(); tctx.arc(0, 0, 15.5, 0, TAU); tctx.stroke(); }
+    tctx.lineWidth = r.alive ? 1.6 : 1; tctx.lineCap = "round"; tctx.lineJoin = "round";
+    for (let i = 0; i < gp.length - 1; i++) {
+      tctx.strokeStyle = segCol(r.g, i, r.alive ? 1 : 0.28);
+      tctx.beginPath(); tctx.moveTo(gp[i].x, gp[i].y); tctx.lineTo(gp[i + 1].x, gp[i + 1].y); tctx.stroke();
+    }
+    tctx.restore();
+  }
+}
+function treeHit(e) {
+  const r = tree.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  for (const [id, p] of nodePos) if (Math.hypot(p.x - x, p.y - y) < 16) return id;
+  return null;
+}
+tree.addEventListener("pointermove", e => { treeHover = treeHit(e); tree.style.cursor = treeHover ? "pointer" : ""; if (treeHover) showInfo(treeHover); });
+tree.addEventListener("pointerleave", () => treeHover = null);
+tree.addEventListener("click", e => {
+  const id = treeHit(e); if (!id) return;
+  const c = creatures.find(k => k.id === id);
+  if (c) { c.energy = 1; c.flash = 1; }
+  showInfo(id); openCard(id);
+});
+
+// ---------- loop ----------
+let last = performance.now(), treeTimer = 0, inkFadeT = 0, lastDt = 0;
+
+function step(dt) {
+  simTime += dt;
+  frontier = Math.min(FRONTIER_MAX, frontier + dt * 0.0022);
+  const life = +ui.life.value, crawl = on(ui.crawl), auto = on(ui.auto);
+  for (const c of [...creatures]) {
+    c.age += dt; c.cooldown -= dt; c.flash = Math.max(0, c.flash - dt * 1.5);
+    if (c.bloom > 0) c.energy = 1;           // a blooming stroke can't fade or be crowded out
+    else if (c !== held) c.energy -= dt / life;
+    if (pointer.inside && !drawing && hover === c) c.energy = Math.min(1, c.energy + dt * 0.6);
+    if (c.energy <= 0) { kill(c); continue; }
+    c.bloom = Math.max(0, c.bloom - dt);
+    if (crawl && c !== held) {
+      // gravity from every other stroke, felt less by heavy strokes
+      let ax = 0, ay = 0;
+      for (const o of creatures) {
+        if (o === c) continue;
+        const dx = o.x - c.x, dy = o.y - c.y, d2 = dx * dx + dy * dy + SOFT2;
+        const f = G * pullOf(o) / (d2 * Math.sqrt(d2));
+        ax += dx * f; ay += dy * f;
+        // personal space: neighbours inside 150px push apart, so crowds thin out and spread across the canvas
+        // (a blooming stroke switches this off so it can gather others)
+        if (d2 < 22500 + SOFT2 && !(o.bloom > 0)) { const d = Math.sqrt(d2 - SOFT2) || 1, k = 38 * (1 - d / 150); ax -= dx / d * k; ay -= dy / d * k; }
+      }
+      const m = Math.sqrt(massOf(c.g));
+      c.vx += ax / m * dt; c.vy += ay / m * dt;
+      const a = c.g.spin * dt, cs = Math.cos(a), sn = Math.sin(a);
+      const vx = c.vx * cs - c.vy * sn, vy = c.vx * sn + c.vy * cs; c.vx = vx; c.vy = vy;
+      // each stroke drifts back toward its own cruising speed; big ones cruise slowly
+      const cruise = cruiseOf(c), sp = Math.hypot(c.vx, c.vy);
+      if (sp < 1e-3) setDir(c, Math.random() * TAU);
+      else {
+        const ns = Math.min(170, sp + (cruise - sp) * Math.min(1, dt * 0.6));
+        c.vx *= ns / sp; c.vy *= ns / sp;
+      }
+      // territory: the colony lives inside a frontier that keeps widening until it fills the screen
+      const fx = frontier * W, fy = frontier * H, L = W / 2 - fx, R = W / 2 + fx, T = H / 2 - fy, B = H / 2 + fy;
+      if (c.x < L) c.vx += (L - c.x) * 1.2 * dt; else if (c.x > R) c.vx -= (c.x - R) * 1.2 * dt;
+      if (c.y < T) c.vy += (T - c.y) * 1.2 * dt; else if (c.y > B) c.vy -= (c.y - B) * 1.2 * dt;
+      c.x += c.vx * dt; c.y += c.vy * dt;
+    }
+    c.pts = phenotype(c, simTime);
+    c.box = bbox(c.pts, N);
+    { const r = records.get(c.id); if (r) { r.x = c.x; r.y = c.y; } }
+    // bounce on the walls using the shape's extent
+    const m = 6;
+    if (c.box.x0 < m && c.vx < 0) { c.vx *= -1; c.x += m - c.box.x0; }
+    if (c.box.x1 > W - m && c.vx > 0) { c.vx *= -1; c.x -= c.box.x1 - (W - m); }
+    if (c.box.y0 < m && c.vy < 0) { c.vy *= -1; c.y += m - c.box.y0; }
+    if (c.box.y1 > H - m && c.vy > 0) { c.vy *= -1; c.y -= c.box.y1 - (H - m); }
+  }
+  // meetings: strokes whose lines cross breed. Held strokes always may; others only if chance meetings are on.
+  const ready = creatures.filter(c => c.cooldown <= 0 && c.age >= GROW_TIME && c.pts);
+  for (let i = 0; i < ready.length; i++) for (let j = i + 1; j < ready.length; j++) {
+    const a = ready[i], b = ready[j];
+    if (a.cooldown > 0 || b.cooldown > 0) continue;
+    if (!creatures.includes(a) || !creatures.includes(b)) continue;
+    if (!auto && a !== held && b !== held) continue;
+    const at = touchPoint(a, b);
+    if (at) breed(a, b, at);
+  }
+  for (const s of sparks) s.t += dt;
+  while (sparks.length && sparks[0].t > 1) sparks.shift();
+}
+
+function render() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  // old ink trails fade away a little at a time (in steps big enough to clear fully on 8-bit canvases)
+  if (on(ui.inkB) && !on(ui.pause)) {
+    inkFadeT -= lastDt;
+    if (inkFadeT <= 0) {
+      inkFadeT = 0.3;
+      ictx.save(); ictx.setTransform(1, 0, 0, 1, 0, 0); ictx.globalCompositeOperation = "destination-out";
+      ictx.fillStyle = "rgba(0,0,0,0.06)"; ictx.fillRect(0, 0, ink.width, ink.height); ictx.restore();
+    }
+  }
+  const ex = explode > 0.001;
+  const list = ex ? [...creatures].sort((p, q) => p.gen - q.gen || p.id - q.id) : creatures;
+  if (ex) { view.drawn = view.lo - 1; view.labels = []; }
+  else if (on(ui.inkB)) ctx.drawImage(ink, 0, 0, W, H);
+  for (const c of list) {
+    if (ex) { drawPlanesUpTo(c.gen); applyPlane(c.gen); }
+    const n = visibleCount(c);
+    // older strokes recede so the newest generation reads first
+    const ageFade = 1 - 0.65 * clamp((c.age - 4) / 30, 0, 1);
+    const a = (0.15 + 0.85 * clamp(c.energy, 0, 1)) * ageFade;
+    // ink trail from the growing/moving tip
+    const tip = c.pts[n];
+    if (on(ui.inkB) && c.tip && !on(ui.pause)) {
+      ictx.strokeStyle = segCol(c.g, n - 1, 0.3 * a); ictx.lineWidth = 0.8 + c.g.weight * 0.3; ictx.lineCap = "round";
+      ictx.beginPath(); ictx.moveTo(c.tip.x, c.tip.y); ictx.lineTo(tip.x, tip.y); ictx.stroke();
+    }
+    c.tip = { x: tip.x, y: tip.y };
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    if (c.flash > 0 || c === held || c === hover || c.bloom > 0) {
+      const bl = clamp(c.bloom / BLOOM, 0, 1) * (0.6 + 0.4 * Math.sin(simTime * 4 + c.phase));
+      ctx.strokeStyle = segCol(c.g, N >> 1, Math.min(0.6, 0.1 + 0.14 * c.flash + 0.24 * bl));
+      ctx.lineWidth = c.g.weight * 4 + 6 + 10 * bl;
+      ctx.beginPath(); ctx.moveTo(c.pts[0].x, c.pts[0].y); for (let i = 1; i <= n; i++) ctx.lineTo(c.pts[i].x, c.pts[i].y); ctx.stroke();
+    }
+    const wScale = 0.6 + 0.4 * ageFade;
+    for (let i = 0; i < n; i++) {
+      ctx.strokeStyle = segCol(c.g, i, a);
+      ctx.lineWidth = c.g.weight * c.g.thick[i] * wScale;
+      ctx.beginPath(); ctx.moveTo(c.pts[i].x, c.pts[i].y); ctx.lineTo(c.pts[i + 1].x, c.pts[i + 1].y); ctx.stroke();
+    }
+    if (c.age < GROW_TIME) { ctx.fillStyle = segCol(c.g, n - 1, 1); ctx.beginPath(); ctx.arc(tip.x, tip.y, 2.6, 0, TAU); ctx.fill(); }
+  }
+  for (const s of sparks) {
+    if (ex) { if (s.gen < view.lo || s.gen > view.hi) continue; applyPlane(s.gen); }
+    const R = s.R || 30;
+    ctx.strokeStyle = segCol(s.g, s.i, (1 - s.t) * (s.R ? 0.7 : 1)); ctx.lineWidth = s.R ? 2.5 : 1.5;
+    ctx.beginPath(); ctx.arc(s.x, s.y, 4 + Math.sqrt(s.t) * (R - 4), 0, TAU); ctx.stroke();
+  }
+  if (ex) finish3D();
+  // a faint dashed edge shows the territory while it is still growing
+  if (!ex && frontier < FRONTIER_MAX - 0.002) {
+    const fx = frontier * W, fy = frontier * H, a = Math.min(1, (FRONTIER_MAX - frontier) / 0.05);
+    ctx.save(); ctx.setLineDash([2, 6]); ctx.strokeStyle = theme.muted; ctx.globalAlpha = 0.35 * a; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(W / 2 - fx, H / 2 - fy, fx * 2, fy * 2, 18); ctx.stroke(); ctx.restore();
+  }
+  if (drawing && drawing.length > 1) {
+    ctx.strokeStyle = theme.ink; ctx.lineWidth = 2; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(drawing[0].x, drawing[0].y); for (const p of drawing) ctx.lineTo(p.x, p.y); ctx.stroke();
+  }
+}
+
+// ---------- exploded view ----------
+// Each generation gets its own sheet, stacked oldest at the bottom, seen in an axonometric
+// (parallel) projection. Because the projection is affine, every sheet is just a canvas transform,
+// so strokes are drawn with the same code as the flat view.
+let explode = 0, explodeTarget = 0, yawU = -0.6, elU = 0.95, orbit = null;
+const view = { s: 1, ox: 0, oy: 0, lo: 0, hi: 0, mid: 0, spacing: 120, drawn: -1, labels: [] };
+function rawM(Z, s, ox, oy) {
+  const yaw = yawU * explode, el = elU * explode;
+  const cy = Math.cos(yaw), sy = Math.sin(yaw), ce = Math.cos(el), se = Math.sin(el);
+  const a = s * cy, b = s * ce * sy, c = -s * sy, d = s * ce * cy;
+  return [a, b, c, d, W / 2 + ox - (a * W / 2 + c * H / 2), H / 2 + oy - (b * W / 2 + d * H / 2) - s * se * Z];
+}
+const zOf = gen => (gen - view.mid) * view.spacing * explode;
+const projM = (m, x, y) => ({ x: m[0] * x + m[2] * y + m[4], y: m[1] * x + m[3] * y + m[5] });
+const proj = (x, y, gen) => projM(rawM(zOf(gen), view.s, view.ox, view.oy), x, y);
+function updateView(dt) {
+  let lo = Infinity, hi = -Infinity;
+  for (const c of creatures) { if (c.gen < lo) lo = c.gen; if (c.gen > hi) hi = c.gen; }
+  if (!creatures.length) lo = hi = 0;
+  const n = hi - lo + 1;
+  view.lo = lo; view.hi = hi; view.mid = (lo + hi) / 2;
+  view.spacing = clamp(760 / Math.max(1, n - 1), 70, 220) * Math.max(0.6, H / 700);
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const g of [lo, hi]) {
+    const m = rawM(zOf(g), 1, 0, 0);
+    for (const [x, y] of [[0, 0], [W, 0], [W, H], [0, H]]) {
+      const p = projM(m, x, y);
+      x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y);
+    }
+  }
+  const fit = Math.min(0.9 * W / (x1 - x0 || 1), 0.84 * H / (y1 - y0 || 1));
+  const sT = lerp(1, fit, explode);
+  const k = Math.min(1, dt * 6);
+  view.s += (sT - view.s) * k;
+  view.ox += (-view.s * ((x0 + x1) / 2 - W / 2) - view.ox) * k;
+  view.oy += (-view.s * ((y0 + y1) / 2 - H / 2) - view.oy) * k;
+}
+function applyPlane(gen) {
+  const m = rawM(zOf(gen), view.s, view.ox, view.oy);
+  ctx.setTransform(m[0] * DPR, m[1] * DPR, m[2] * DPR, m[3] * DPR, m[4] * DPR, m[5] * DPR);
+  return m;
+}
+function drawPlanesUpTo(gen) {
+  while (view.drawn < gen) {
+    const g = ++view.drawn, m = applyPlane(g);
+    ctx.globalAlpha = 0.42 * explode; ctx.fillStyle = theme.stage; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = explode; ctx.strokeStyle = theme.line; ctx.lineWidth = 1.2 / view.s; ctx.strokeRect(0, 0, W, H);
+    if (g === view.lo && on(ui.inkB)) { ctx.globalAlpha = 0.85; ctx.drawImage(ink, 0, 0, W, H); }
+    ctx.globalAlpha = 1;
+    let best = null;
+    for (const [x, y] of [[0, 0], [W, 0], [W, H], [0, H]]) { const p = projM(m, x, y); if (!best || p.x < best.x) best = p; }
+    let count = 0; for (const c of creatures) if (c.gen === g) count++;
+    view.labels.push({ g, x: best.x, y: best.y, count });
+  }
+}
+function finish3D() {
+  drawPlanesUpTo(view.hi);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  // lineage threads: each child is tied to where its parents live (or last lived) on lower sheets
+  ctx.setLineDash([3, 4]); ctx.lineWidth = 1;
+  for (const c of creatures) {
+    if (!c.parents) continue;
+    const P = proj(c.x, c.y, c.gen);
+    for (const pid of c.parents) {
+      const r = records.get(pid);
+      if (!r || r.x == null || r.gen < view.lo) continue;
+      const Q = proj(r.x, r.y, r.gen);
+      ctx.strokeStyle = segCol(c.g, 0, 0.5 * explode);
+      ctx.beginPath(); ctx.moveTo(Q.x, Q.y); ctx.lineTo(P.x, P.y); ctx.stroke();
+      ctx.fillStyle = segCol(r.g, 0, (r.alive ? 0.9 : 0.35) * explode); ctx.beginPath(); ctx.arc(Q.x, Q.y, 2.4, 0, TAU); ctx.fill();
+    }
+    ctx.fillStyle = segCol(c.g, 0, explode); ctx.beginPath(); ctx.arc(P.x, P.y, 2.4, 0, TAU); ctx.fill();
+  }
+  ctx.setLineDash([]);
+  ctx.font = "500 11px IBM Plex Mono, ui-monospace, monospace"; ctx.textBaseline = "bottom";
+  ctx.fillStyle = theme.muted; ctx.globalAlpha = explode;
+  for (const l of view.labels) ctx.fillText(`G${l.g} · ${l.count}`, Math.max(4, l.x + 6), l.y - 4);
+  ctx.globalAlpha = 1;
+}
+const hintEl = document.getElementById("hint"), hintFlat = hintEl.innerHTML;
+// the view cycles on its own: a while flat for drawing, then a look at the stacked generations
+const FLAT_TIME = 22, EXPLODED_TIME = 9;
+let autoT = FLAT_TIME;
+function setExplode(onNow) {
+  explodeTarget = onNow ? 1 : 0;
+  autoT = onNow ? EXPLODED_TIME : FLAT_TIME;
+  hintEl.innerHTML = onNow
+    ? "Exploded view: each generation sits on its own sheet, founders at the bottom. Dashed threads tie each child to its parents. Drag to orbit, click to flatten. It flattens again on its own."
+    : hintFlat;
+  hover = null; drawing = null; held = null; downAt = null; world.className = onNow ? "orbit" : "";
+}
+function tickAutoView(dt) {
+  if (on(ui.pause)) return;
+  autoT -= dt;
+  if (autoT > 0) return;
+  // never switch out from under someone who is drawing, dragging or orbiting
+  if (drawing || held || orbit) { autoT = 1.5; return; }
+  setExplode(explodeTarget === 0);
+}
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now; lastDt = dt;
+  explode += (explodeTarget - explode) * Math.min(1, dt * 3.5);
+  if (Math.abs(explode - explodeTarget) < 0.001) explode = explodeTarget;
+  if (W > 0) updateView(dt);
+  if (!on(ui.pause)) step(dt);
+  else for (const c of creatures) if (!c.pts) c.pts = phenotype(c, simTime);
+  if (W > 0) render();
+  treeTimer -= dt; if (treeTimer <= 0) { drawTree(); treeTimer = 0.25; }
+  tickAutoView(dt);
+  tickCard(dt);
+  requestAnimationFrame(frame);
+}
+
+resize();
+seedSamples();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
