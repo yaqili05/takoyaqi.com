@@ -82,6 +82,15 @@ p + p{margin-top:1em}
 .contrib{list-style:none;counter-reset:c}
 .contrib li{position:relative;padding:10px 0 10px 34px;border-top:1px solid var(--line);font-size:15px;max-width:720px}
 .contrib li::before{counter-increment:c;content:counter(c,decimal-leading-zero);position:absolute;left:0;top:11px;font-size:12px;color:var(--muted)}
+.ml-preview{min-width:0;margin-top:24px}
+.ml-preview-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.ml-preview-track::-webkit-scrollbar{display:none}
+.ml-preview-track a{flex:0 0 calc((100% - 24px)/3);min-width:0;scroll-snap-align:start;background:#f2f2f2}
+.ml-preview-track img{width:100%;aspect-ratio:776/818;object-fit:cover}
+.ml-preview-controls{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:12px;font-size:13px;color:var(--muted)}
+.ml-preview-controls button{width:34px;height:34px;border:1px solid var(--line);background:#fff;color:var(--ink);font:18px var(--font);cursor:pointer}
+.ml-preview-controls button:hover{border-color:var(--ink)}
+@media (max-width:760px){.ml-preview-track a{flex-basis:68%}}
 @media (max-width:760px){
   .simwrap{height:50vh;min-height:300px}
   .case section.two{grid-template-columns:1fr}
@@ -627,7 +636,8 @@ const views = {
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
 
-      <section class="two"><h2>media lab 40+40</h2><div><p>at the media lab's 40+40 celebration the arm — coco — hung over a table, looked around for faces, danced for a thumbs-up and took a polaroid of anyone who showed it a victory sign.</p>
+      <section class="two"><h2>media lab 40+40</h2><div style="min-width:0"><p>at the media lab's 40+40 celebration the arm — coco — hung over a table, looked around for faces, danced for a thumbs-up and took a polaroid of anyone who showed it a victory sign.</p>
+        <div class="ml-preview" id="ml-preview"><p class="fine">loading photos…</p></div>
         <p style="margin-top:18px"><a class="u" href="#/ml4040">everyone's photos with coco →</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
@@ -868,6 +878,8 @@ const fig=(n,f,cap)=>`<figure class="fo-fig"><a href="images/${f}" target="_blan
 };
 
 function render(){
+  clearInterval(mlPreviewTimer);
+  mlPreviewTimer = null;
   const parts = location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
   const route = parts[0] || 'projects';
   let html;
@@ -881,6 +893,7 @@ function render(){
   const L = document.getElementById('launch');
   if (L) L.onclick = () => { const w = document.getElementById('simwrap');
     w.innerHTML = '<iframe src="sim/index.html" title="soft arm simulation" allow="fullscreen" loading="eager"></iframe>'; w.classList.add('live'); };
+  if (route === 'projects' && parts[1] === 'soft-arm') mlPreview();
   if (route === 'ml4040') ml4040(parts[1]);
   document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.r === route));
   document.title = route === 'projects' && !parts[1] ? 'yaqi li' : `${parts[1] ? parts[1].replace(/-/g,' ') : route} — yaqi li`;
@@ -890,6 +903,43 @@ function render(){
 const ML_RAW = 'https://raw.githubusercontent.com/yaqili05/takoyaqi.com/main/ml4040/';
 const mlUrl = id => ML_RAW + 'photos/' + encodeURIComponent(id) + '.jpg';
 let mlTimer = null;
+let mlPreviewTimer = null;
+function mlPreview(){
+  const preview = document.getElementById('ml-preview');
+  fetch(ML_RAW + 'photos.json?t=' + Date.now(), {cache:'no-store'})
+    .then(r => { if (!r.ok) throw new Error('photos unavailable'); return r.json(); })
+    .then(list => {
+      if (!preview.isConnected) return;
+      const ids = list.slice(-9).reverse().map(p => p.id);
+      if (!ids.length) { preview.innerHTML = '<p class="fine">photos are on their way.</p>'; return; }
+      preview.innerHTML = `<div class="ml-preview-track" aria-label="media lab 40+40 photo preview">${ids.map(id => `<a href="#/ml4040/${esc(id)}" aria-label="view photo with coco"><img src="${mlUrl(id)}" alt="a polaroid with coco" loading="lazy"></a>`).join('')}</div>
+        <div class="ml-preview-controls"><span id="ml-preview-count">1 / ${ids.length}</span><button type="button" aria-label="previous photo" id="ml-preview-prev">←</button><button type="button" aria-label="next photo" id="ml-preview-next">→</button></div>`;
+      const track = preview.querySelector('.ml-preview-track');
+      const slides = [...track.children];
+      const count = preview.querySelector('#ml-preview-count');
+      let index = 0;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      const lastIndex = Math.max(0, slides.findIndex(slide => slide.offsetLeft - slides[0].offsetLeft >= maxScroll - 1));
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (maxScroll < 1) preview.querySelector('.ml-preview-controls').style.display = 'none';
+      const go = n => {
+        index = (n + lastIndex + 1) % (lastIndex + 1);
+        track.scrollTo({left:slides[index].offsetLeft - slides[0].offsetLeft,behavior:reducedMotion ? 'auto' : 'smooth'});
+        count.textContent = `${index + 1} / ${slides.length}`;
+      };
+      preview.querySelector('#ml-preview-prev').onclick = () => go(index - 1);
+      preview.querySelector('#ml-preview-next').onclick = () => go(index + 1);
+      track.addEventListener('scroll', () => {
+        const nearest = slides.reduce((best, slide, n) => Math.abs(slide.offsetLeft - slides[0].offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - slides[0].offsetLeft - track.scrollLeft) ? n : best, 0);
+        index = nearest;
+        count.textContent = `${index + 1} / ${slides.length}`;
+      }, {passive:true});
+      if (lastIndex > 0 && !reducedMotion) {
+        mlPreviewTimer = setInterval(() => { if (preview.isConnected && !document.hidden && !preview.matches(':hover, :focus-within')) go(index + 1); }, 4000);
+      }
+    })
+    .catch(() => { if (preview.isConnected) preview.innerHTML = '<p class="fine">photos are temporarily unavailable.</p>'; });
+}
 function ml4040(id){
   clearInterval(mlTimer);
   const grid = document.getElementById('ml-grid'), count = document.getElementById('ml-count');
