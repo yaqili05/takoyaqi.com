@@ -621,6 +621,10 @@ const views = {
       </div>
       <div class="simlinks"><span>reach · path following · react · ropes — drag the cylinder into the arm, orbit to look around</span><a href="sim/index.html" target="_blank" rel="noopener">open full screen ↗</a></div>
 
+      <section class="two"><h2>media lab 40+40</h2><div style="min-width:0"><p>at the media lab's 40+40 celebration the arm — coco — hung over a table, looked around for faces, danced for a thumbs-up and took a polaroid of anyone who showed it a victory sign.</p>
+        <div class="ml-preview" id="ml-preview"><p class="fine">loading photos…</p></div>
+        <p style="margin-top:18px"><a class="u" href="#/ml4040">everyone's photos with coco →</a></p></div></section>
+
       <section class="two"><h2>overview</h2><div>${A.overview.map(t=>`<p>${esc(t)}</p>`).join('')}</div></section>
 
       <blockquote>${esc(A.question)}</blockquote>
@@ -635,10 +639,6 @@ const views = {
 
       <section class="two"><h2>next</h2><div><p>${esc(A.next)}</p><p class="fine">${esc(A.credit)}</p>
         <p style="margin-top:18px"><a class="u" href="${esc(A.repo)}" target="_blank" rel="noopener">simulation code on github ↗</a></p></div></section>
-
-      <section class="two"><h2>media lab 40+40</h2><div style="min-width:0"><p>at the media lab's 40+40 celebration the arm — coco — hung over a table, looked around for faces, danced for a thumbs-up and took a polaroid of anyone who showed it a victory sign.</p>
-        <div class="ml-preview" id="ml-preview"><p class="fine">loading photos…</p></div>
-        <p style="margin-top:18px"><a class="u" href="#/ml4040">everyone's photos with coco →</a></p></div></section>
 
       <div class="pager"><a href="#/projects/${prev.slug}">← ${ttl(prev.title)}</a><a href="#/projects">all projects</a><a href="#/projects/${next.slug}">${ttl(next.title)} →</a></div>
     </article>`;
